@@ -141,7 +141,15 @@ config =
   anal_mode: flags["anal-mode"]
   log_level: flags["log-level"] or "info"
 
-game = require("Game")(config)
+export Irdya = require("Game")(config)
+
+prompt = require "prompt"
+with prompt
+  .colorize = true
+  .name = "Irdya"
+  .history = "/tmp/.myprompt_history"
+  .prompts = {"%  ", "%% "}
+  .enter()
 
 log.info("Exiting...")
 utils.quit("Normal Exit")
