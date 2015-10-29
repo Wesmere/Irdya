@@ -48,7 +48,7 @@ class Kernel
     return @display_state
   ---
   -- Print the data table
-  debug: => moon.p(@)
+  debug: => moon.p(@game_state)
   ---
   -- Print txt to stdout
   -- @param txt to print
@@ -62,7 +62,7 @@ class Kernel
     -- @TODO handle remove
     assert(cfg.name)
     assert(cfg.command)
-    utils.setfenv(cfg.command, @content_state.actions)
+    utils.setfenv(cfg.command, @content_state.ENV.action)
     if not @game_state.events[cfg.name]
       @game_state.events[cfg.name] = {}
     table.insert(@game_state.events[cfg.name], cfg)
@@ -71,6 +71,7 @@ class Kernel
   --
   -- @return iff t is a pure array
   isArray = (t) ->
+    return false if type(t) == "function"
     i = 0
     for _ in pairs(t)
       i = i + 1
@@ -96,6 +97,10 @@ class Kernel
   -- @param side
   setup_side: (side) =>
     assert(side)
+    @display_state.sides[side.side] =
+      units: {}
+      labels: {}
+
     @doArrayOrSingle(side.unit, @create_unit)
 
   ---
@@ -115,7 +120,7 @@ class Kernel
     new_unit_cfg = tablex.deepcopy(unit_type_cfg)
     tablex.merge(new_unit_cfg, cfg)
     @display_state.units[new_unit_cfg.id] = new_unit_cfg
-    new_unit = Unit(@display_state.units[new_unit_cfg.id])
+    new_unit = Unit(@display_state.sides[new_unit_cfg.side].units[new_unit_cfg.id])
     assert(new_unit)
     return new_unit
   ---
@@ -139,7 +144,22 @@ class Kernel
     -- Side setup
     assert(scenario.side)
     moon.p(scenario.side)
-    @doArrayOrSingle(scenario.side, @setup_side)
+    --@doArrayOrSingle(scenario.side, @setup_side)
+    for key, events in pairs scenario
+      char = key\sub(1,1)
+      unless char\match("%u")
+        continue
+      unless isArray(events)
+        events = { events }
+      for i, event in ipairs events
+        switch type(event)
+          when "table"
+              event.name = key
+              @register_event_handler(event)
+          when "function"
+            @register_event_handler
+              name: key
+              command: event
   ---
   -- @TODO
   -- @param side
