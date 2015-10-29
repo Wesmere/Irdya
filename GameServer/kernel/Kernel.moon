@@ -22,22 +22,21 @@ class Kernel
     @content_state = content
     -- some game state @TODO
     @game_state =
-      sides: {}
-      events: {}
+      sides:
+        villages: {} -- Location Set
+      events: {} -- type --> array
       units: {} -- unit.id --> Location
-  -- display state to be synced with the diplay server
+    -- display state to be synced with the diplay server
     @display_state =
-      units: {}
+      turn: 0
       sides:
         units: {} -- unit.id --> unit.data
         labels: {} --
-        villages: {} -- location Set
         map: {}
       -- contains 2darrays for hex grid based issues
       board:
         map: {} -- [x][y] --> terrain_type.id
         units: {} -- [x][y] --> unit.id
-
         labels: {} -- [x][y] --> label.data
         items: {} -- [x][y] --> item.data
         sound_sources: {} -- [x][y] -->
@@ -46,20 +45,7 @@ class Kernel
   -- @TODO
   -- @return state update for a client
   get_client_state = (side_number) ->
-    state =
-      sides: {}
-      board:
-        units: {}
-        map: {}
-        labels: {}
-        items: {}
-        sound_sources: {}
-    -- own side is known
-    state.sides[side_number] = @display_state.sides[side_number]
-    -- allied sides are known
-    --- @TODO implement allied sides known
-    --- @TODO implement a lot more
-    return state
+    return @display_state
   ---
   -- Print the data table
   debug: => moon.p(@)
@@ -83,7 +69,7 @@ class Kernel
     return true -- @ TODO
   ---
   --
-  -- @return iff t is a pure list
+  -- @return iff t is a pure array
   isArray = (t) ->
     i = 0
     for _ in pairs(t)
@@ -149,7 +135,6 @@ class Kernel
       map_cfg = @content_state.Map[map_id]
       assert(map_cfg)
       @display_state.board.map = map_parser(map_cfg.map_data)
-      --moon.p(@display_state.board.map)
     --- @TODO check if every used terrain type is known
     -- Side setup
     assert(scenario.side)
