@@ -1,5 +1,5 @@
 -- MoonScript
-moon = require "moon"
+--moon = require "moon"
 moonscript = require "moonscript"
 -- Penlight lib requires
 path = require "pl.path"
@@ -170,21 +170,18 @@ class Game
     -- root must be loaded first or only wml_config function is known.
     if config.data_dir
       @load_wesmod_by_path(config.data_dir)
-      -- moon.p(@)
       @scan_root(config.data_dir)
-      -- moon.p(@)
     else
       log.fatal("no data dir")
       utils.quit("no data dir")
-    -- if userdata_dir
-    --   @scan_root(userdata_dir)
-    -- @kernel = require("kernel/Kernel")(@state)
+
+    if userdata_dir
+      @scan_root(userdata_dir)
+    @kernel = require("kernel/Kernel")(@state)
   ---
   -- dumb the game state
   debug: =>
-    moon.p(@state)
-    --@kernel\fire_event("test")
-    --@kernel\debug!
+    @kernel\debug!
   ---
   --
   -- @param cfg
@@ -208,7 +205,11 @@ class Game
   -- Load a WesMod by its id
   -- @param id of the WesMod to load
   load_wesmod: (id) =>
-    assert(id)
+    unless id
+      print "Available WesMods:"
+      for key, value in pairs @state.WesMods
+        print key
+      return
     mod = @state.WesMods[id]
     if not mod
       log.error("Can't load, WesMod not registered: " .. id)
