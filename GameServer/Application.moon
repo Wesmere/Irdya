@@ -1,5 +1,8 @@
 #!/usr/bin/env moon
 
+VERSION = "0.0"
+manifest_file_name = "WesMod.moon"
+
 -- MoonScript
 moonscript = require "moonscript"
 
@@ -8,45 +11,15 @@ dir = require "pl.dir"
 path = require "pl.path"
 utils = require "pl.utils"
 app = require "pl.app"
---app.require_here!
-
-
-VERSION = "0.0"
-manifest_file_name = "WesMod.moon"
 
 check_script_name = ->
   if _G.arg == nil
     error('no command line args available\nWas this run from a main script?')
   return _G.arg[0]
 
---- add the current script's path to the Lua module path.
--- Applies to both the source and the binary module paths. It makes it easy for
--- the main file of a multi-file program to access its modules in the same directory.
--- `base` allows these modules to be put in a specified subdirectory, to allow for
--- cleaner deployment and resolve potential conflicts between a script name and its
--- library directory.
--- @string base optional base directory.
--- @treturn string the current script's path with a trailing slash
-require_here = (base) ->
-  p = path.dirname(check_script_name())
-  if not path.isabs(p)
-    p = path.join(path.currentdir(),p)
-  if p\sub(-1,-1) ~= path.sep
-    p = p..path.sep
-  if base then
-    p = p..base..path.sep
-  so_ext = path.is_windows and 'dll' or 'so'
-  lsep = package.path\find '^;' and '' or ';'
-  csep = package.cpath\find '^;' and '' or ';'
-  package.path = ('%s?.moon;%s?.lua;%s?%sinit.lua%s%s')\format(p,p,p,path.sep,lsep,package.path)
-  package.cpath = ('%s?.%s%s%s')\format(p,so_ext,csep,package.cpath)
-  return p
-
-require_here!
-
-require "moonscript"
-
-
+script_name = check_script_name!
+abs_path = path.abspath(path.dirname(script_name))
+path.chdir(abs_path)
 
 -- enable global logging facility
 export log = require "utils/log"
@@ -66,6 +39,7 @@ if flags["log-help"]
 
 if flags["help"]
   print([[
+--log-help
 --log-level=trace|debug|info|warn|error|fatal
 --data-dir
 --userdata-dir
@@ -76,19 +50,12 @@ if flags["help"]
 
 platform = app.platform!
 log.debug("Running on " .. platform)
-log.info("Working Directory: " .. path.currentdir!)
-log.info("Application file path: " .. _G.arg[0])
-
-abs_path = path.abspath(path.dirname(_G.arg[0]))
-
-path.chdir(abs_path)
-
-
-log.info("Applicatoin absolute path: " .. abs_path)
+log.trace("Working Directory: " .. path.currentdir!)
+log.debug("Applicatoin absolute path: " .. abs_path)
 root_path = path.join(abs_path, "../root")
-log.info("root_path: " .. root_path)
+log.trace("root_path: " .. root_path)
 norm_path = path.normpath(root_path)
-log.info("normpath: " .. norm_path)
+log.trace("normpath: " .. norm_path)
 
 --- @TODO detect them
 data_dir = flags["data-dir"] or norm_path
