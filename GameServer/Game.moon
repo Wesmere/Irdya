@@ -84,7 +84,7 @@ class Game
     log.info("Loading WesMod at: " .. wesmod_path)
     -- Note: order matters
     -- knowns = { "Eras", "Help", "Tips" }
-    knowns = { "WSL", "Mechanics", "Terrain", "Units", "Scenarios" }
+    knowns = { "WSL", "Mechanics", "Terrain", "Units", "Scenario" }
     found = ""
     for folder in *knowns
       folder_path = path.join(wesmod_path, folder)
@@ -131,7 +131,7 @@ class Game
           WesMods: {}
           Units: {}
           Help: {}
-          Scenarios: {}
+          Scenario: {}
           --- @TODO think about same name but different scopes
           --  Which currently just overwrites the on_scan function
           WSL:
@@ -163,7 +163,7 @@ class Game
       Era:
         factions: {}
         era: {}
-      Scenarios: {}
+      Scenario: {}
       Map: {}
       Config: config
 
@@ -182,6 +182,13 @@ class Game
   -- dumb the game state
   debug: =>
     @kernel\debug!
+  ---
+  --
+  --
+  test: =>
+    @load_wesmod("test")
+    @start_scenario("test")
+
   ---
   --
   -- @param cfg
