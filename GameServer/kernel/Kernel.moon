@@ -1,11 +1,11 @@
 moonscript = require "moonscript"
-moon = require "moon"
 utils = require "pl.utils"
 dir = require "pl.dir"
 
+debug = require "utils/debug"
+
 Set = require "pl.Set"
 
--- log = require "Lua/aux/log"
 Location = require "kernel/Location"
 Unit = require "kernel/Unit"
 
@@ -48,7 +48,7 @@ class Kernel
     return @display_state
   ---
   -- Print the data table
-  debug: => moon.p(@game_state)
+  debug: => debug.print(@game_state)
   ---
   -- Print txt to stdout
   -- @param txt to print
@@ -78,6 +78,12 @@ class Kernel
       if t[i] == nil
         return false
     return true
+  ---
+  --
+  --
+  wrapInArray = (t) ->
+    return t if isArray(t)
+    return { t }
   ---
   -- @TODO
   -- @param thing
@@ -130,7 +136,7 @@ class Kernel
   start_scenario: (id, cfg) =>
     log.trace("Kernel: Scenario started:" .. id)
     -- @TODO some error handling
-    scenario = @content_state.Scenarios[id]
+    scenario = @content_state.Scenario[id]
     assert(scenario)
     -- Let's load the map.
     map_parser = require "kernel/Map"
@@ -143,19 +149,18 @@ class Kernel
     --- @TODO check if every used terrain type is known
     -- Side setup
     assert(scenario.side)
-    moon.p(scenario.side)
+    debug.print(scenario.side)
     --@doArrayOrSingle(scenario.side, @setup_side)
     for key, events in pairs scenario
       char = key\sub(1,1)
       unless char\match("%u")
         continue
-      unless isArray(events)
-        events = { events }
+      events = wrapInArray(events)
       for i, event in ipairs events
         switch type(event)
           when "table"
-              event.name = key
-              @register_event_handler(event)
+            event.name = key
+            @register_event_handler(event)
           when "function"
             @register_event_handler
               name: key
