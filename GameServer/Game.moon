@@ -83,10 +83,8 @@ class Game
   load_wesmod_by_path: (wesmod_path) =>
     log.info("Loading WesMod at: " .. wesmod_path)
     -- Note: order matters
-    -- knowns = { "Eras", "Help", "Tips" }
-    knowns = { "WSL", "Mechanics", "Terrain", "Units", "Scenario" }
     found = ""
-    for folder in *knowns
+    for i, folder in ipairs @state.ENV.folders
       folder_path = path.join(wesmod_path, folder)
       if not path.exists(folder_path)
         continue
@@ -125,7 +123,13 @@ class Game
       ENV: -- holds tables being used as env
         on_scan:
           wsl_config: (cfg) -> @state.Registry.WSL_tags[cfg.name] = true
-        folders: -- envs for wesmod content folders
+        folders: { -- envs for wesmod content folders
+          "WSL"
+          "Terrain"
+          "Units"
+          "Help"
+          "Scenario"
+          "Mechanics"
           Mechanics: {}
           Terrain: {}
           WesMods: {}
@@ -143,6 +147,7 @@ class Game
                 @state.ENV.on_scan[cfg.name] = cfg.on_scan
               else
                 @state.ENV.on_scan[cfg.name] = ->
+        }
         action: {} -- the env for event handlers
         command: {} -- is it an env? at least a collenction of functions
       Mechanics: -- used by Kernel execution
