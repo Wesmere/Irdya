@@ -1,0 +1,14 @@
+-- [modify_unit]
+-- works similar to the MODIFY_UNIT macro.
+-- [filter] with a StandardUnitFilter as argument. All units matching this filter are modified. Matches on recall list units too.
+-- Accepts generally the syntax inside of wml unit variables created by [store_unit] which can be viewed in a savefile or by using the :inspect command. It can add [trait]s and [object]s without needing to wrap them inside a [modifications] tag, and their effects are applied immediately. Cannot remove things. Subtags with the same name must be written in the correct order to match them with the tag they are supposed to modify.
+-- example usage (see also the test scenario):
+-- [modify_unit]
+--   [filter]
+--     x,y=38,6
+--   [/filter]
+--   hitpoints=10
+--   {TRAIT_HEALTHY}
+-- [/modify_unit]
+-- The unit which is currently modified is accessible via $this_unit, e.g. hitpoints = "$($this_unit.hitpoints / 2)" to set the hitpoints of all units to half of their particular maxima. This this_unit variable is independent from the this_unit variable available in the SUF used to determine which units to modify (first all matching units are gathered, and then all those are modified).
+-- note: The syntax allowed is somehow vague. Just try things and possibly correct/add/modify this documentation. (a forum thread discusses some related issues).

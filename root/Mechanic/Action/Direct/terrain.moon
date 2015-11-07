@@ -1,0 +1,11 @@
+-- [terrain]
+-- Changes the terrain on the map.
+-- terrain: the character of the terrain to use. See TerrainCodesWML to see what letter a type of terrain uses.
+-- StandardLocationFilter. This StandardLocationFilter's terrain= key is used for the new terrain, filtering by terrain can be done with a nested StandardLocationFilter: [and]terrain=terrain_string_to_be_filtered_for.
+-- layer: (overlay|base|both, default=both) only change the specified layer.
+-- replace_if_failed: (default=no) When replacing just one layer failed, try to replace the whole terrain. If terrain is an overlay only terrain, use the default_base as base layer. If the terrain has no default base, do nothing.
+-- If you want to remove the overlays from a terrain and leave only the base, use:
+-- layer=overlay
+-- terrain="^"
+-- Note: When a hex changes from a village terrain to a non-village terrain, and a team owned that village it loses that village. When a hex changes from a non-village terrain to a village terrain and there is a unit on that hex it does not automatically capture the village. The reason for not capturing villages it that there are too many choices to make; should a unit loose its movement points, should capture events be fired. It is easier to do this as wanted by the author in WML.
+ 
