@@ -73,7 +73,8 @@ check_root = (root, name, create) ->
       log.debug("Reading manifest file: " .. manifest)
       wesmod_type = nil
       env =
-        root: (cfg) ->
+        wesmod: (cfg) ->
+        -- root: (cfg) ->
           wesmod_type = cfg.type
       file_fun = moonscript.loadfile(manifest)
       utils.setfenv(file_fun, env)

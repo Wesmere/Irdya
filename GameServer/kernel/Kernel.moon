@@ -26,6 +26,7 @@ class Kernel
         villages: {} -- Location Set
       events: {} -- type --> array
       units: {} -- unit.id --> Location
+      action: { kernel: @ } -- id --> function ENV for event handlers
     -- display state to be synced with the diplay server
     @display_state =
       turn: 0
@@ -48,7 +49,9 @@ class Kernel
     return @display_state
   ---
   -- Print the data table
-  debug: => debug.print(@game_state)
+  debug: =>
+    -- debug.print(@content_state)
+    debug.print(@game_state)
   ---
   -- Print txt to stdout
   -- @param txt to print
@@ -62,7 +65,7 @@ class Kernel
     -- @TODO handle remove
     assert(cfg.name)
     assert(cfg.command)
-    utils.setfenv(cfg.command, @content_state.ENV.action)
+    utils.setfenv(cfg.command, @game_state.action)
     if not @game_state.events[cfg.name]
       @game_state.events[cfg.name] = {}
     table.insert(@game_state.events[cfg.name], cfg)
@@ -136,14 +139,14 @@ class Kernel
   start_scenario: (id, cfg) =>
     log.trace("Kernel: Scenario started:" .. id)
     -- @TODO some error handling
-    scenario = @content_state.Scenario[id]
+    scenario = @content_state.content.Scenario.scenario[id]
     assert(scenario)
     -- Let's load the map.
     map_parser = require "kernel/Map"
     if map_data = scenario.map_data
       @display_state.board.map = map_parser(map_data)
     elseif map_id = scenario.map
-      map_cfg = @content_state.Map[map_id]
+      map_cfg = @content_state.content.Scenario.map[map_id]
       assert(map_cfg)
       @display_state.board.map = map_parser(map_cfg.map_data)
     --- @TODO check if every used terrain type is known
@@ -151,6 +154,11 @@ class Kernel
     assert(scenario.side)
     debug.print(scenario.side)
     --@doArrayOrSingle(scenario.side, @setup_side)
+
+    for key, action in pairs @content_state.content.Mechanic.wsl_action
+      --- @TODO do validation here
+      @game_state.action[key] = (cfg) -> return action.action(cfg, @)
+
     for key, events in pairs scenario
       char = key\sub(1,1)
       unless char\match("%u")
@@ -286,7 +294,7 @@ class Kernel
   -- @param primary
   -- @param second
   -- @return iff gamestate changed
-  execute_event_handler: (handler, primary, second) =>
+  execute_event_handler: (handler, primary, second, first_weapon, second_weapon) =>
     return false if handler.remove
     return false if handler.filter_condition and not handler.filter_condition()
     return false if primary and not primary\filter(handler.filter)
@@ -294,6 +302,7 @@ class Kernel
     --@TODO filter_attack
     --@TODO filter_second_attack
     --@TODO filter_side
+    --@TODO filter_condition
     --@TODO delayed_variable_substitution ?
     log.debug("Executing " .. handler.name)
 
@@ -324,8 +333,7 @@ class Kernel
       primary_unit = (type(primary) == Unit) and primary or @get_unit(primary)
     if secondary
       secondary_unit = (type(secondary) == Unit) and secondary or @get_unit(secondary)
-    -- events = @game_state.events[name]
-    if events
+    if events = @game_state.events[name]
       for event in *@game_state.events[name]
         @execute_event_handler(event, primary_unit, secondary_unit, first_weapon, second_weapon)
   ---
@@ -344,5 +352,10 @@ class Kernel
   execute_command_chain: (Actions) =>
     for Action in *@game_state.Actions
       execute_command()
+  ---
+  --
+  --
+  display: =>
+    require("map_display")(@display_state.board.map)
 
 return Kernel

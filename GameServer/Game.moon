@@ -1,5 +1,4 @@
 -- MoonScript
---moon = require "moon"
 moonscript = require "moonscript"
 -- Penlight lib requires
 path = require "pl.path"
@@ -19,6 +18,7 @@ class Game
   -- @param env environment to execute in
   load_cfg_file: (file, env) =>
     anal_mode = @state.Config.anal_mode
+    --- @TODO better and more output
     assert(env, "No env")
     assert(file, "No file")
     env.tostring = tostring
@@ -93,7 +93,7 @@ class Game
       @load_all_files(folder_path, env)
     log.trace("Found: " .. found)
     -- loading root of the wesmod
-    env = @state.ENV.folders.WesMods
+    env = @state.ENV.toplevel
     @load_files(wesmod_path, env)
     return true
   ---
@@ -112,64 +112,59 @@ class Game
     -- @core_loaded = false
     -- @core_loaded = true --- @TODO
     @state =
+      content:
+        toplevel: {}
       Registry:
-        maps: {}
-        scenarios: {}
-        WSL_tags: {}
-        roots: {}
-        campaigns: {}
-        eras: {}
-        game_cores: {}
+        wsl_table: {}
       ENV: -- holds tables being used as env
+        toplevel: {}
         on_scan:
-          wsl_config: (cfg) -> @state.Registry.WSL_tags[cfg.name] = true
+          wsl_table: (cfg, file, path) -> @state.Registry.wsl_table[cfg.id] =
+            path: path
+            file: file
         folders: { -- envs for wesmod content folders
           "WSL"
-          "Terrain"
-          "Units"
-          "Help"
-          "Scenario"
-          "Mechanics"
-          Mechanics: {}
-          Terrain: {}
-          WesMods: {}
-          Units: {}
-          Help: {}
-          Scenario: {}
           --- @TODO think about same name but different scopes
           --  Which currently just overwrites the on_scan function
           WSL:
-            wsl_config: (cfg) ->
-              assert(cfg.name, "no name")
-              assert(cfg.on_load, "no on_load")
-              @state.ENV.folders[cfg.scope][cfg.name] = cfg.on_load
-              if cfg.on_scan
-                @state.ENV.on_scan[cfg.name] = cfg.on_scan
+            -- tostring: tostring
+            wsl_table: (cfg) ->
+              assert(cfg.id, "no id for wsl table handler")
+              local env
+              local dest
+              @state.Registry[cfg.id] = {}
+              if cfg.scope
+                unless @state.ENV.folders[cfg.scope]
+                  @state.ENV.folders[cfg.scope] = {}
+                  table.insert(@state.ENV.folders, cfg.scope)
+                  @state.content[cfg.scope] = {}
+                env = @state.ENV.folders[cfg.scope]
+                dest = @state.content[cfg.scope]
+                unless env[cfg.id]
+                  env[cfg.id] = {}
+                  dest[cfg.id] = {}
               else
-                @state.ENV.on_scan[cfg.name] = ->
+                unless @state.ENV.toplevel[cfg.id]
+                  @state.ENV.toplevel[cfg.id] = {}
+                  @state.content.toplevel[cfg.id] = {}
+                env = @state.ENV.toplevel
+                dest = @state.content.toplevel
+              env[cfg.id] = (config, file, path) ->
+                --- @TODO do validation here!
+                dest[cfg.id][config.id] = config
+                if entry = @state.Registry[cfg.id][config.id]
+                  entry.loaded = true
+                else @state.Registry[cfg.id][config.id] =
+                  loaded: true
+              @state.ENV.on_scan[cfg.id] = (config, file, path) ->
+                if entry = @state.Registry[cfg.id][config.id]
+                  entry.path = path
+                  entry.file = file
+                else
+                  @state.Registry[cfg.id][config.id] =
+                    path: path
+                    file: file
         }
-        action: {} -- the env for event handlers
-        command: {} -- is it an env? at least a collenction of functions
-      Mechanics: -- used by Kernel execution
-        actions: {} -- direct kernel access
-        commands: {}
-      Help:
-        toplevel: {}
-        topic: {}
-        section: {}
-      Terrain:
-        terrain_type: {}
-      Units:
-        move_type: {} -- depend on terrain_types
-        race: {}
-        trait: {}
-        unit_type: {} -- depend on movetypes, races, traits
-      WesMods: {}
-      Era:
-        factions: {}
-        era: {}
-      Scenario: {}
-      Map: {}
       Config: config
 
     -- root must be loaded first or only wml_config function is known.
@@ -193,7 +188,13 @@ class Game
   test: =>
     @load_wesmod("test")
     @start_scenario("test")
-
+    @kernel\fire_event("Start")
+  ---
+  --
+  --
+  display_map: =>
+    @kernel\display!
+    --require("map_display")!
   ---
   --
   -- @param cfg
@@ -219,10 +220,10 @@ class Game
   load_wesmod: (id) =>
     unless id
       print "Available WesMods:"
-      for key, value in pairs @state.WesMods
+      for key, value in pairs @state.Registry.wesmod
         print key
       return
-    mod = @state.WesMods[id]
+    mod = @state.Registry.wesmod[id]
     if not mod
       log.error("Can't load, WesMod not registered: " .. id)
       return false
