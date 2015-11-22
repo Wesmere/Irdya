@@ -5,8 +5,23 @@
 -- @param [destination]: the location of the defending unit.
 
 wsl_command
-  id: "attack"
-  function: (cfg) ->
-    attacker = kernel\get_unit(cfg.source.x, cfg.source.y)
-    defender = kernel\get_unit(cfg.destination.x, cfg.destination.y)
-    attacker\attack(cfg.weapon, defender, cfg.defender_weapon)
+    id: "attack"
+    function: (cfg) ->
+        attacker = kernel\get_unit(cfg.source.x, cfg.source.y)
+        defender = kernel\get_unit(cfg.destination.x, cfg.destination.y)
+        attacker\attack(cfg.weapon, defender, cfg.defender_weapon)
+
+
+
+
+     --   events to be fired here:
+     -- attack
+     -- attack end
+     -- attacker hits
+     -- attacker misses
+     -- defender hits
+     -- defender misses
+     -- petrified
+     -- last last breath
+     -- die
+
