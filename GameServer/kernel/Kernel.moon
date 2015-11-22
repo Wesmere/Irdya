@@ -18,30 +18,41 @@ class Kernel
   -- @content
   new: (content) =>
     assert(content)
+    --assert(content.content)
     -- contains actions, commands, terrain_types, unit_types, eras, etc
-    @content_state = content
+    @content = content
     -- some game state @TODO
-    @game_state =
-      sides:
-        villages: {} -- Location Set
+    @game =
+      sides: {
+        -- 1:
+        --   villages: {} -- Location Set
+        --   units: {} -- unit.id --> Location
+        --   recalls
+        --   map: ?
+      }
+      teams: {
+        -- elves:
+        --   sides: {} signed array: side_number
+        --   labels: {} [x][y] --> label table
+      }
+      units: {} -- unit.id --> Unit
+      areas: {
+        -- darkwood:
+        --   location: {}
+        --   filter: {}
+      }
+      -- functions
       events: {} -- type --> array
-      units: {} -- unit.id --> Location
-      action: { kernel: @ } -- id --> function ENV for event handlers
-    -- display state to be synced with the diplay server
-    @display_state =
-      turn: 0
-      sides:
-        units: {} -- unit.id --> unit.data
-        labels: {} --
-        map: {}
-      -- contains 2darrays for hex grid based issues
-      board:
-        map: {} -- [x][y] --> terrain_type.id
-        units: {} -- [x][y] --> unit.id
-        labels: {} -- [x][y] --> label.data
-        items: {} -- [x][y] --> item.data
-        sound_sources: {} -- [x][y] -->
-        villages: {} -- [x][y] --> owner side_number
+      action: {} -- id --> function ENV for event handlers
+    -- contains 2darrays for hex grid based issues
+    @board =
+      time: {} -- [x][y] --> schedule.id
+      map: {} -- [x][y] --> terrain_type.string
+      units: {} -- [x][y] --> unit.id
+      labels: {} -- [x][y] --> label.data - the global labels
+      items: {} -- [x][y] --> item.data
+      sound_sources: {} -- [x][y] -->
+      villages: {} -- [x][y] --> owner side_number
   ---
   -- @TODO
   -- @return state update for a client
@@ -51,7 +62,7 @@ class Kernel
   -- Print the data table
   debug: =>
     -- debug.print(@content_state)
-    debug.print(@game_state)
+    debug.print(@content.Scenario)
   ---
   -- Print txt to stdout
   -- @param txt to print
@@ -65,10 +76,10 @@ class Kernel
     -- @TODO handle remove
     assert(cfg.name)
     assert(cfg.command)
-    utils.setfenv(cfg.command, @game_state.action)
-    if not @game_state.events[cfg.name]
-      @game_state.events[cfg.name] = {}
-    table.insert(@game_state.events[cfg.name], cfg)
+    utils.setfenv(cfg.command, @game.action)
+    if not @game.events[cfg.name]
+      @game.events[cfg.name] = {}
+    table.insert(@game.events[cfg.name], cfg)
     return true -- @ TODO
   ---
   --
@@ -92,25 +103,28 @@ class Kernel
   -- @param thing
   -- @param f
   -- @return
-  doArrayOrSingle: (thing, f) =>
-    assert(f)
-    assert(thing)
-    if isArray(thing)
-      log.warn("thing is an array")
-      result = for item in *thing
-        f(@, item)
-      return result
-    else return f(@, thing)
+  -- doArrayOrSingle: (thing, f) =>
+  --   assert(f)
+  --   assert(thing)
+  --   if isArray(thing)
+  --     log.warn("thing is an array")
+  --     result = for item in *thing
+  --       f(@, item)
+  --     return result
+  --   else return f(@, thing)
   ---
   --
   -- @param side
   setup_side: (side) =>
     assert(side)
-    @display_state.sides[side.side] =
+    @game.sides[side.side] =
       units: {}
       labels: {}
 
-    @doArrayOrSingle(side.unit, @create_unit)
+    units = wrapInArray(side.unit)
+    for unit in *units
+      unit.side = side.side
+      @create_unit(unit)
 
   ---
   -- Constructs a new unit table and puts it into gamestate
@@ -123,15 +137,15 @@ class Kernel
     unit_type = cfg.type
     --- @TODO handle misssing unit type id more gracefully
     assert(unit_type)
-    unit_type_cfg = @content_state.Units.unit_type[unit_type]
+    unit_type_cfg = @content.content.Units.unit_type[unit_type]
     --- @TODO handle missing units more gracefully
     assert(unit_type_cfg)
     new_unit_cfg = tablex.deepcopy(unit_type_cfg)
-    tablex.merge(new_unit_cfg, cfg)
-    @display_state.units[new_unit_cfg.id] = new_unit_cfg
-    new_unit = Unit(@display_state.sides[new_unit_cfg.side].units[new_unit_cfg.id])
-    assert(new_unit)
-    return new_unit
+    new_unit = tablex.merge(new_unit_cfg, cfg, true)
+    @game.units[cfg.id] = new_unit
+    unit = Unit(@game.units[cfg.id])
+    assert(unit)
+    return unit
   ---
   --
   -- @param id
@@ -139,25 +153,31 @@ class Kernel
   start_scenario: (id, cfg) =>
     log.trace("Kernel: Scenario started:" .. id)
     -- @TODO some error handling
-    scenario = @content_state.content.Scenario.scenario[id]
+    debug.print(@content)
+    scenario = @content.content.Scenario.scenario[id]
     assert(scenario)
     -- Let's load the map.
     map_parser = require "kernel/Map"
     if map_data = scenario.map_data
-      @display_state.board.map = map_parser(map_data)
+      @board.map = map_parser(map_data)
     elseif map_id = scenario.map
-      map_cfg = @content_state.content.Scenario.map[map_id]
+      map_cfg = @content.content.Scenario.map[map_id]
       assert(map_cfg)
-      @display_state.board.map = map_parser(map_cfg.map_data)
+      @board.map = map_parser(map_cfg.map_data)
     --- @TODO check if every used terrain type is known
     -- Side setup
     assert(scenario.side)
     debug.print(scenario.side)
     --@doArrayOrSingle(scenario.side, @setup_side)
 
-    for key, action in pairs @content_state.content.Mechanic.wsl_action
+    sides = wrapInArray(scenario.side)
+    for side in *sides
+      @setup_side(side)
+
+
+    for key, action in pairs @content.content.Mechanic.wsl_action
       --- @TODO do validation here
-      @game_state.action[key] = (cfg) -> return action.action(cfg, @)
+      @game.action[key] = (cfg) -> return action.action(cfg, @)
 
     for key, events in pairs scenario
       char = key\sub(1,1)
@@ -173,6 +193,14 @@ class Kernel
             @register_event_handler
               name: key
               command: event
+
+    @fire_event("Preload") -- should be fired every time a scenario got reloaded
+    @fire_event("Prestart") -- before anything is on the screen
+    @fire_event("Start")
+
+    @fire_event("NewTurn")
+
+
   ---
   -- @TODO
   -- @param side
@@ -181,20 +209,17 @@ class Kernel
   capture_village: (side, loc, fire_event) =>
     if fire_event
       @fire_event("capture", loc)
+
   ---
-  -- This getter wrapes a unit table from the game state into a class object.
-  -- @param location Location or Table to search on
-  -- @return Unit on the location or nil
-  get_unit: (x, y) =>
-    loc = Location(x, y)
-    if @game_state.Units[loc\get_x!] == nil
-      log.warn("Kernel.get_unit: Trying to get a unit from empty hex")
-      return nil
-    unit = @game_state.Units[loc\get_x!][loc\get_y!]
-    if unit == nil
-      log.warn("Kernel.get_unit: Trying to get a unit from empty hex")
-      return nil
-    return Unit(unit)
+  --
+  --
+  get_side: (side) =>
+    if type(side) == "number"
+      return @game.sides[sideFilter]
+
+    -- if type(side)
+
+
   ---
   -- Get all sides matching the given filter
   -- @param sideFilter SSF
@@ -213,6 +238,14 @@ class Kernel
   --   not: SSF
   -- @return a number list of matching sides
   get_sides: (sideFilter) =>
+
+    if type(sideFilter) == "number"
+      return @game.sides[sideFilter]
+
+      -- if side = @game.sides[sideFilter]
+      --   return side
+      -- else return
+
     result = Set {}
     number_of_sides = #@display_state.side
     all = Set [i for i = 1, number_of_sides]
@@ -275,7 +308,30 @@ class Kernel
   -- @param locationFilter
   -- @return iff the filter matches
   match_loc: (locationFilter) =>
-
+  ---
+  -- This getter wrapes a unit table from the game state into a class object.
+  -- @param location Location or Table to search on
+  -- @return Unit on the location or nil
+  get_unit_at: (x, y) =>
+    loc = Location(x, y)
+    if @game.Units[loc\get_x!] == nil
+      log.warn("Kernel.get_unit: Trying to get a unit from empty hex")
+      return nil
+    unit = @game.Units[loc\get_x!][loc\get_y!]
+    if unit == nil
+      log.warn("Kernel.get_unit: Trying to get a unit from empty hex")
+      return nil
+    return Unit(unit)
+  ---
+  -- This getter wrapes a unit table from the game state into a class object.
+  -- @param location Location or Table to search on
+  -- @return Unit on the location or nil
+  get_unit: (filter) =>
+    for id, unit in pairs @game.units
+      log.warn("Filtering unit with id: #{id}")
+      unit_obj = Unit(unit)
+      if unit_obj\filter(filter)
+        return unit_obj
   ---
   -- get_units
   -- @param
@@ -333,8 +389,8 @@ class Kernel
       primary_unit = (type(primary) == Unit) and primary or @get_unit(primary)
     if secondary
       secondary_unit = (type(secondary) == Unit) and secondary or @get_unit(secondary)
-    if events = @game_state.events[name]
-      for event in *@game_state.events[name]
+    if events = @game.events[name]
+      for event in *@game.events[name]
         @execute_event_handler(event, primary_unit, secondary_unit, first_weapon, second_weapon)
   ---
   -- Handle a command from the display server
@@ -359,3 +415,4 @@ class Kernel
     require("map_display")(@display_state.board.map)
 
 return Kernel
+

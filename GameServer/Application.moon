@@ -110,6 +110,7 @@ config =
   log_level: flags["log-level"] or "info"
 
 export Irdya = require("Game")(config)
+Irdya\test!
 
 prompt = require "prompt"
 with prompt

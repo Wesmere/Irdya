@@ -5,22 +5,19 @@ moon = require "moon"
 --
 class Location
 
-  -- TODO make private
-  -- process_args: (x, y) =>
+  --
+  --
+  -- process_args = (x, y) ->
   --   switch moon.type(x)
   --     when "number"
-  --       unless @Y = y
+  --       unless type(y) == "number"
   --         error("Missing second arguement 'y'")
-  --       @X = x
-  --       return
+  --       return x,y
   --     when Location
-  --       @X = x\get_x!
-  --       @Y = x\get_y!
-  --       return
+  --       return x.x, x.y
   --     when "table"
   --       if loc = x.loc
-  --         process_args(loc)
-  --         return
+  --         return process_args(loc)
   --       if @X = x.x
   --         unless @Y = x.y
   --           error("Missing y key")
@@ -42,23 +39,13 @@ class Location
   -- Location{ loc: { x: 3, y: 5} }
   -- Location(other_location)
   new: (x, y) =>
-    @X = {}
-    @Y = {}
-    -- process_args(x, y)
-    error("Location: X component not a mumber") unless type(@X) == "number"
-    error("Location: Y component not a mumber") unless type(@Y) == "number"
-
-  get_x: =>
-    return @X
-
-  get_y: =>
-    return @Y
-
+    --@x, @y = process_args(x, y)
+    error("Location: X component not a mumber") unless type(@x) == "number"
+    error("Location: Y component not a mumber") unless type(@y) == "number"
   ----
   -- to string method
   -- @return a human readable representation
   __tostring: =>
-    return ("(" .. @X .. "/" .. @Y .. ")")
+    return "(#{@x}/#{@y})"
 
 return Location
-

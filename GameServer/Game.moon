@@ -1,5 +1,6 @@
 -- MoonScript
 moonscript = require "moonscript"
+moon = require "moon"
 -- Penlight lib requires
 path = require "pl.path"
 dir = require "pl.dir"
@@ -27,7 +28,8 @@ class Game
     file_fun, err = moonscript.loadfile(file)
     if not file_fun
       --- @TODO think about a better error output format
-      log.error("#{file} >> #{err}")
+      --- err is most likely a syntax error
+      log.error("Error parsing file: #{file} >> #{err}")
       if anal_mode
         log.fatal("Anal mode exit")
         utils.quit("Anal exit")
@@ -35,13 +37,14 @@ class Game
     new_env = {}
     for key, value in pairs env
       new_env[key] = (cfg) -> value(cfg, file_basename, file_path)
-    new_env.state = @state
+    --new_env.state = @state
     utils.setfenv(file_fun, new_env)
     try
       do: ->
         file_fun!
       catch: (e) ->
-        log.error("Error Loading config file: " .. file .. ": " .. e)
+        --- @TODO better error output. Error is a runtime error
+        log.error("Error executing file: " .. file .. ": " .. e)
         if anal_mode
           log.fatal("Anal mode exit")
           utils.quit("Anal exit")
@@ -104,66 +107,107 @@ class Game
     log.info("Scanning root: " .. root_path)
     @load_all_files(root_path, env)
   ---
-  -- Constructor @TODO
-  -- @param data_dir
-  -- @param userdata_dir
-  -- @param config_dir
+  -- Constructor
+  -- @param config
   new: (config) =>
-    -- @core_loaded = false
-    -- @core_loaded = true --- @TODO
+
+    wsl_table_scanner = (cfg, file, dir_path) ->
+      @state.Registry.wsl_table[cfg.id] =
+        path: dir_path
+        file: file
+
+      dump_path = "/tmp/wml_dump"
+      dir.makepath(dump_path)
+
+      file_name = "WesMod"
+      if scope = cfg.scope
+        file_name = scope
+
+      file_path = path.join(dump_path, file_name)
+
+      mode = "a"
+      header1 = "# "
+      header2 = "## "
+      header3 = "### "
+      list_element = "* "
+      bold = (str) -> return "**#{str}**"
+      italic = (str) -> return "_#{str}_"
+
+      file_handle_mode = assert(io.open(file_path, mode))
+
+      if scope = cfg.scope
+        file_handle_mode\write("#{header1}#{scope}WSL\n")
+
+      file_handle_mode\write("#{header2}the #{italic(cfg.id)} table\n")
+
+      if description = cfg.description
+        file_handle_mode\write("#{description}\n\n")
+
+      file_handle_mode\write("The following keys are recognized in the #{bold(cfg.id)} tables:\n")
+
+      if scheme = cfg.scheme
+        for key, config in pairs scheme
+          if description = config.description
+            file_handle_mode\write("#{list_element}#{bold(key)}: #{description}\n")
+
+    wsl_handler_loader = (cfg) ->
+      assert(cfg.id, "no id for wsl table handler")
+      local env
+      local dest
+      @state.Registry[cfg.id] = {}
+      if cfg.scope
+        unless @state.ENV.folders[cfg.scope]
+          @state.ENV.folders[cfg.scope] = {}
+          table.insert(@state.ENV.folders, cfg.scope)
+          @state.content[cfg.scope] = {}
+        env = @state.ENV.folders[cfg.scope]
+        dest = @state.content[cfg.scope]
+        unless env[cfg.id]
+          env[cfg.id] = {}
+          dest[cfg.id] = {}
+      else
+        unless @state.ENV.toplevel[cfg.id]
+          @state.ENV.toplevel[cfg.id] = {}
+          @state.content.toplevel[cfg.id] = {}
+        env = @state.ENV.toplevel
+        dest = @state.content.toplevel
+      env[cfg.id] = (config, file, path) ->
+        --- @TODO do validation here!
+        dest[cfg.id][config.id] = config
+        if entry = @state.Registry[cfg.id][config.id]
+          entry.loaded = true
+        else @state.Registry[cfg.id][config.id] =
+          loaded: true
+      @state.ENV.on_scan[cfg.id] = (config, file, path) ->
+        if entry = @state.Registry[cfg.id][config.id]
+          entry.path = path
+          entry.file = file
+        else
+          @state.Registry[cfg.id][config.id] =
+            path: path
+            file: file
+
     @state =
       content:
         toplevel: {}
       Registry:
         wsl_table: {}
+        wsl_handler: {}
       ENV: -- holds tables being used as env
         toplevel: {}
         on_scan:
-          wsl_table: (cfg, file, path) -> @state.Registry.wsl_table[cfg.id] =
-            path: path
-            file: file
+          wsl_handler: (cfg, file, dir_path) ->
+            @state.Registry.wsl_handler[cfg.id] =
+              path: dir_path
+              file: file
+          wsl_table: wsl_table_scanner
         folders: { -- envs for wesmod content folders
           "WSL"
           --- @TODO think about same name but different scopes
           --  Which currently just overwrites the on_scan function
           WSL:
-            -- tostring: tostring
             wsl_table: (cfg) ->
-              assert(cfg.id, "no id for wsl table handler")
-              local env
-              local dest
-              @state.Registry[cfg.id] = {}
-              if cfg.scope
-                unless @state.ENV.folders[cfg.scope]
-                  @state.ENV.folders[cfg.scope] = {}
-                  table.insert(@state.ENV.folders, cfg.scope)
-                  @state.content[cfg.scope] = {}
-                env = @state.ENV.folders[cfg.scope]
-                dest = @state.content[cfg.scope]
-                unless env[cfg.id]
-                  env[cfg.id] = {}
-                  dest[cfg.id] = {}
-              else
-                unless @state.ENV.toplevel[cfg.id]
-                  @state.ENV.toplevel[cfg.id] = {}
-                  @state.content.toplevel[cfg.id] = {}
-                env = @state.ENV.toplevel
-                dest = @state.content.toplevel
-              env[cfg.id] = (config, file, path) ->
-                --- @TODO do validation here!
-                dest[cfg.id][config.id] = config
-                if entry = @state.Registry[cfg.id][config.id]
-                  entry.loaded = true
-                else @state.Registry[cfg.id][config.id] =
-                  loaded: true
-              @state.ENV.on_scan[cfg.id] = (config, file, path) ->
-                if entry = @state.Registry[cfg.id][config.id]
-                  entry.path = path
-                  entry.file = file
-                else
-                  @state.Registry[cfg.id][config.id] =
-                    path: path
-                    file: file
+            wsl_handler: wsl_handler_loader
         }
       Config: config
 
@@ -177,7 +221,7 @@ class Game
 
     if userdata_dir
       @scan_root(userdata_dir)
-    @kernel = require("kernel/Kernel")(@state)
+    @kernel = require("kernel/Kernel")(@state.content)
   ---
   -- dumb the game state
   debug: =>
@@ -187,8 +231,9 @@ class Game
   --
   test: =>
     @load_wesmod("test")
+    --moon.p(@state.content)
     @start_scenario("test")
-    @kernel\fire_event("Start")
+    --@kernel\fire_event("Start")
   ---
   --
   --
@@ -198,14 +243,14 @@ class Game
   ---
   --
   -- @param cfg
-  register_action: (cfg) =>
-    env =
-      kernel: @kernel
-    utils.setfenv(cfg.command, @content_state.actions)
-    assert(cfg.name)
-    if not @game_state.events[cfg.name]
-      @game_state.events[cfg.name] = {}
-    table.insert(@game_state.events[cfg.name], cfg)
+  -- register_action: (cfg) =>
+  --   env =
+  --     kernel: @kernel
+  --   utils.setfenv(cfg.command, @content_state.actions)
+  --   assert(cfg.name)
+  --   if not @game_state.events[cfg.name]
+  --     @game_state.events[cfg.name] = {}
+  --   table.insert(@game_state.events[cfg.name], cfg)
   ---
   -- @TODO
   -- @param id
