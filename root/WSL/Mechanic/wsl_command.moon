@@ -1,4 +1,4 @@
-wsl_table
+wsl_handler
     id: "wsl_command"
     scope: "Mechanic"
 

@@ -1,4 +1,4 @@
-wsl_table
+wsl_handler
     id: "race"
     scope: "Units"
     on_scan: (cfg) ->

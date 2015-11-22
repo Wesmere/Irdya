@@ -1,5 +1,5 @@
 -- note, root is loaded before scanned...
-wsl_table
+wsl_handler
     id: "root"
 --    scope: "WesMod"
 

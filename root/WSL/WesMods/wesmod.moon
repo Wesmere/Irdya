@@ -1,2 +1,2 @@
-wsl_table
+wsl_handler
     id: "wesmod" 

@@ -1,4 +1,4 @@
-wsl_table
+wsl_handler
     id: "unit_type"
     scope: "Units"
     on_scan: (cfg) ->

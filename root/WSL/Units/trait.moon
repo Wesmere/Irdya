@@ -18,7 +18,7 @@ Trait =
         is_list: true
         scheme: EffectWML
 
-wsl_table
+wsl_handler
     id: "trait"
     scope: "Units"
     description: [[The "trait" table describes a trait. When it appears in the [units] toplevel, it describes a global trait, and all races with the attribute ignore_global_traits=no will have this trait.; it may also appear in other places.]]
