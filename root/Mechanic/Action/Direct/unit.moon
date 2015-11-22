@@ -1,5 +1,5 @@
 wsl_action
-  id: "unit"
-  function: (cfg) ->
-    return kernel\create_unit(cfg)
+    id: "unit"
+    action: (cfg, kernel) ->
+        return kernel\create_unit(cfg)
 
