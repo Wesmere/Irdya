@@ -68,7 +68,7 @@ ERROR = (TEXT) ->
 --
 --     command: TIMED_ACTIONS "orc renaming", () ->
 --         MODIFY_UNIT {race = "orc"}, "name", _ "Azir"
-TIMED_ACTIONS TITLE_TEXT CONTENT_WML
+TIMED_ACTIONS = (TITLE_TEXT, CONTENT_WML) ->
     TIME_ACTIONS_time_begin = set_variable
         time: "stamp"
 

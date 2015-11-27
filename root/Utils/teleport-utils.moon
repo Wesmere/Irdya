@@ -1,7 +1,7 @@
 -- Functions for teleporting units.
 
 -- These don't depend on any other macros.  Please don't change this.
-e.
+
 
 ----
 -- Teleports a unit matching FILTER to X,Y

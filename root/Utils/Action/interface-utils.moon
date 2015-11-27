@@ -141,7 +141,7 @@ REMOVE_LABEL = (X, Y) ->
 --
 -- For example, let's scroll 5 right and 3 down:
 -- SCROLL 5 3
-SCROLL = (X, Y)
+SCROLL = (X, Y) ->
     scroll
         x: X
         y: Y

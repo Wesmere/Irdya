@@ -1,3 +1,5 @@
+_ = (str) -> return str
+
 -- Utility functions for use in the objectives dialog
 
 TURNS_RUN_OUT =

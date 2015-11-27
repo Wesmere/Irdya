@@ -48,8 +48,8 @@ AI_CANT_PLAY = (SIDES, cfg) ->
                 speaker: "narrator"
                 message: _ "The computer player might not be able to play side $side_number properly in this scenario. Side $side_number is intended to be played by a human player."
                 image: "wesnoth-icon"
-            set_variable
-                name: "side_#{side_number}_ai_warning_displayed"
-                value: true
+--            set_variable
+--                name: "side_#{side_number}_ai_warning_displayed"
+--                value: true
     table.insert(cfg.AiTurn, event)
     return cfg

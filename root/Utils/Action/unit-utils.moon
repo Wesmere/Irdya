@@ -1,7 +1,4 @@
-
 -- This file contains unit utility functions for WSL authors.
--- 
--- These don't rely on any other functions. Please don't change this.
 
 -- This needs to match the magic UNREACHABLE constant in unit_movement_type
 UNREACHABLE = 99
@@ -22,10 +19,10 @@ UNREACHABLE = 99
 --
 UNIT = (SIDE, TYPE, X, Y, WSL) ->
     with WSL
-        .side: SIDE
-        .type: TYPE
-        .x: X
-        .y: Y
+        .side = SIDE
+        .type = TYPE
+        .x = X
+        .y = Y
     return unit WSL
 
 -- Creates a generic unit of TYPE belonging to SIDE at X,Y, which has a
@@ -136,7 +133,7 @@ RECALL = (ID_STRING) ->
         id: ID_STRING
 
 -- Note that id precedes x and y, unlike with the unit-generating macros.
-RECALL_XY = (ID_STRING, X, Y)
+RECALL_XY = (ID_STRING, X, Y) ->
     recall
         id: ID_STRING
         x: X
@@ -174,7 +171,7 @@ RECALL_XY = (ID_STRING, X, Y)
 --     [/unit]
 -- #enddef
 
--- Stores an attribute of a unit to the given variable.
+-- Stores an attribute of a unit into the given global variable.
 -- 
 -- Example where this is used to flip all orcs to whatever side James is on:
 -- ! {STORE_UNIT_VAR (id=James) side side_of_James}

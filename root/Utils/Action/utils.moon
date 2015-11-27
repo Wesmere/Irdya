@@ -1,47 +1,39 @@
--- #textdomain wesnoth
--- # This file contains general utility macros for WML authors.
--- #
--- # Later macros in this file are built using earlier ones, which
--- # is why they live here rather than being broken out into topic-specific files.
+----
+-- @module actionWSL_utils
 
--- # ! in comments is used in generating HTML documentation, ignore it otherwise.
--- #define QUANTITY NAME EASY_VALUE NORMAL_VALUE HARD_VALUE
---     # Macro to define a 'quantity' differently based on difficulty levels.
--- #ifdef EASY
---     {NAME}={EASY_VALUE}
--- #endif
--- #ifdef NORMAL
---     {NAME}={NORMAL_VALUE}
--- #endif
--- #ifdef HARD
---     {NAME}={HARD_VALUE}
--- #endif
--- #enddef
+----
+-- @section utils
 
--- #define QUANTITY4 NAME EASY_VALUE NORMAL_VALUE HARD_VALUE NIGHTMARE_VALUE
---     # Four-difficulty version of QUANTITY
--- #ifdef EASY
---     {NAME}={EASY_VALUE}
--- #endif
+-- This file contains general utility functions for WSL authors.
+-- Later functions in this file are built using earlier ones, which
+-- is why they live here rather than being broken out into topic-specific files.
 
--- #ifdef NORMAL
---     {NAME}={NORMAL_VALUE}
--- #endif
+----
+-- Function to define a 'quantity' differently based on difficulty levels.
+QUANTITY = (NAME, EASY_VALUE, NORMAL_VALUE, HARD_VALUE) ->
+    if EASY
+        return { [NAME]: EASY_VALUE }
+    if NORMAL
+        return { [NAME]: NORMAL_VALUE }
+    if HARD
+        return { [NAME]: HARD_VALUE }
 
--- #ifdef HARD
---     {NAME}={HARD_VALUE}
--- #endif
+----
+-- Four-difficulty version of QUANTITY
+QUANTITY4 = (NAME, EASY_VALUE, NORMAL_VALUE, HARD_VALUE, NIGHTMARE_VALUE) ->
+    if EASY
+        return { [NAME]: EASY_VALUE }
+    if NORMAL
+        return { [NAME]: NORMAL_VALUE }
+    if HARD
+        return { [NAME]: HARD_VALUE }
+    if NIGHTMARE
+        return { [NAME]: NIGHTMARE_VALUE }
 
--- #ifdef NIGHTMARE
---     {NAME}={NIGHTMARE_VALUE}
--- #endif
--- #enddef
-
--- # No tab or space-based indentation for these macros to avoid trouble when these macros are used
--- # in the middle of a quoted string literal
--- #
--- # wmlindent: start ignoring
--- # wmlscope: start conditionals
+----
+-- No tab or space-based indentation for these macros to avoid trouble when these macros are used
+-- in the middle of a quoted string literal
+ON_DIFFICULTY = (EASY_VALUE, NORMAL_VALUE, HARD_VALUE) ->
 -- #ifdef EASY
 -- #define ON_DIFFICULTY EASY_VALUE NORMAL_VALUE HARD_VALUE
 -- {EASY_VALUE}#enddef
@@ -54,9 +46,9 @@
 -- #define ON_DIFFICULTY EASY_VALUE NORMAL_VALUE HARD_VALUE
 -- {HARD_VALUE}#enddef
 -- #endif
--- # wmlscope: stop conditionals
--- # wmlindent: stop ignoring
--- # wmlscope: prune ON_DIFFICULTY
+
+
+
 
 -- # No tab or space-based indentation for these macros to avoid trouble when these macros are used
 -- # in the middle of a quoted string literal
@@ -83,20 +75,21 @@
 -- # wmlindent: stop ignoring
 -- # wmlscope: prune ON_DIFFICULTY4
 
+----
+-- Function to define number of turns for different difficulty levels.
 TURNS = (EASY_AMOUNT, NORMAL_AMOUNT, HARD_AMOUNT) ->
---     # Macro to define number of turns for different difficulty levels.
---     {QUANTITY turns {EASY_AMOUNT} {NORMAL_AMOUNT} {HARD_AMOUNT}}
+    QUANTITY "turns", EASY_AMOUNT, NORMAL_AMOUNT, HARD_AMOUNT
 
--- #define TURNS4 EASY_AMOUNT NORMAL_AMOUNT HARD_AMOUNT NIGHTMARE_AMOUNT
---     # Four-difficulty version of TURNS
---     {QUANTITY4 turns {EASY_AMOUNT} {NORMAL_AMOUNT} {HARD_AMOUNT} {NIGHTMARE_AMOUNT}}
--- #enddef
+----
+-- Four-difficulty version of TURNS
+TURNS4 = (EASY_AMOUNT, NORMAL_AMOUNT, HARD_AMOUNT, NIGHTMARE_AMOUNT) ->
+    QUANTITY4 "turns", EASY_AMOUNT, NORMAL_AMOUNT, HARD_AMOUNT, NIGHTMARE_AMOUNT
 
--- #define GOLD EASY_AMOUNT NORMAL_AMOUNT HARD_AMOUNT
---     # Macro which will let you say {GOLD x y z} to set
---     # starting gold depending on easy/medium/hard - x/y/z
---     {QUANTITY gold {EASY_AMOUNT} {NORMAL_AMOUNT} {HARD_AMOUNT}}
--- #enddef
+----
+-- Macro which will let you say {GOLD x y z} to set
+-- starting gold depending on easy/medium/hard - x/y/z
+GOLD = (EASY_AMOUNT, NORMAL_AMOUNT, HARD_AMOUNT) ->
+    QUANTITY "gold", EASY_AMOUNT, NORMAL_AMOUNT, HARD_AMOUNT
 
 -- #define GOLD4 EASY_AMOUNT NORMAL_AMOUNT HARD_AMOUNT NIGHTMARE_AMOUNT
 --     # Four-difficulty version of GOLD
@@ -149,61 +142,49 @@ VARIABLE = (VAR, VALUE) ->
         name: VAR
         value: VALUE
 
+-- Assigns a persistent variable with the contents of a standard variable.
+GLOBAL_VARIABLE = (NAMESPACE, LOCAL_VAR_NAME, GLOBAL_VAR_NAME, SIDE) ->
+    set_global_variable
+        namespace: NAMESPACE
+        from_local: LOCAL_VAR_NAME
+        to_global: GLOBAL_VAR_NAME
+        side: SIDE
 
+-- Retrieves the contents of a persistent variable and stores them in a standard variable.
+VARIABLE_FROM_GLOBAL = (NAMESPACE, GLOBAL_VAR_NAME, LOCAL_VAR_NAME, SIDE) ->
+    get_global_variable
+        namespace: NAMESPACE
+        from_global: GLOBAL_VAR_NAME
+        to_local: LOCAL_VAR_NAME
+        side: SIDE
+        immediate: false
 
--- #define GLOBAL_VARIABLE NAMESPACE LOCAL_VAR_NAME GLOBAL_VAR_NAME SIDE
---     #Assigns a persistent variable with the contents of a standard variable.
---     [set_global_variable]
---         namespace={NAMESPACE}
---         from_local={LOCAL_VAR_NAME}
---         to_global={GLOBAL_VAR_NAME}
---         side={SIDE}
---     [/set_global_variable]
--- #enddef
+-- Macro to do mathematical operations on variables.
+VARIABLE_OP VAR OP_NAME VALUE
+    set_variable
+        name: VAR
+        [OP_NAME]: VALUE
 
--- #define VARIABLE_FROM_GLOBAL NAMESPACE GLOBAL_VAR_NAME LOCAL_VAR_NAME SIDE
---     #Retrieves the contents of a persistent variable and stores them in a standard variable.
---     [get_global_variable]
---         namespace={NAMESPACE}
---         from_global={GLOBAL_VAR_NAME}
---         to_local={LOCAL_VAR_NAME}
---         side={SIDE}
---         #immediate=no
---     [/get_global_variable]
--- #enddef
-
--- #define VARIABLE_OP VAR OP_NAME VALUE
---     # Macro to do mathematical operations on variables.
---     [set_variable]
---         name={VAR}
---         {OP_NAME}={VALUE}
---     [/set_variable]
--- #enddef
-
--- #define VARIABLE_CONDITIONAL VAR OP_NAME VALUE
---     # Macro to do conditional operations on variables.
---     [variable]
---         name={VAR}
---         {OP_NAME}={VALUE}
---     [/variable]
--- #enddef
+-- Macro to do conditional operations on variables.
+VARIABLE_CONDITIONAL VAR OP_NAME VALUE
+    variable
+        name: VAR
+        [OP_NAME]: VALUE
 
 -- Macro to clear a variable previously set.
 CLEAR_VARIABLE = (VAR_NAME) ->
     clear_variable
         name: VAR_NAME
 
--- #define CLEAR_GLOBAL_VARIABLE NAMESPACE MY_VARIABLE_NAME SIDE
---     # Clears a persistent variable entirely.
---     [clear_global_variable]
---         namespace={NAMESPACE}
---         global={MY_VARIABLE_NAME}
---         side={SIDE}
---         immediate=no
---     [/clear_global_variable]
--- #enddef
+----
+-- Clears a persistent variable entirely.
+CLEAR_GLOBAL_VARIABLE = (NAMESPACE, MY_VARIABLE_NAME, SIDE) ->
+    clear_global_variable
+        namespace: NAMESPACE
+        global: MY_VARIABLE_NAME
+        side: SIDE
+        immediate: false
 
--- # wmlindent: start ignoring
 -- #define FOREACH ARRAY_VALUE VAR
 -- # Macro to begin a WML clause that iterates over an array.
 -- {VARIABLE {VAR} 0}
@@ -213,7 +194,6 @@ CLEAR_VARIABLE = (VAR_NAME) ->
 --     less_than=${ARRAY_VALUE}.length
 --     [/variable]
 --     [do]
--- #enddef
 
 -- #define NEXT VAR
 -- # Macro to end a WML clause that iterates over an array.
@@ -224,11 +204,6 @@ CLEAR_VARIABLE = (VAR_NAME) ->
 --     [/do]
 -- [/while]
 -- {CLEAR_VARIABLE {VAR}}
--- #enddef
--- # wmlindent: stop ignoring
-
--- # wmlindent: opener "{FOREACH "
--- # wmlindent: closer "{NEXT "
 
 -- #define REPEAT NUMBER BODY_WML
 --     # Macro to execute some WML a defined number of times.
@@ -238,259 +213,205 @@ CLEAR_VARIABLE = (VAR_NAME) ->
 --     #!     {QUAKE "rumble.ogg"}
 --     #! )}
 --     {VARIABLE REPEAT_i 0}
-
 --     [while]
 --         [variable]
 --             name=REPEAT_i
 --             less_than={NUMBER}
---         [/variable]
-
 --         [do]
 --             {BODY_WML}
-
 --             {VARIABLE_OP REPEAT_i add 1}
---         [/do]
---     [/while]
-
 --     {CLEAR_VARIABLE REPEAT_i}
--- #enddef
 
--- #define LOOKUP_INDEX FROM_ARRAY_NAME WHERE_KEY_NAME WHERE_VALUE SAVE_AS_NAME
---     # Call this to lookup an array element that has a particular key-value pair
---     # then it saves the index of that element, or
---     # if the key-value pair is not found it saves the array's length
+----
+-- Call this to lookup an array element that has a particular key-value pair
+-- then it saves the index of that element, or
+-- if the key-value pair is not found it saves the array's length
+LOOKUP_INDEX = (FROM_ARRAY_NAME, WHERE_KEY_NAME, WHERE_VALUE, SAVE_AS_NAME) ->
 --     {VARIABLE {SAVE_AS_NAME} 0}
 --     [while]
 --         [variable]
 --             name={SAVE_AS_NAME}
 --             less_than=${FROM_ARRAY_NAME}.length
---         [/variable]
 --         [variable]
 --             name={FROM_ARRAY_NAME}[${SAVE_AS_NAME}].{WHERE_KEY_NAME}
 --             not_equals={WHERE_VALUE}
---         [/variable]
 --         [do]
 --             {VARIABLE_OP {SAVE_AS_NAME} add 1}
---         [/do]
---     [/while]
--- #enddef
 
--- #define LOOKUP_VALUE FROM_ARRAY_NAME WHERE_KEY_NAME WHERE_VALUE SAVE_KEY_NAME DEFAULT_VALUE SAVE_AS_NAME
---     # Call this to look up an array element that has a particular key-value pair
---     # then it saves another key from that same element.
+----
+-- Call this to look up an array element that has a particular key-value pair
+-- then it saves another key from that same element.
+LOOKUP_VALUE = (FROM_ARRAY_NAME, WHERE_KEY_NAME, WHERE_VALUE, SAVE_KEY_NAME, DEFAULT_VALUE, SAVE_AS_NAME) ->
 --     {LOOKUP_INDEX {FROM_ARRAY_NAME} {WHERE_KEY_NAME} {WHERE_VALUE} {SAVE_AS_NAME}}
 --     [if]
 --         [variable]
 --             name={SAVE_AS_NAME}
 --             numerical_equals=${FROM_ARRAY_NAME}.length
---         [/variable]
 --         [then]
 --             {VARIABLE {SAVE_AS_NAME} {DEFAULT_VALUE}}
---         [/then]
 --         [else]
 --             {VARIABLE {SAVE_AS_NAME} ${FROM_ARRAY_NAME}[${SAVE_AS_NAME}].{SAVE_KEY_NAME}}
---         [/else]
---     [/if]
--- #enddef
 
+----
 -- Alters a unit variable (such as unit.x, unit.type,
 -- unit.side), handling all the storing and unstoring.
 --
--- Example that flips all spearmen to side 2:
--- ! {MODIFY_UNIT type=Spearman side 2}
+-- @usage: -- Example that flips all spearmen to side 2:
+-- MODIFY_UNIT {type: "Spearman"}, "side", 2
 MODIFY_UNIT = (FILTER, VAR, VALUE) ->
     for unit in *store_unit
             filter: FILTER
             kill: true
         unit[VAR] = VALUE
---     [store_unit]
---         [filter]
---             {FILTER}
---         variable=MODIFY_UNIT_store
---         kill=yes
---     {FOREACH MODIFY_UNIT_store MODIFY_UNIT_i}
---         [set_variable]
---             name=MODIFY_UNIT_store[$MODIFY_UNIT_i].{VAR}
---             value={VALUE}
---         [unstore_unit]
---             variable=MODIFY_UNIT_store[$MODIFY_UNIT_i]
---             find_vacant=no
---     {NEXT MODIFY_UNIT_i}
---     {CLEAR_VARIABLE MODIFY_UNIT_store,MODIFY_UNIT_i}
+        unstore_unit
+            variable: "unit"
+            find_vacant: false
+----
+--
+-- @tparam SUF FILTER
+-- @tparam number OFFSET_X
+-- @tparam number OFFSET_Y
+MOVE_UNIT_BY = (FILTER, OFFSET_X, OFFSET_Y) ->
+    MOVE_UNIT_store = store_unit
+        filter: FILTER
+        variable: "MOVE_UNIT_store"
+        kill: true
+    for mover in MOVE_UNIT_store
+        mover.x += OFFSET_X
+        mover.y += OFFSET_Y
+        unstore_unit
+            variable: mover
+            find_vacant: false
+----
+-- Moves a unit from its current location to the given location,
+-- displaying movement normally.
+--
+-- Note that setting the destination on an existing unit does not kill either
+-- one, but causes the unit to move to the nearest vacant hex instead.
+-- @tparam SUF FILTER
+-- @tparam number TO_X
+-- @tparam number TO_Y
+MOVE_UNIT = (FILTER, TO_X, TO_Y) ->
+    with FILTER
+        .to_x = TO_X
+        .to_y = TO_Y
+        .fire_event = false
+    move_unit FILTER
+----
+-- Heals all? unit(s?) matching the given filter from all pain and diseases.
+-- @tparam SUF FILTER
+-- @treturn number amount of hp healed
+FULL_HEAL = (FILTER) ->
+    heal_unit
+        filter: FILTER
+        amount: "full"
+        restore_statuses: true
 
-
--- #define MOVE_UNIT_BY FILTER OFFSET_X OFFSET_Y
---     #TODO COMMENT
---     [store_unit]
---         [filter]
---             {FILTER}
---         [/filter]
-
---         variable=MOVE_UNIT_store
---         kill=yes
---     [/store_unit]
-
---     {FOREACH MOVE_UNIT_store MOVE_UNIT_BY_i}
---         {VARIABLE_OP MOVE_UNIT_store[$MOVE_UNIT_BY_i].x add {OFFSET_X}}
---         {VARIABLE_OP MOVE_UNIT_store[$MOVE_UNIT_BY_i].y add {OFFSET_Y}}
---         [unstore_unit]
---             variable=MOVE_UNIT_store[$MOVE_UNIT_BY_i]
---             find_vacant=no
---         [/unstore_unit]
---     {NEXT MOVE_UNIT_BY_i}
---     {CLEAR_VARIABLE MOVE_UNIT_store,MOVE_UNIT_BY_i}
--- #enddef
-
--- #define MOVE_UNIT FILTER TO_X TO_Y
---     # Moves a unit from its current location to the given location, displaying
---     # movement normally.
---     #
---     # Note that setting the destination on an existing unit does not kill either
---     # one, but causes the unit to move to the nearest vacant hex instead.
---     [move_unit]
---         {FILTER}
---         to_x={TO_X}
---         to_y={TO_Y}
---         fire_event=no
---     [/move_unit]
--- #enddef
-
--- #define FULL_HEAL FILTER
---     [heal_unit]
---         [filter]
---             {FILTER}
---         [/filter]
-
---         amount=full
---         restore_statuses=yes
---     [/heal_unit]
--- #enddef
-
--- #define PUT_TO_RECALL_LIST FILTER
---     # This places a given unit back to the recall list of the side it is on.
---     # Note however, that the unit is not healed to full health, so when
---     # recalled (even if not until the next scenario) the unit may have less
---     # than his maximum hp left.
---     #
---     # An example that returns all units stepping on (20,38) back to the recall
---     # list:
---     #
---     #! [event]
---     #!     name=moveto
---     #!
---     #!     [filter]
---     #!         x,y=20,38
---     #!     [/filter]
---     #!
---     #!     {PUT_TO_RECALL_LIST x,y=20,38}
---     #! [/event]
---     [put_to_recall_list]
---         {FILTER}
---     [/put_to_recall_list]
--- #enddef
-
--- # FIXME: Documentation for these is needed.
-
--- #define MENU_IMG_TXT IMAGE TEXT
--- "&"+{IMAGE}+"="+{TEXT}#enddef
-
--- #define MENU_IMG_TXT2 IMAGE FIRST_TEXT_VALUE SECOND_TEXT_VALUE
--- "&"+{IMAGE}+"="+{FIRST_TEXT_VALUE}+"="+{SECOND_TEXT_VALUE}#enddef
-
--- #define RECRUIT_UNIT_VARIATIONS SIDE TYPE VARIATIONS_VALUE
---     # Allows a side to seemingly recruit variations of a given unit, such as the
---     # the Walking Corpse.
---     #
---     # An example which makes side 2 have a 50% chance of getting a normal WC
---     # and a 50% chance of getting either a drake or dwarf variation:
---     #! {RECRUIT_UNIT_VARIATIONS 2 "Walking Corpse" none,none,drake,dwarf}
---     [event]
---         name=prerecruit
---         first_time_only=no
-
---         [filter]
---             side={SIDE}
---             type={TYPE}
---         [/filter]
-
---         {VARIABLE_OP recruited_unit_random_variation rand {VARIATIONS_VALUE}}
-
---         [if]
---             [variable]
---                 name=recruited_unit_random_variation
---                 not_equals=none
---             [/variable]
-
---             [then]
---                 [object]
---                     duration=forever
---                     silent=yes
-
---                     [filter]
---                         x,y=$x1,$y1
---                     [/filter]
-
---                     [effect]
---                         apply_to=variation
---                         name=$recruited_unit_random_variation
---                     [/effect]
-
---                     [effect]
---                         apply_to=hitpoints
---                         heal_full=yes
---                     [/effect]
---                 [/object]
---             [/then]
---         [/if]
-
---         {CLEAR_VARIABLE recruited_unit_random_variation}
---     [/event]
--- #enddef
-
-
---     # Scatters the given kind of units randomly on a given area on the map.
---     #
---     # An example which scatters some loyal elves on forest hexes in
---     # x,y=10-30,20-40, at a minimum of three hexes apart from each other and
---     # never on top of or adjacent to any already existing units:
---     #! {SCATTER_UNITS 20 "Elvish Fighter,Elvish Archer,Elvish Shaman" 3 (
---     #!     terrain=Gs^Fp
---     #!     x=10-30
---     #!     y=20-40
---     #!
---     #!     [not]
---     #!         [filter]
---     #!         [/filter]
---     #!     [/not]
---     #!
---     #!     [not]
---     #!         [filter_adjacent_location]
---     #!             [filter]
---     #!             [/filter]
---     #!         [/filter_adjacent_location]
---     #!     [/not]
---     #! ) (
---     #!     side=2
---     #!     generate_name=yes
---     #!     random_traits=yes
---     #!
---     #!     [modifications]
---     #!         {TRAIT_LOYAL}
---     #!     [/modifications]
---     #! )}
-SCATTER_UNITS = (NUMBER, TYPES, PADDING_RADIUS, FILTER, UNIT_WML) ->
-    FILTER.include_borders = false
+----
+-- This places a given unit back to the recall list of the side it is on.
+-- Note however, that the unit is not healed to full health, so when
+-- recalled (even if not until the next scenario) the unit may have less
+-- than his maximum hp left.
+--
+-- @usage An example that returns all units stepping on (20,38) back to the recall
+-- list:
+--
+-- event
+--     name=moveto
+--
+--     filter
+--          x: 20
+--          y: 38
+--
+--     command: PUT_TO_RECALL_LIST {x: 20, y: 38}
+PUT_TO_RECALL_LIST = (FILTER) ->
+    put_to_recall_list FILTER
+----
+--
+-- @tparam string IMAGE
+-- @tparam string TEXT
+-- @fixme Documentation for these is needed.
+MENU_IMG_TXT = (IMAGE, TEXT) ->
+    return "&" .. IMAGE .. "=" .. TEXT
+----
+--
+-- @tparam string IMAGE
+-- @tparam string FIRST_TEXT_VALUE
+-- @tparam string SECOND_TEXT_VALUE
+MENU_IMG_TXT2 = (IMAGE, FIRST_TEXT_VALUE, SECOND_TEXT_VALUE) ->
+    return "&" .. IMAGE .. "=" .. FIRST_TEXT_VALUE .. "=" .. SECOND_TEXT_VALUE
+----
+-- Allows a side to seemingly recruit variations of a given unit,
+-- such as the Walking Corpse.
+--
+-- @usage An example which makes side 2 have a 50% chance of getting a normal WC
+-- and a 50% chance of getting either a drake or dwarf variation:
+-- RECRUIT_UNIT_VARIATIONS 2, "Walking Corpse", {"none","none","drake","dwarf"}
+RECRUIT_UNIT_VARIATIONS = (SIDE, TYPE, VARIATIONS) ->
+    event
+        name: "Prerecruit"
+        first_time_only: false
+        filter:
+            side: SIDE
+            type: TYPE
+        command: ->
+            shuffleArray(VARIATIONS)
+            variation = VARIATIONS[1]
+            unless variation == "none"
+                object
+                    duration: "forever"
+                    silent: true
+                    filter:
+                        x: x1
+                        y: y1
+                    effect:
+                        apply_to: "variation"
+                        name: variation
+                    effect:
+                        apply_to: "hitpoints"
+                        heal_full: true
+----
+-- Scatters the given kind of units randomly on a given area on the map.
+--
+-- @tparam number NUMBER the amount of numbers to scatter
+-- @tparam {unit_type_id,...} TYPES
+-- @tparam number PADDING_RADIUS minimum distance between the units
+-- @tparam SLF FILTER
+-- @tparam Unit_WSL UNIT_WSL
+-- @treturn {Unit,...} The list containing the created units
+--
+-- An example which scatters some loyal elves on forest hexes in
+-- x,y=10-30,20-40, at a minimum of three hexes apart from each other and
+-- never on top of or adjacent to any already existing units:
+-- @usage SCATTER_UNITS 20, {"Elvish Fighter", "Elvish Archer", "Elvish Shaman"}, 3,
+--     {
+--         terrain: "Gs^Fp"
+--         x: "10-30"
+--         y: "20-40"
+--         not:
+--             filter: {}
+--         not:
+--             filter_adjacent_location:
+--                 filter: {}
+--     },
+--     {
+--         side: 2
+--         generate_name: true
+--         random_traits: true
+--         modifications: TRAIT_LOYAL
+--     }
+SCATTER_UNITS = (NUMBER, TYPES, PADDING_RADIUS, FILTER, UNIT_WSL) ->
+    FILTER.include_borders = false -- isn't excluding borders the deafault?
     possible_unit_locations = store_locations FILTER
     j = 1
-    for i = 1, NUMBER
+    res = for i=1, NUMBER
         break if #possible_unit_locations == 0
-        --- @TODO Shuffle locations
-        loc = possible_unit_locations[i]
-        with UNIT_WML
+        shuffleArray(possible_unit_locations)
+        loc = possible_unit_locations[1]
+        with UNIT_WSL
             .x = loc.x
             .y = loc.y
             .type = TYPES[j]
-        unit UNIT_WML
         if j == #TYPES then j = 1 else j += 1
         possible_unit_locations = store_locations
             find_in: possible_unit_locations
@@ -498,195 +419,68 @@ SCATTER_UNITS = (NUMBER, TYPES, PADDING_RADIUS, FILTER, UNIT_WML) ->
                 x: loc.x
                 y: loc.y
                 radius: PADDING_RADIUS
-
--- #define FORCE_CHANCE_TO_HIT FILTER SECOND_FILTER CTH_NUMBER EXTRA_CONDITIONS_WML
---     # Invisibly forces certain units to always have a specific chance to hit
---     # when fighting against certain other units.
---     #
---     # Note that the player still only sees the regular damage calculations, so
---     # this is useful if you need to give an invisible helping hand to the player
---     # or AI. For example, if the player is forced to attack with only a couple
---     # of units at the beginning of a scenario, you can use this to ensure that
---     # simply having bad luck cannot ruin their attempt so easily. Also you might
---     # have enemy leaders which the player is not supposed to fight or be able to
---     # defeat due to storyline reasons, but could theoretically still kill with
---     # some clever trick, AI mistake or sheer exceptional luck.
---     #
---     # An example which forces Konrad's attacks to always hit Li'sar, but only
---     # after turn 10:
---     #! {FORCE_CHANCE_TO_HIT id=Konrad id="Li'sar" 100 (
---     #!     [variable]
---     #!         name=turn_number
---     #!         greater_than=10
---     #!     [/variable]
---     #! )}
---     [event]
---         name=attack
---         first_time_only=no
-
---         [filter]
---             {FILTER}
---         [/filter]
-
---         [filter_second]
---             {SECOND_FILTER}
---         [/filter_second]
-
---         [if]
---             [and]
---                 {EXTRA_CONDITIONS_WML}
---             [/and]
-
---             [then]
---                 {FOREACH unit.attack i}
---                     [if]
---                         #This is to mute a warning message about retrieving a member of non-existant wml container.
---                         [variable]
---                             name=unit.attack[$i].specials.length
---                             greater_than=0
---                         [/variable]
-
---                         [variable]
---                             name=unit.attack[$i].specials.chance_to_hit.length
---                             greater_than=0
---                         [/variable]
-
---                         [then]
---                             [set_variables]
---                                 name=unit.attack[$i].specials.original_chance_to_hit
---                                 to_variable=unit.attack[$i].specials.chance_to_hit
---                             [/set_variables]
-
---                             {CLEAR_VARIABLE unit.attack[$i].specials.chance_to_hit}
---                         [/then]
---                     [/if]
-
---                     [set_variables]
---                         name=unit.attack[$i].specials.chance_to_hit
-
---                         [value]
---                             id=forced_cth
---                             value={CTH_NUMBER}
---                             cumulative=no
---                         [/value]
---                     [/set_variables]
---                 {NEXT i}
-
---                 [unstore_unit]
---                     variable=unit
---                     find_vacant=no
---                 [/unstore_unit]
-
---                 [event]
---                     name=attack end
---                     delayed_variable_substitution=yes
-
---                     {FOREACH unit.attack i}
---                         {CLEAR_VARIABLE unit.attack[$i].specials.chance_to_hit}
-
---                         [set_variables]
---                             name=unit.attack[$i].specials.chance_to_hit
---                             to_variable=unit.attack[$i].specials.original_chance_to_hit
---                         [/set_variables]
-
---                         {CLEAR_VARIABLE unit.attack[$i].specials.original_chance_to_hit}
---                     {NEXT i}
-
---                     [unstore_unit]
---                         variable=unit
---                         find_vacant=no
---                     [/unstore_unit]
---                 [/event]
---             [/then]
---         [/if]
---     [/event]
-
---     # The following event is a simple duplicates of the above ones, with the
---     # primary and secondary units reversed so that the effect is applied also on
---     # defense.
---     [event]
---         name=attack
---         first_time_only=no
-
---         [filter]
---             {SECOND_FILTER}
---         [/filter]
-
---         [filter_second]
---             {FILTER}
---         [/filter_second]
-
---         [if]
---             [and]
---                 {EXTRA_CONDITIONS_WML}
---             [/and]
-
---             [then]
---                 {FOREACH second_unit.attack i}
---                     [if]
---                         [variable]
---                             name=second_unit.attack[$i].specials.length
---                             greater_than=0
---                         [/variable]
-
---                         [variable]
---                             name=second_unit.attack[$i].specials.chance_to_hit.length
---                             greater_than=0
---                         [/variable]
-
---                         [then]
---                             [set_variables]
---                                 name=second_unit.attack[$i].specials.original_chance_to_hit
---                                 to_variable=second_unit.attack[$i].specials.chance_to_hit
---                             [/set_variables]
-
---                             {CLEAR_VARIABLE second_unit.attack[$i].specials.chance_to_hit}
---                         [/then]
---                     [/if]
-
---                     [set_variables]
---                         name=second_unit.attack[$i].specials.chance_to_hit
-
---                         [value]
---                             id=forced_cth
---                             value={CTH_NUMBER}
---                             cumulative=no
---                         [/value]
---                     [/set_variables]
---                 {NEXT i}
-
---                 [unstore_unit]
---                     variable=second_unit
---                     find_vacant=no
---                 [/unstore_unit]
-
---                 [event]
---                     name=attack end
---                     delayed_variable_substitution=yes
-
---                     {FOREACH second_unit.attack i}
---                         {CLEAR_VARIABLE second_unit.attack[$i].specials.chance_to_hit}
-
---                         [set_variables]
---                             name=second_unit.attack[$i].specials.chance_to_hit
---                             to_variable=second_unit.attack[$i].specials.original_chance_to_hit
---                         [/set_variables]
-
---                         {CLEAR_VARIABLE second_unit.attack[$i].specials.original_chance_to_hit}
---                     {NEXT i}
-
---                     [unstore_unit]
---                         variable=second_unit
---                         find_vacant=no
---                     [/unstore_unit]
---                 [/event]
---             [/then]
---         [/if]
---     [/event]
--- #enddef
-
+        unit UNIT_WSL
+    return res
+----
+-- Invisibly forces certain units to always have a specific chance to hit
+-- when fighting against certain other units.
+--
+-- Note that the player still only sees the regular damage calculations, so
+-- this is useful if you need to give an invisible helping hand to the player
+-- or AI. For example, if the player is forced to attack with only a couple
+-- of units at the beginning of a scenario, you can use this to ensure that
+-- simply having bad luck cannot ruin their attempt so easily. Also you might
+-- have enemy leaders which the player is not supposed to fight or be able to
+-- defeat due to storyline reasons, but could theoretically still kill with
+-- some clever trick, AI mistake or sheer exceptional luck.
+--
+-- @usage An example which forces Konrad's attacks to always hit Li'sar, but only
+-- after turn 10:
+-- FORCE_CHANCE_TO_HIT {id: "Konrad"}, {id: "Li'sar"}, 100,
+--     {
+--         variable:
+--             name: "turn_number"
+--             greater_than: 10
+--     }
+FORCE_CHANCE_TO_HIT = (FILTER, SECOND_FILTER, CTH_NUMBER, EXTRA_CONDITIONS_WML) ->
+    command = () ->
+        for i in unit.attack
+            set_variables
+                name: 'i["specials"]["chance_to_hit"]'
+                value:
+                    id: "forced_cth"
+                    value: CTH_NUMBER
+                    cumulative: false
+        event
+            name: "AttackEnd"
+            delayed_variable_substitution: true
+            command: ->
+                for i in unit.attack
+                    i.specials.chance_to_hit = i.specials.original_chance_to_hit
+    event
+        name: "Attack"
+        first_time_only: false
+        filter: FILTER
+        filter_second: SECOND_FILTER
+        filter_condition: EXTRA_CONDITIONS_WML
+        :command
+    -- The following event is a simple duplicates of the above ones, with the
+    -- primary and secondary units reversed so that the effect is applied also on
+    -- defense.
+    event
+        name: "Attack"
+        first_time_only: false
+        filter: SECOND_FILTER
+        filter_second: FILTER
+        filter_condition: EXTRA_CONDITIONS_WML
+        :command
+----
+-- Gives a side gold and informs the player about it.
+-- @tparam number AMOUNT the amount of gold to give to the player's side
+-- @tparam number SIDE the side the gold is given to. No SSF support.
+-- @todo add SSF support.
+-- @todo add message for the other players!
 LOOT = (AMOUNT, SIDE) ->
---- @TODO add message for the other players!
     message
         side_for: SIDE
         speaker: "narrator"
