@@ -1,3 +1,7 @@
+----
+-- The Kernel, responsible for executing events
+-- @classmod Kernel
+
 moonscript = require "moonscript"
 utils = require "pl.utils"
 dir = require "pl.dir"
@@ -9,19 +13,74 @@ Set = require "pl.Set"
 Location = require "kernel/Location"
 Unit = require "kernel/Unit"
 
+---
+-- @table Kernel.game.sides.side
+-- @tfield Set(Location) villages
+-- @tfield tab units unit.id --> Location
+-- @tfield {Unit,...} recalls
+-- @tfield number map
+-- @tfield number|string color It indicates team color. Can be one of the following:
+-- color	red	blue	green	purple	black	brown	orange	white	teal
+-- value	1	2	3	4	5	6	7	8	9
+-- @tfield "human"|"ai"|"network"|"null" controller Indicates type of player that control this side. In networked multiplayer, the controller attribute is ambiguous. Be very careful or you have OOS errors.
+-- [*] human: Human player
+-- ai: If players assigns "Computer Player" to "Player/Type" in game lobby
+-- network: In multiplayer for sides that client does not control, both what would normally be human and ai. For host values are as usual, this is where OOS comes from.
+-- null: If players assigns "Empty" to "Player/Type" in game lobby
+-- @tfield bool fog Indicates whether this side is affected by fog of war.
+-- @tfield number gold The amount of gold the side have.
+-- @tfield bool hidden (boolean) If 'yes', side is not shown in status table.
+-- @tfield number income Base income for this side (without villages).
+-- @tfield string name Name of player.
+-- @tfield {string,...} recruit A comma-separated list of unit types that can be recruited by this side.
+-- @tfield bool shroud Whether this side is affected by shroud.
+-- @tfield number side The $side_number of the side belonging to this container
+-- @tfield string team_name String representing the team's description.
+-- @tfield tstring user_team_name Translated string representing the team's description.
+-- @tfield number village_gold The amount of gold given to this side per village it controls per turn.
+-- @tfield bool scroll_to_leader Whether the game view scrolls to the side leader at the start of their turn.
+-- @tfield string flag Flag animation for villages owned by this side (see [side]). Unless previously specified in [side] or changed with WML (see [modify_side]), this value may be empty for the default flag animation.
+-- @tfield string flag_icon Flag icon for the status bar for this side (see [side]). Unless previously specified in [side] or changed with WML (see [modify_side]), this value may be empty for the default flag icon.
+-- @tfield number village_support The number o
+
+---
+-- @table content
+-- @tfield stuff more a field in the content table
+
+---
+-- @table game
+-- @tfield {side,...} sides
+-- @tfield {team,...} teams
+-- @tfield {[Unit],...} units unit.id --> Unit
+-- @tfield tab areas
+-- @tfield {[string]={event,...},...} events type --> array
+-- @tfield tab action id --> function ENV for event handlers
+
+---
+-- @table board
+-- @tfield [x][y]->unit_id units
+-- @tfield [x][y]->schedule.id time
+-- @tfield [x][y]->terrain_type.string map
+-- @tfield [x][y]->labels the global labels
+-- @tfield [x][y]->item items
+-- @tfield [x][y]->sound_source sound_sources
+-- @tfield [x][y]->number villages to owner side number mapping
+
 ----
--- @TODO
--- @classmod Kernel
+-- TODO
+-- lassmod Kernel
+-- contains 2darrays for hex grid based issues
 class Kernel
   ---
   -- Constructor
-  -- @content
+  -- @tparam Kernel self
+  -- @tab content
   new: (content) =>
     assert(content)
     --assert(content.content)
     -- contains actions, commands, terrain_types, unit_types, eras, etc
     @content = content
-    -- some game state @TODO
+    -- some game state @todo
     @game =
       sides: {
         -- 1:
@@ -54,35 +113,39 @@ class Kernel
       sound_sources: {} -- [x][y] -->
       villages: {} -- [x][y] --> owner side_number
   ---
-  -- @TODO
+  -- To be send to the display client
+  -- @tparam Kernel self
   -- @return state update for a client
   get_client_state = (side_number) ->
     return @display_state
   ---
   -- Print the data table
+  -- @tparam Kernel self
   debug: =>
     -- debug.print(@content_state)
     debug.print(@content.Scenario)
   ---
   -- Print txt to stdout
-  -- @param txt to print
+  -- @tparam Kernel self
+  -- @string txt to print
   print: (txt) => print(txt)
   ---
   -- register the given event handler
-  -- @param cfg
-  -- @return iff the event was registered or removed @TODO
+  -- @tparam Kernel self
+  -- @tab cfg
+  -- @treturn bool iff the event was registered or removed @todo
   register_event_handler: (cfg) =>
-    -- @TODO handle id
-    -- @TODO handle remove
+    -- @todo handle id
+    -- @todo handle remove
     assert(cfg.name)
     assert(cfg.command)
     utils.setfenv(cfg.command, @game.action)
     if not @game.events[cfg.name]
       @game.events[cfg.name] = {}
     table.insert(@game.events[cfg.name], cfg)
-    return true -- @ TODO
+    return true -- @todo
   ---
-  --
+  -- Check for a table being a pure array.
   -- @return iff t is a pure array
   isArray = (t) ->
     return false if type(t) == "function"
@@ -98,8 +161,7 @@ class Kernel
   wrapInArray = (t) ->
     return t if isArray(t)
     return { t }
-  ---
-  -- @TODO
+  --
   -- @param thing
   -- @param f
   -- @return
@@ -112,9 +174,12 @@ class Kernel
   --       f(@, item)
   --     return result
   --   else return f(@, thing)
+
+
   ---
-  --
-  -- @param side
+  -- Setup a side at scenario start.
+  -- @tparam Kernel self
+  -- @tab side
   setup_side: (side) =>
     assert(side)
     @game.sides[side.side] =
@@ -128,17 +193,18 @@ class Kernel
 
   ---
   -- Constructs a new unit table and puts it into gamestate
-  -- @param cfg
-  -- @return Unit created
+  -- @tparam Kernel self
+  -- @tab cfg
+  -- @treturn Unit created
   create_unit: (cfg) =>
     assert(cfg)
     tablex = require "pl.tablex"
     -- find the unit's type
     unit_type = cfg.type
-    --- @TODO handle misssing unit type id more gracefully
+    --- @todo handle misssing unit type id more gracefully
     assert(unit_type)
     unit_type_cfg = @content.content.Units.unit_type[unit_type]
-    --- @TODO handle missing units more gracefully
+    --- @todo handle missing units more gracefully
     assert(unit_type_cfg)
     new_unit_cfg = tablex.deepcopy(unit_type_cfg)
     new_unit = tablex.merge(new_unit_cfg, cfg, true)
@@ -147,12 +213,13 @@ class Kernel
     assert(unit)
     return unit
   ---
-  --
-  -- @param id
-  -- @param cfg
+  -- Start a damn scenario
+  -- @tparam Kernel self
+  -- @string id
+  -- @tab cfg
   start_scenario: (id, cfg) =>
     log.trace("Kernel: Scenario started:" .. id)
-    -- @TODO some error handling
+    -- @todo some error handling
     debug.print(@content)
     scenario = @content.content.Scenario.scenario[id]
     assert(scenario)
@@ -164,7 +231,7 @@ class Kernel
       map_cfg = @content.content.Scenario.map[map_id]
       assert(map_cfg)
       @board.map = map_parser(map_cfg.map_data)
-    --- @TODO check if every used terrain type is known
+    --- @todo check if every used terrain type is known
     -- Side setup
     assert(scenario.side)
     debug.print(scenario.side)
@@ -176,7 +243,7 @@ class Kernel
 
 
     for key, action in pairs @content.content.Mechanic.wsl_action
-      --- @TODO do validation here
+      --- @todo do validation here
       @game.action[key] = (cfg) -> return action.action(cfg, @)
 
     for key, events in pairs scenario
@@ -202,17 +269,21 @@ class Kernel
 
 
   ---
-  -- @TODO
-  -- @param side
-  -- @param loc
-  -- @param fire_event
+  -- Change the village ownership
+  -- @tparam Kernel self
+  -- @number side to give the ownership to
+  -- @tparam Location loc evil of the villabe thingy ding dong
+  -- @bool fire_event iff the "capture_village" event is fired
+  -- @treturn bool iff the village could be captured
   capture_village: (side, loc, fire_event) =>
     if fire_event
       @fire_event("capture", loc)
 
   ---
-  --
-  --
+  -- getter for a side
+  -- @tparam Kernel self
+  -- @number side
+  -- @treturn table
   get_side: (side) =>
     if type(side) == "number"
       return @game.sides[sideFilter]
@@ -222,13 +293,14 @@ class Kernel
 
   ---
   -- Get all sides matching the given filter
-  -- @param sideFilter SSF
-  --   side
-  --   has_unit
+  -- @tparam Kernel self
+  -- @tab sideFilter
+  -- @field side
+  -- @field  has_unit
   --     SUF
   --     search_recall_list
-  --   team_name
-  --   enemy_of: SSF
+  -- @field  team_name
+  -- @field  enemy_of: SSF
   --   allied_with: SSF
   --   has_enemy: SSF
   --   has_ally: SSF
@@ -249,7 +321,7 @@ class Kernel
     result = Set {}
     number_of_sides = #@display_state.side
     all = Set [i for i = 1, number_of_sides]
-    --- @TODO get the order right
+    --- @todo get the order right
     if filter = sideFilter["not"]
       match = get_sides(filter)
       result = result + (all - match)
@@ -266,30 +338,33 @@ class Kernel
       else return {}
 
   ---
-  --
-  -- @param sideFilter SSF
-  -- @param
-  -- @return iff the given filter matches the given side
+  -- match a side to a given filter
+  -- @tparam Kernel self
+  -- @tab sideFilter SSF
+  -- @number side_number
+  -- @treturn bool iff the given filter matches the given side
   match_side: (sideFilter, side_number) =>
     return false if sideFilter.side != side_number
     return false if @game_state.Sides
 
   ---
   -- Get all locations matching the filter
-  -- @param locationFilter
-  -- time_of_day
-  -- time_of_day_id
-  -- terrain
-  -- x,y
-  -- area
-  -- include_borders
+  -- @tparam Kernel self
+  -- @tab locationFilter
+  -- @param locationFilter.time_of_day
+  -- @param locationFilter.time_of_day_id
+  -- @param locationFilter.terrain
+  -- @param locationFilter.x
+  -- @param locationFilter.y
+  -- @param locationFilter.area
+  -- @param locationFilter.include_borders
   -- [filter] SUF
   -- [filter_vision]
   --   visible
   --   respect_fog
   -- [filter_owner] SSF
-  -- find_in
-  -- radius
+  -- @param locationFilter.find_in
+  -- @param locationFilter.radius
   -- [filter_radius]
   -- [and]
   -- [or]
@@ -297,7 +372,7 @@ class Kernel
   -- [filter_adjacent_location]
   --   count
   --   adjacent
-  -- @return
+  -- @treturn {Location,...} All matching locations.
   get_locs: (locationFilter) =>
     if type(locationFilter) == "function"
       return locationFilter
@@ -305,12 +380,15 @@ class Kernel
 
   ---
   -- Get only a single location
+  -- @param self
   -- @param locationFilter
   -- @return iff the filter matches
   match_loc: (locationFilter) =>
   ---
   -- This getter wrapes a unit table from the game state into a class object.
-  -- @param location Location or Table to search on
+  -- @param self
+  -- @param x location Location or Table to search on
+  -- @param y
   -- @return Unit on the location or nil
   get_unit_at: (x, y) =>
     loc = Location(x, y)
@@ -324,7 +402,8 @@ class Kernel
     return Unit(unit)
   ---
   -- This getter wrapes a unit table from the game state into a class object.
-  -- @param location Location or Table to search on
+  -- @param self
+  -- @param filter
   -- @return Unit on the location or nil
   get_unit: (filter) =>
     for id, unit in pairs @game.units
@@ -334,11 +413,12 @@ class Kernel
         return unit_obj
   ---
   -- get_units
-  -- @param
+  -- @param self
+  -- @param filter
   -- @return all units in game matching the filter
   get_units: (filter) =>
     matches = {}
-    -- @TODO try to be fast later
+    -- @todo try to be fast later
     --if filter.filter_location
     --  locations =
     for unit in *@scenario_state.units
@@ -346,20 +426,24 @@ class Kernel
         table.insert(matches, unit)
     return matches
   ---
+  -- event handler stuff executing thing
+  -- @param self
   -- @param handler
   -- @param primary
   -- @param second
+  -- @param first_weapon
+  -- @param second_weapon
   -- @return iff gamestate changed
   execute_event_handler: (handler, primary, second, first_weapon, second_weapon) =>
     return false if handler.remove
     return false if handler.filter_condition and not handler.filter_condition()
     return false if primary and not primary\filter(handler.filter)
     return false if second  and not second\filter(handler.filter_second)
-    --@TODO filter_attack
-    --@TODO filter_second_attack
-    --@TODO filter_side
-    --@TODO filter_condition
-    --@TODO delayed_variable_substitution ?
+    --@todo filter_attack
+    --@todo filter_second_attack
+    --@todo filter_side
+    --@todo filter_condition
+    --@todo delayed_variable_substitution ?
     log.debug("Executing " .. handler.name)
 
     if handler.first_time_only
@@ -372,7 +456,8 @@ class Kernel
   ---
   -- Fires all the events of the given type
   -- Which executes the handlers listening for them
-  -- @param name string
+  -- @tparam Kernel self
+  -- @string name
   -- @param primary optional unit or location
   -- @param secondary optional unit or location
   -- @param first_weapon
@@ -394,6 +479,7 @@ class Kernel
         @execute_event_handler(event, primary_unit, secondary_unit, first_weapon, second_weapon)
   ---
   -- Handle a command from the display server
+  -- @param self
   -- @param command
   execute_command: (command) =>
     assert(command.name)
@@ -403,16 +489,16 @@ class Kernel
     assert(action_func)
     return action_func(Command)
   ---
-  --
-  -- @param
+  -- execute a list of commands.
+  -- @param self
+  -- @param Actions
   execute_command_chain: (Actions) =>
     for Action in *@game_state.Actions
       execute_command()
   ---
-  --
-  --
+  -- Some display thing
+  -- @param self
   display: =>
     require("map_display")(@display_state.board.map)
 
 return Kernel
-

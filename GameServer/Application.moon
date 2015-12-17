@@ -1,4 +1,8 @@
 #!/usr/bin/env moon
+----
+-- Irdya thing
+-- @script some
+
 
 VERSION = "0.0"
 manifest_file_name = "WesMod.moon"
@@ -57,7 +61,7 @@ log.trace("root_path: " .. root_path)
 norm_path = path.normpath(root_path)
 log.trace("normpath: " .. norm_path)
 
---- @TODO detect them
+--- @todo detect them
 data_dir = flags["data-dir"] or norm_path
 userdata_dir = flags["userdata-dir"] or path.join("~/.local/share/kernel", VERSION, "data")
 userconfig_dir = flags["userconfig-dir"] or "~/.config/kernel"

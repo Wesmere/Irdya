@@ -1,3 +1,7 @@
+----
+-- This class is more or less just a loader for the game's content
+-- @classmod Game
+
 -- MoonScript
 moonscript = require "moonscript"
 moon = require "moon"
@@ -6,20 +10,21 @@ path = require "pl.path"
 dir = require "pl.dir"
 utils = require "pl.utils"
 tablex = require "pl.tablex"
-----
--- This class is more or less just a loader for the game's content
--- @TODO
--- @classmod Game
+
+
+---
+-- jo class game here
 class Game
-  --- @TODO move into function or outside of class?
+  --- @todo move into function or outside of class?
   try = require "../utils/try"
   ----
   -- Load a single file within the given environment.
-  -- @param file the filepath to load
-  -- @param env environment to execute in
+  -- @tparam Game self nothing
+  -- @string file the filepath to load
+  -- @tab env environment to execute in
   load_cfg_file: (file, env) =>
     anal_mode = @state.Config.anal_mode
-    --- @TODO better and more output
+    --- @todo better and more output
     assert(env, "No env")
     assert(file, "No file")
     env.tostring = tostring
@@ -27,7 +32,7 @@ class Game
     file_basename = path.basename(file)
     file_fun, err = moonscript.loadfile(file)
     if not file_fun
-      --- @TODO think about a better error output format
+      --- @todo think about a better error output format
       --- err is most likely a syntax error
       log.error("Error parsing file: #{file} >> #{err}")
       if anal_mode
@@ -43,7 +48,7 @@ class Game
       do: ->
         file_fun!
       catch: (e) ->
-        --- @TODO better error output. Error is a runtime error
+        --- @todo better error output. Error is a runtime error
         log.error("Error executing file: " .. file .. ": " .. e)
         if anal_mode
           log.fatal("Anal mode exit")
@@ -52,12 +57,13 @@ class Game
         log.trace("Loaded File: " .. file)
   ---
   -- Load only the files at this level of the directory structure.
-  -- @param content_dir_path
-  -- @param env environment to execute the files in
+  -- @tparam Game self
+  -- @string content_dir_path
+  -- @tab env environment to execute the files in
   load_files: (content_dir_path, env) =>
     assert(content_dir_path)
     assert(env)
-    --- @TODO this patterns don't work
+    --- @todo this patterns don't work
     --files = dir.getfiles(content_dir_path, "@(*.moon|*.lua)")
     files = dir.getfiles(content_dir_path, "*.moon")
     for file in *files
@@ -65,8 +71,9 @@ class Game
       @load_cfg_file(filePath, env)
   ---
   -- Load each and every file in the given path.
-  -- @param content_dir_path root path to load from
-  -- @param env environment to run the file loader with
+  -- @tparam Game self
+  -- @string content_dir_path root path to load from
+  -- @tab env environment to run the file loader with
   load_all_files: (content_dir_path, env) =>
     assert(content_dir_path)
     assert(env)
@@ -74,7 +81,7 @@ class Game
     iter = dir.walk(content_dir_path, false, false)
     helper = (root, dirs, files) ->
       log.trace(root)
-      --- @TODO this patterns don't work
+      --- @todo this patterns don't work
       --for file in *dir.filter(files, "@(*.moon|*.lua)")
       for file in *dir.filter(files, "*.moon")
         filepath = path.join(root, file)
@@ -82,7 +89,8 @@ class Game
     seq = require("pl.seq").foreach(iter, helper)
   ---
   -- load WesMod by path
-  -- @param wesmod_path string
+  -- @tparam Game self
+  -- @string wesmod_path
   load_wesmod_by_path: (wesmod_path) =>
     log.info("Loading WesMod at: " .. wesmod_path)
     -- Note: order matters
@@ -100,15 +108,19 @@ class Game
     @load_files(wesmod_path, env)
     return true
   ---
-  -- @TODO
-  -- @param root_path
+  -- Scans all the root for stuff
+  -- @tparam Game self
+  -- @string root_path
   scan_root: (root_path) =>
     env = @state.ENV.on_scan
     log.info("Scanning root: " .. root_path)
     @load_all_files(root_path, env)
   ---
   -- Constructor
-  -- @param config
+  -- @tparam Game self
+  -- @tab config
+  -- @string config.data_dir
+  -- @string config.userdata_dir
   new: (config) =>
 
     wsl_table_scanner = (cfg, file, dir_path) ->
@@ -172,7 +184,7 @@ class Game
         env = @state.ENV.toplevel
         dest = @state.content.toplevel
       env[cfg.id] = (config, file, path) ->
-        --- @TODO do validation here!
+        --- @todo do validation here!
         dest[cfg.id][config.id] = config
         if entry = @state.Registry[cfg.id][config.id]
           entry.loaded = true
@@ -203,7 +215,7 @@ class Game
           wsl_table: wsl_table_scanner
         folders: { -- envs for wesmod content folders
           "WSL"
-          --- @TODO think about same name but different scopes
+          --- @todo think about same name but different scopes
           --  Which currently just overwrites the on_scan function
           WSL:
             wsl_table: (cfg) ->
@@ -219,28 +231,29 @@ class Game
       log.fatal("no data dir")
       utils.quit("no data dir")
 
-    if userdata_dir
+    if userdata_dir = config.userdata_dir
       @scan_root(userdata_dir)
     @kernel = require("kernel/Kernel")(@state.content)
   ---
   -- dumb the game state
+  -- @tparam Game self
   debug: =>
     @kernel\debug!
   ---
-  --
-  --
+  -- test the west
+  -- @tparam Game self
   test: =>
     @load_wesmod("test")
     --moon.p(@state.content)
     @start_scenario("test")
     --@kernel\fire_event("Start")
   ---
-  --
-  --
+  -- display the map for debugging purposes
+  -- @tparam Game self
   display_map: =>
     @kernel\display!
-    --require("map_display")!
-  ---
+
+  --
   --
   -- @param cfg
   -- register_action: (cfg) =>
@@ -251,17 +264,22 @@ class Game
   --   if not @game_state.events[cfg.name]
   --     @game_state.events[cfg.name] = {}
   --   table.insert(@game_state.events[cfg.name], cfg)
+
+
   ---
-  -- @TODO
-  -- @param id
-  -- @param cfg
+  -- Start the scenario
+  -- @tparam Game self
+  -- @string id
+  -- @tab cfg
   start_scenario: (id, cfg) =>
     assert(id, "Missing first arguement")
     @kernel = require("kernel/Kernel")(@state)
     @kernel\start_scenario(id, cfg)
+
   ---
   -- Load a WesMod by its id
-  -- @param id of the WesMod to load
+  -- @tparam Game self
+  -- @string id of the WesMod to load
   load_wesmod: (id) =>
     unless id
       print "Available WesMods:"
@@ -276,7 +294,7 @@ class Game
     if mod.loaded
       log.warn("WesMod " .. id .. " already loaded")
       return false
-    -- @TODO
+    -- @todo
     -- if (not @core_loaded) and mod.type != "core"
     --   log.error("WesMod " .. id .. " can't load, core needed")
     --   return false

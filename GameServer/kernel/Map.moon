@@ -1,11 +1,6 @@
---tablex = require "pl.tablex"
-
---moon = require "moon"
---moonscript = require "moonscript"
-
 parse_map_string = (map_string) ->
   assert(map_string)
-  log.trace("Parsing a map string: " .. map_string)
+  log.trace("Parsing map string: " .. map_string)
   map = {}
   y = 0
   for line in string.gmatch(map_string, "[^\r\n]+")
@@ -19,10 +14,3 @@ parse_map_string = (map_string) ->
   return map
 
 return parse_map_string
-
-----
---
---
--- class Map
---   new: (cfg) =>
---     @data = load_map_string(cfg.map_data)
