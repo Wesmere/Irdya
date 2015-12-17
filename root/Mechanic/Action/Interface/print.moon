@@ -5,7 +5,7 @@ wsl_action
     description: "Displays a message across the screen. The message will disappear after a certain time."
 
     action: (cfg, kernel) ->
-        kernel\send_request("print", text, duration)
+        wesnoth.print(cfg)
 
     scheme:
         text:

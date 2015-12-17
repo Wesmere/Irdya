@@ -1,11 +1,17 @@
-
-
 wsl_action
     id: "store_villages"
     description: "Stores a series of locations of villages that pass certain criteria into an array. Each member of the result array will have members 'x' and 'y' (the position) and 'terrain' (the terrain type) and 'owner_side'. note: The only advantage/difference this tag has, in comparison to using [store_locations]terrain=*^V*, is that the amount of hexes which are considered for a possible match is previously restricted to those with villages."
 
-    action: (cfg, kernel) ->
-        villages = kernel
+    action: (cfg, wesnoth) ->
+        villages = wesnoth.get_villages( cfg )
+        writer = utils.vwriter.init(cfg, "location")
+        for village in *villages
+            utils.vwriter.write(writer, {
+                x: village[1]
+                y: village[2]
+                terrain: wesnoth.get_terrain( village[1], village[2] )
+                owner_side: wesnoth.get_village_owner( village[1], village[2] ) or 0
+            })
 
     scheme:
         variable:

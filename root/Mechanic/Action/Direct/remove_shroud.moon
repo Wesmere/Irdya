@@ -1,7 +1,20 @@
- 
--- [remove_shroud]
--- Removes some shroud from the map for a certain side (only relevant for sides that have shroud=yes).
--- side: (default=1) the side for which to remove shroud. This can be a comma-separated list of sides. note: Default side=1 for empty side= is deprecated.
--- [filter_side] with a StandardSideFilter as argument
--- StandardLocationFilter: the range of tiles for which shroud should be removed
-  
+
+wsl_action
+    id: "remove_shroud"
+    description: "Removes some shroud from the map for a certain side (only relevant for sides that have shroud: true)."
+
+    scheme:
+        side:
+            description: "(default=1) the side for which to remove shroud. This can be a comma-separated list of sides. note: Default side=1 for empty side= is deprecated."
+            default: 1
+            type: "number"
+
+        filter_side:
+            description: "with a StandardSideFilter as argument"
+            type: "table"
+            table: "SSF"
+
+        StandardLocationFilter:
+            description: "the range of tiles for which shroud should be removed"
+            type: "table"
+            table: "SLF"

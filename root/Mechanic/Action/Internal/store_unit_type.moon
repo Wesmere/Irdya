@@ -2,12 +2,20 @@ wsl_action
     id: "store_unit_type"
 
     action: (cfg, kernel) ->
-        types = for unit_type in *cfg.type
-            kernel.content.unit_type[unit_type]
-        if #types == 1
-            types = types[1]
-        _G[cfg.variable] = types
-        return types
+        types = cfg.type or
+            helper.wml_error "[store_unit_type] missing required type= attribute."
+        writer = utils.vwriter.init(cfg, "unit_type")
+        for w in *types
+            unit_type = wesnoth.unit_types[w] or
+                helper.wml_error(string.format("Attempt to store nonexistent unit type '%s'.", w))
+            utils.vwriter.write(writer, unit_type.__cfg)
+
+        -- types = for unit_type in *cfg.type
+        --     kernel.content.unit_type[unit_type]
+        -- if #types == 1
+        --     types = types[1]
+        -- _G[cfg.variable] = types
+        -- return types
 
     scheme:
         type:

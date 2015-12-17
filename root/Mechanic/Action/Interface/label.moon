@@ -3,19 +3,25 @@ wsl_action
     description: "Places a label on the map."
 
     action: (cfg, kernel) ->
-        locs = kernel\get_locs(cfg.filter_location)
-        labels = if team = cfg.team_id
-            kernel.game_state.teams[team].labels
-        else
-            kernel.board.labels
-        label =
-            text: cfg.text
-            color: cfg.color
-            visible_in_fog: cfg.visible_in_fog
-            visible_in_shroud: cfg.visible_in_shroud
-            immutable: cfg.immutable
-        for loc in *locs
-            labels[loc\x!][loc\y!] = label
+
+        new_cfg = helper.parsed( cfg )
+        for location in *wesnoth.get_locations(cfg)
+            new_cfg.x, new_cfg.y = location[1], location[2]
+            wesnoth.label( new_cfg )
+
+        -- locs = kernel\get_locs(cfg.filter_location)
+        -- labels = if team = cfg.team_id
+        --     kernel.game_state.teams[team].labels
+        -- else
+        --     kernel.board.labels
+        -- label =
+        --     text: cfg.text
+        --     color: cfg.color
+        --     visible_in_fog: cfg.visible_in_fog
+        --     visible_in_shroud: cfg.visible_in_shroud
+        --     immutable: cfg.immutable
+        -- for loc in *locs
+        --     labels[loc\x!][loc\y!] = label
 
     scheme:
         --loc:
@@ -42,3 +48,4 @@ wsl_action
             description: [[whether this label is protected from being removed or changed by players. Default yes.]]
             type: "Bool"
             default: true
+

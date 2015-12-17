@@ -1,19 +1,20 @@
-
-
-
-
-
-
 wsl_action
     id: "put_to_recall_list"
     description: [[(Version 1.13.0 and later only)
 Puts a unit to the recall list of its side.]]
 
     action: (cfg, kernel) ->
-        units = kernel\get_units(cfg.StandardUnitFilter)
-        --for i, unit in ipairs units
-        --    if unit.id
-
+        units = wesnoth.get_units(cfg)
+        for unit in *units
+            if cfg.heal
+                with unit
+                    .hitpoints = unit.max_hitpoints
+                    .moves = unit.max_moves
+                    .attacks_left = unit.max_attacks
+                    .status.poisoned = false
+                    .status.slowed = false
+            wesnoth.put_recall_unit(unit, unit.side)
+            wesnoth.erase_unit(unit)
 
     scheme:
         StandardUnitFilter:

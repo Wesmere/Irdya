@@ -3,13 +3,11 @@ wsl_action
     description: "Changes the terrain on the map."
 
     action: (cfg, kernel) ->
-        locations = kernel\get_locations(cfg.filter)
-        for location in *locations
-
-            --if is_village
-
-            kernel.board.map[location.x][location.y] = cfg.terrain
-
+        terrain = cfg.terrain or helper.wml_error("[terrain] missing required terrain= attribute")
+        -- cfg = helper.shallow_parsed(cfg)
+        cfg.terrain = nil
+        for loc in *wesnoth.get_locations(cfg)
+            wesnoth.set_terrain(loc[1], loc[2], terrain, cfg.layer, cfg.replace_if_failed)
 
     scheme:
         terrain:

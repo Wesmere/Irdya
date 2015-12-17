@@ -1,13 +1,89 @@
-
 wsl_action
     id: "endlevel"
-    description: [[Ends the scenario.]]
+    description: "Ends the scenario."
 
-    action: (cfg, kernel) ->
-        kernel\fire_event(cfg.result)
+    action: (cfg, wesnoth) ->
+        -- parsed = helper.parsed(cfg)
+        if wesnoth.check_end_level_disabled()
+            wesnoth.message("Repeated [endlevel] execution, ignoring")
+            return
 
+        next_scenario = cfg.next_scenario
+        if next_scenario
+            wesnoth.set_next_scenario(next_scenario)
 
-        kernel\start_scenario(cfg.next_scenario)
+        end_text = cfg.end_text
+        end_text_duration = cfg.end_text_duration
+        if end_text or end_text_duration
+            wesnoth.set_end_campaign_text(end_text or "", end_text_duration)
+
+        end_credits = cfg.end_credits
+        if end_credits ~= nil
+            wesnoth.set_end_campaign_credits(end_credits)
+
+        side_results = {}
+        for result in cfg.result
+            side = result.side or helper.wml_error("[result] in [endlevel] missing required side= key")
+            side_results[side] = result
+
+        there_is_a_human_victory = false
+        there_is_a_human_defeat = false
+        there_is_a_local_human_victory = false
+        there_is_a_local_human_defeat = false
+        bool_int = (b) ->
+            if b == true
+                return 0
+            elseif b == false
+                return 1
+            else
+                return b
+
+        for side in *wesnoth.sides
+            side_result = side_results[side.side] or {}
+            victory_or_defeat = side_result.result or cfg.result or "victory"
+            victory = victory_or_defeat == "victory"
+            if victory_or_defeat ~= "victory" and victory_or_defeat ~= "defeat"
+                return helper.wml_error("invalid result= key in [endlevel] '" .. victory_or_defeat .."'")
+
+            if side.controller == "human" or side.controller == "network"
+                if victory
+                    there_is_a_human_victory = true
+                else
+                    there_is_a_human_defeat = true
+
+            if side.controller == "human"
+                if victory
+                    there_is_a_local_human_victory = true
+                else
+                    there_is_a_local_human_defeat = true
+
+            if side_result.bonus ~= nil
+                side.carryover_bonus = bool_int(side_result.bonus)
+            elseif cfg.bonus ~= nil
+                side.carryover_bonus = bool_int(cfg.bonus)
+
+            if side_result.carryover_add ~= nil
+                side.carryover_add = side_result.carryover_add
+            elseif cfg.carryover_add ~= nil
+                side.carryover_add = cfg.carryover_add
+
+            if side_result.carryover_percentage ~= nil
+                side.carryover_percentage = side_result.carryover_percentage
+            elseif cfg.carryover_percentage ~= nil
+                side.carryover_percentage = cfg.carryover_percentage
+
+        proceed_to_next_level = there_is_a_human_victory or (not there_is_a_human_defeat and cfg.result ~= "defeat")
+        victory = there_is_a_local_human_victory or (not there_is_a_local_human_defeat and proceed_to_next_level)
+
+        wesnoth.end_level
+            music: cfg.music
+            carryover_report: cfg.carryover_report
+            save: cfg.save
+            replay_save: cfg.replay_save
+            linger_mode: cfg.linger_mode
+            reveal_map: cfg.reveal_map
+            proceed_to_next_level: proceed_to_next_level
+            result: victory and "victory" or "defeat"
 
     scheme:
         result:

@@ -1,6 +1,20 @@
- 
--- [set_recruit]
--- Sets the units a side can recruit.
--- recruit: the types of units that the side can now recruit.
--- side: (default=1) the number of the side that is having its recruitment set. This can be a comma-separated list. note: Default side=1 for empty side= is deprecated.
--- StandardSideFilter tags and keys; default for empty side= is all sides, as usual in a SSF.
+wsl_action
+    id: "set_recruit"
+    description: "Sets the units a side can recruit."
+
+    action: (cfg, kernel) ->
+        recruit = cfg.recruit or helper.wml_error("[set_recruit] missing required recruit= attribute")
+        for team in *wesnoth.get_sides(cfg)
+            v = for w in *recruit
+                w
+            team.recruit = v
+
+    scheme:
+        recruit:
+            description: "the types of units that the side can now recruit."
+        side:
+            description: "(default=1) the number of the side that is having its recruitment set. This can be a comma-separated list. note: Default side=1 for empty side= is deprecated."
+            default: 1
+            type: "number"
+        StandardSideFilter:
+            description: "tags and keys; default for empty side= is all sides, as usual in a SSF."

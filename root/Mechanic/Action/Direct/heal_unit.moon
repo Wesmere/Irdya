@@ -2,13 +2,8 @@ wsl_action
     id: "heal_unit"
     description: [[Heal a unit. The variable $heal_amount will be set to the exact number of points healed (i.e can be lesser than the parameter amount if the unit is fully healed). $heal_amount contains only the number of hitpoints the first unit that was found got healed.]]
 
-    action: (cfg, kernel) ->
-        healed_units = kernel\get_units(cfg.filter)
-        healing_units = kernel\get_units(cfg.filter_second)
-
-        for i, healed in ipairs healed_units
-            damage = healed.max_hitpoints - healed.hitpoints
-
+    action: (cfg, wesnoth) ->
+        wesnoth.heal_unit(cfg)
 
     scheme:
         filter:
@@ -40,3 +35,4 @@ wsl_action
             description: [[(boolean, default yes) Whether standard statuses should be reset to "no". This affects poisoned, slowed, petrified and unhealable. Before 1.9 this is always "no".]]
             type: "Bool"
             default: true
+

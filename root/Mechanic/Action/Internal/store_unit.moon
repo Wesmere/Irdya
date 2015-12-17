@@ -7,23 +7,45 @@ Common usage is to manipulate a unit by using [store_unit] to store it into a va
 Note: stored units also exist on the field, and modifying the stored variable will not automatically change the stats of the units. You need to use [unstore_unit]. See also [unstore_unit] and FOREACH."
 
     action: (cfg, kernel) ->
-        units = kernel\get_units(cfg.filter)
-        if cfg.kill
-            for unit in *units
-                kernel\remove_unit(unit.id)
-        if variable = cfg.variable
-            if mode = cfg.mode
-                switch mode
-                    when "always_clear"
-                        _G[variable] = units
-                    when "append"
-                        start = #(_G[variable]) + 1
-                        for i, unit in ipairs units
-                            _G[variable][i + start] = unit
-                    when "replace"
-                        for i, unit in ipairs units
-                            _G[variable][i] = unit
-        return units
+        filter = helper.get_child(cfg, "filter") or
+		helper.wml_error "[store_unit] missing required [filter] tag"
+        kill_units = cfg.kill
+
+        --cache the needed units here, since the filter might reference the to-be-cleared variable(s)
+        units = wesnoth.get_units(filter)
+        recall_units = wesnoth.get_recall_units(filter)
+
+        writer = utils.vwriter.init(cfg, "unit")
+
+        for u in *units
+            utils.vwriter.write(writer, u.__cfg)
+            if kill_units then wesnoth.erase_unit(u)
+
+        if (not filter.x or filter.x == "recall") and (not filter.y or filter.y == "recall")
+            for u in *recall_units
+                ucfg = u.__cfg
+                ucfg.x = "recall"
+                ucfg.y = "recall"
+                utils.vwriter.write(writer, ucfg)
+                if kill_units then wesnoth.erase_unit(u)
+
+        -- units = kernel\get_units(cfg.filter)
+        -- if cfg.kill
+        --     for unit in *units
+        --         kernel\remove_unit(unit.id)
+        -- if variable = cfg.variable
+        --     if mode = cfg.mode
+        --         switch mode
+        --             when "always_clear"
+        --                 _G[variable] = units
+        --             when "append"
+        --                 start = #(_G[variable]) + 1
+        --                 for i, unit in ipairs units
+        --                     _G[variable][i + start] = unit
+        --             when "replace"
+        --                 for i, unit in ipairs units
+        --                     _G[variable][i] = unit
+        -- return units
 
     scheme:
         filter:
@@ -34,4 +56,3 @@ Note: stored units also exist on the field, and modifying the stored variable wi
             description: "defaults to always_clear, which clears the variable, whether or not a match is found. If mode is set to replace, the variable will not be cleared, and units which match the filter will overwrite existing elements at the start of the array, leaving any additional elements intact if the original array contained more elements than there are units matching the filter. If mode is set to append, the variable will not be cleared, and units which match the filter will be added to the array after the existing elements."
         kill:
             description: "if 'yes' the units that are stored will be removed from play. This is useful for instance to remove access to a player's recall list, with the intent to restore the recall list later."
-

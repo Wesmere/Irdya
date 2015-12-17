@@ -7,12 +7,15 @@ This action is good to use to clean up the set of variables; for example, a well
 
     action: (cfg) ->
         for name in *cfg.name
-            _G[name] = nil
+            wesnoth.set_variable(name)
 
     scheme:
         name:
             description: [[the name of the variable to clear. This can also be a comma-separated list of multiple variable names.
 If a name ends with an array index, then it deletes that one container, and shifts the indexes of all subsequent containers. For example, {CLEAR_VARIABLE my_awesome_array[2]} deletes my_awesome_array[2], but then moves my_awesome_array[3] to my_awesome_array[2], moves my_awesome_array[4] to my_awesome_array[3], and so on until the end of the array.
 Note that {CLEAR_VARIABLE my_awesome_array} deletes the entire array, but {CLEAR_VARIABLE my_awesome_array[0]} deletes only the first container.]]
-            is_list: true
+            list: true
             type: "String"
+            mandatory: true
+
+
