@@ -160,13 +160,13 @@ VARIABLE_FROM_GLOBAL = (NAMESPACE, GLOBAL_VAR_NAME, LOCAL_VAR_NAME, SIDE) ->
         immediate: false
 
 -- Macro to do mathematical operations on variables.
-VARIABLE_OP VAR OP_NAME VALUE
+VARIABLE_OP = (VAR, OP_NAME, VALUE) ->
     set_variable
         name: VAR
         [OP_NAME]: VALUE
 
 -- Macro to do conditional operations on variables.
-VARIABLE_CONDITIONAL VAR OP_NAME VALUE
+VARIABLE_CONDITIONAL = (VAR, OP_NAME, VALUE) ->
     variable
         name: VAR
         [OP_NAME]: VALUE

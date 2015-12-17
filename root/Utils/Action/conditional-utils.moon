@@ -6,7 +6,7 @@
 
 ----
 -- Test if a given side owns the village at the specified location
-OWN_VILLAGE = (X, Y, SIDE,) ->
+OWN_VILLAGE = (X, Y, SIDE) ->
     return have_location
         owner_side: SIDE
         x: X

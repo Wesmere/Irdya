@@ -21,8 +21,8 @@ MODIFY_TERRAIN_MASK = (X, Y, MASK_VALUE, RULES_WML) ->
         .mask = MASK_VALUE
     terrain_mask RULES_WML
 
-math.randomseed(os.time!)
 shuffleTable = ( t ) ->
+    math.randomseed(os.time!)
     rand = math.random
     assert( t, "shuffleTable() expected a table, got nil" )
     iterations = #t
