@@ -1,10 +1,12 @@
-----
--- @classmod
+--
+-- Some text here
+-- classmod
 
 
 array2d = require "pl.array2d"
 
-
+--
+-- A mighty class
 class Board
 
 

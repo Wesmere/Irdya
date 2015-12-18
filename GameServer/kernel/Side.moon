@@ -1,5 +1,5 @@
-----
--- @classmod
+--
+-- classmod
 
 -- color: It indicates team color. Can be one of the following:
 -- color    red    blue    green    purple    black    brown    orange    white    teal
