@@ -35,12 +35,9 @@ wesnoth.get_all_vars = () ->
 
 
 ----
--- @function helper.set_wml_var_metatable
--- helper.set_wml_var_metatable{}
 -- Sets the metatable of a table so that it can be used to access WML variables. Returns the table. The fields of the tables are then proxies to the WML objects with the same names; reading/writing to them will directly access the WML variables.
 -- helper.set_wml_var_metatable(_G)
 -- my_persistent_variable = 42
-
 -- it's not reccomended to use helper.set_wml_var_metatable(_G) because that limits possible gobal variables to valid wml attributes or tables. This can have some surprising effects:
 -- c = { a= 9}
 -- d = c
@@ -61,6 +58,9 @@ wesnoth.get_all_vars = () ->
 -- even if you don't use such code in your addon it's still bad because other code of modifications or eras to be used with your addon might do. And you'll mess up their code. This is also true for SP campaigns because it might interfere with ai code and we plan to enable modifications in SP too. Instead you should use set_wml_var_metatable with another table ('V' in this example):
 -- V = helper.set_wml_var_metatable({})
 -- V.my_persistent_variable = 42
+-- @function helper.set_wml_var_metatable
+helper.set_wml_var_metatable = () ->
+
 
 ----
 -- Returns the first sub-tag of a WML object with the given name.
@@ -112,6 +112,9 @@ helper.get_variable_array = (var_name) ->
 -- @function helper.get_variable_proxy_array
 helper.get_variable_proxy_array(var_name)
 Creates proxies for all the WML container variables with given name and returns a table containing them (starting at index 1). This function is similar to #helper.get_variable_array, except that the proxies can be used for modifying WML containers.
+
+
+
 helper.set_variable_array
 helper.set_variable_array(varname, array)
 Creates WML container variables with given name from given table.

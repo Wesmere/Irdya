@@ -73,171 +73,194 @@ Location = require "kernel/Location"
 -- @tfield {tab,...} modifications.advance an advancement the unit has. Same format as [advancement], UnitTypeWSL. Might be used if the unit type has some advancements, but this particular one is supposed to have some of them already taken. (Version 1.13.2 and later only) In 1.13.2 and later this has been renamed to [advancement], to match the UnitTypeWML tag of the same name.
 
 ----
---
---
+-- Unit
 class Unit
-  ---
-  -- Constructor
-  -- @param self
-  -- @param cfg
-  new: (cfg) =>
-    @ = cfg
+    ----
+    -- Constructor
+    -- @param self
+    -- @param cfg
+    new: (cfg) =>
+        @ = cfg
 
-  ---
-  -- Prints the table containing all the unit's data
-  -- @param self
-  debug: =>
-    moon.p(@)
+    ----
+    -- Prints the table containing all the unit's data
+    -- @param self
+    debug: =>
+        moon.p(@)
 
-  ---
-  -- Get the defense propability value
-  -- @param self
-  -- @param terrain optional terrain
-  -- @return propability of defense on @terrain
-  defense: (terrain) =>
-    log.warn("Not implemented yet")
+    ----
+    -- Get the defense propability value
+    -- @param self
+    -- @param terrain optional terrain
+    -- @return propability of defense on @terrain
+    defense: (terrain) =>
+        log.warn("Not implemented yet")
 
-  ---
-  -- Get the movement consts
-  -- @param self
-  -- @param terrain optional terrain
-  -- @return movement costs on @terrain
-  movement_cost: (terrain) =>
-    log.warn("Not implemented yet")
+    ----
+    -- Get the movement consts
+    -- @param self
+    -- @param terrain optional terrain
+    -- @return movement costs on @terrain
+    movement_cost: (terrain) =>
+        log.warn("Not implemented yet")
 
-  ---
-  -- Return the terrain the unit is currenty on
-  -- @param self
-  terrain: =>
-    log.warn("Not implemented yet")
+    ----
+    -- Return the terrain the unit is currenty on
+    -- @param self
+    terrain: =>
+        log.warn("Not implemented yet")
 
-  ---
-  -- Return the position of the unit
-  -- @tparam Unit self
-  -- @treturn Location of the unit
-  loc: =>
-    log.warn("Not implemented yet")
+    ---
+    -- Return the position of the unit
+    -- @tparam Unit self
+    -- @treturn Location of the unit
+    loc: =>
+        log.warn("Not implemented yet")
 
-  ----
-  -- Returns true if the given unit matches the WML filter passed as the second argument. If other_unit is specified, it is used for the $other_unit auto-stored variable in the filter. Otherwise, this variable is not stored for the filter.
-  -- @tparam Unit self
-  -- @tparam StandardUnitFilter filter
-  -- @tparam[opt] Unit other_unit
-  -- @treturn bool iff this unit matches the filter
-  -- @usage assert(unit.canrecruit == wesnoth.match_unit(unit, { canrecruit = true }))
-  matches: (filter, other_unit) =>
-    if or_table = f["or"]
-      return true if @filter(or_table)
+    ----
+    -- Returns true if the given unit matches the WML filter passed as the second argument. If other_unit is specified, it is used for the $other_unit auto-stored variable in the filter. Otherwise, this variable is not stored for the filter.
+    -- @tparam Unit self
+    -- @tparam StandardUnitFilter filter
+    -- @tparam[opt] Unit other_unit
+    -- @treturn bool iff this unit matches the filter
+    -- @usage assert(unit.canrecruit == wesnoth.match_unit(unit, { can_recruit: true }))
+    matches: (filter, other_unit) =>
+        if or_table = f["or"]
+            return true if @filter(or_table)
 
-    if and_table = f["and"]
-      return false unless @filter(and_table)
+        if and_table = f["and"]
+            return false unless @filter(and_table)
 
-    if not_table = f["not"]
-      return false if @filter(not_table)
+        if not_table = f["not"]
+            return false if @filter(not_table)
 
-    log.warn("filtering the unit with the id: #{@.id}")
+        log.warn("filtering the unit with the id: #{@.id}")
 
     -- assert(type(f) == "function" or type(f) == "table")
     -- return f(@) if type(f) == "function"
 --special ones
     -- defense: current defense of the unit on current tile
     -- (chance to hit %, like in movement type definitions)
-    if f.defense
-      return false if Set(f.defense)[@defense!]
-    if f.movement_cost
-      return false if Set(f.movement_cost)[@movement_cost!]
+        if f.defense
+            return false if Set(f.defense)[@defense!]
+        if f.movement_cost
+            return false if Set(f.movement_cost)[@movement_cost!]
     --find_in: name of an array or container variable; if present, the unit will not match unless it is also found stored in the variable
-    items = { id: true, speaker: true, type: true }
-    if id = wrapInArray(f.id)
-      return false if Set(id)[@id]
-    if f.speaker
-      return false if Set(f.speaker)[@id]
-    if f.type
-      return false if Set(f.type)[@type]
+        items = { id: true, speaker: true, type: true }
+        if id = wrapInArray(f.id)
+            return false if Set(id)[@id]
+        if f.speaker
+            return false if Set(f.speaker)[@id]
+        if f.type
+            return false if Set(f.type)[@type]
     -- TODO implement table filter
-
-
-
     return true
 
+    ----
+    -- Places a unit on the map. This unit is described either by a WML table or by a proxy unit. Coordinates can be passed as the first two arguments, otherwise the table is expected to have two fields x and y, which indicate where the unit will be placed. If the function is called with coordinates only, the unit on the map at the given coordinates is removed instead. (Version 1.13.2 and later only) This use is now deprecated; use wesnoth.erase_unit instead.
+    -- @tparam Unit self
+    -- @number[opt] x
+    -- @number[opt] y
+    -- @usage -- create a unit with random traits, then erase it
+    -- wesnoth.put_unit(17, 42, { type: "Elvish Lady" })
+    -- wesnoth.put_unit(17, 42)
+    -- When the argument is a proxy unit, no duplicate is created. In particular, if the unit was private or on a recall list, it no longer is; and if the unit was on the map, it has been moved to the new location. Note: passing a WML table is just a shortcut for calling #wesnoth.create_unit and then putting the resulting unit on the map.
+    -- -- move the leader back to the top-left corner
+    -- wesnoth.put_unit(1, 1, wesnoth.get_units({ can_recruit: true })[1])
+    to_map: (x, y) =>
 
+    ----
+    -- Erases the unit from the map.
+    -- After calling this on a unit, the unit is no longer valid.
+    -- @tparam Unit self
+    erase: () =>
 
-  ----
-  -- Places a unit on the map. This unit is described either by a WML table or by a proxy unit. Coordinates can be passed as the first two arguments, otherwise the table is expected to have two fields x and y, which indicate where the unit will be placed. If the function is called with coordinates only, the unit on the map at the given coordinates is removed instead. (Version 1.13.2 and later only) This use is now deprecated; use wesnoth.erase_unit instead.
-  -- @tparam Unit self
-  -- @number[opt] x
-  -- @number[opt] y
-  to_map: (x, y) =>
--- (Version 1.13.2 and later only) unit:to_map([x, y])
+    ----
+    -- Places a unit on a recall list. This unit is described either by a WML table or by a proxy unit. The side of the recall list is given by the second argument, or by the side of the unit if missing.
+    -- @tparam Unit self
+    -- @number[opt] side the list is inserted into
+    to_recall: (side) =>
 
--- -- create a unit with random traits, then erase it
--- wesnoth.put_unit(17, 42, { type = "Elvish Lady" })
--- wesnoth.put_unit(17, 42)
--- When the argument is a proxy unit, no duplicate is created. In particular, if the unit was private or on a recall list, it no longer is; and if the unit was on the map, it has been moved to the new location. Note: passing a WML table is just a shortcut for calling #wesnoth.create_unit and then putting the resulting unit on the map.
--- -- move the leader back to the top-left corner
--- wesnoth.put_unit(1, 1, wesnoth.get_units({ canrecruit = true })[1])
+    ----
+    -- Advances the unit (and shows the advance unit dialog if needed) if the unit has enough xp. This function should be called after modifying the units experience directly. A similar function is called by wesnoth internally after unit combat. The second argument is a boodean value that specifies whether the advancement should be animated. The third agrument is a boodean value that specifies whether advancement related events should be fired.
+    -- @tparam Unit self
+    -- @bool animate whether the advancement should be animated.
+    -- @bool fire_events whether advancement related events should be fired.
+    advance: (animate, fire_events) =>
 
-  ----
-  -- jo
-  erase: () =>
+    ----
+    -- Modifies the unit.
+    -- @tparam Unit self
+    -- @string type the type of the modification (one of "trait", "object", or "advancement").
+    -- @tab effects See EffectWML for details about effects.
+    -- @bool[opt] write_to_mods
+    add_modification: (type, effects, write_to_mods) =>
 
-  ----
-  -- jo
-  to_recall: (side) =>
+    ----
+    -- j
+    -- @tparam Unit self
+    -- @string terrain_code
+    movement: (terrain_code) =>
 
-  ----
-  -- yep
-  advance: () =>
+    ----
+    -- blah
+    -- @tparam Unit self
+    -- @string terrain_code
+    vision: (terrain_code) =>
 
-  ----
-  -- yes
-  add_modification: (type, effects, [write_to_mods]) =>
+    ----
+    -- foo
+    -- @tparam Unit self
+    -- @string terrain_code
+    jamming: (terrain_code) =>
 
-  ----
-  -- j
-  movement: (terrain_code) =>
+    ----
+    -- bar
+    -- @tparam Unit self
+    -- @tab ability_table
+    ability: (ability_table) =>
 
-  ----
-  -- blah
-  vision: (terrain_code) =>
+    ----
+    -- jepp
+    -- @tparam Unit self
+    -- @string to_type
+    transform: (to_type) =>
 
-  ----
-  -- foo
-  jamming: (terrain_code) =>
+    ----
+    -- Returns the resistance of a unit against an attack type. (Note: it is a WML resistance. So the higher it is, the weaker the unit is.) The third argument indicates whether the unit is the attacker. Last arguments are the coordinates of an optional map location (for the purpose of taking abilities into account).
+    -- @tparam Unit self
+    -- @string damage_type
+    resistance: (damage_type) =>
 
-  ----
-  -- bar
-  ability: (ability_table) =>
+    ----
+    -- Returns the defense of a unit on a particular terrain. (Note: it is a WML defense. So the higher it is, the weaker the unit is.)
+    -- @tparam Unit self
+    -- @string terrain_code
+    defense: (terrain_code) =>
 
-  ----
-  -- jepp
-  transform: (to_type) =>
+    ----
+    -- Creates a private unit from another unit.
+    -- @tparam Unit self
+    -- @treturn Unit the clone
+    clone: () =>
 
-  ----
-  -- another yep
-  resistance: (damage_type) =>
+    ----
+    -- superjo
+    -- @tparam Unit self
+    extract: () =>
 
-  ----
-  -- even more yep
-  unit_defense: (terrain_cod) =>
+    ----
+    -- yeah
+    -- @tparam Unit self
+    __tostring: =>
+        return("id: " .. @data.id)
 
-  ----
-  -- jojo
-  clone: () =>
-
-  ----
-  -- superjo
-  extract: () =>
-
-  ----
-  -- yeah
-  __tostring: =>
-    return("id: " .. @data.id)
-
-  ----
-  -- yes yes yes
-  __eq: (other) =>
-    return @id == other.id
+    ----
+    -- yes yes yes
+    -- @tparam Unit self
+    -- @tparam Unit other
+    __eq: (other) =>
+        return @id == other.id
 
 
 return Unit

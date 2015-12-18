@@ -1,22 +1,17 @@
 ---
 -- @submodule wesmere
 
-LuaWML:Sides
-This page describes the LuaWML functions and helpers for handling sides and villages.
-Contents [hide]
-1 wesmere.sides
-2 wesmere.get_sides
-3 wesmere.get_village_owner
-4 wesmere.set_village_owner
-5 wesmere.is_enemy
-6 wesmere.match_side
-7 wesmere.get_starting_location
-8 helper.all_teams
+-- LuaWML:Sides
+-- This page describes the LuaWML functions and helpers for handling sides and villages.
 
 ----
 -- This is not a function but a table indexed by side numbers.
 -- Its elements are proxy tables with these fields:
--- @table sides
+-- The metatable of these proxy tables appears as "side".
+-- @usage side = wesmere.sides[1]
+-- side.gold += 50
+-- wesmere.message(string.format("%d sides", #wesmere.sides))
+-- @table wesmere.sides
 -- @number side the side number
 -- @number gold
 -- @number village_gold
@@ -41,27 +36,17 @@ Contents [hide]
 -- @bool lost (read/write) If lost=true this side will be removed from the persitent list at the end of the scenario. This key can also be used to stop the engine from removing a side by setting it to false. Writing this key only works in a victory/defeat event.
 -- @tab __cfg WML table (dump)
 
-
-The metatable of these proxy tables appears as "side".
-local team = wesmere.sides[1]
-team.gold = team.gold + 50
-wesmere.message(string.format("%d sides", #wesmere.sides))
-
-wesmere.sides
-
-
-
----
+----
+-- Returns a table array containing proxy tables for these sides matching the passed StandardSideFilter.
 -- @function wesmere.get_sides
-wesmere.get_sides(filter)
-Returns a table array containing proxy tables for these sides matching the passed StandardSideFilter.
---set gold to 0 for all sides with a leader
-local sides = wesmere.get_sides({ {"has_unit", { canrecruit = true }} })
-for i,v in ipairs(sides) do
-    v.gold = 0
-end
+-- @usage -- set gold to 0 for all sides with a leader
+-- sides = wesmere.get_sides({ {"has_unit", { can_recruit: true }} })
+-- for v in *sides
+--    v.gold = 0
+wesmere.get_sides = (filter) ->
 
----
+
+----
 -- @function wesmere.get_village_owner
 -- @number x
 -- @number y
@@ -88,18 +73,21 @@ wesmere.set_vilage_owner = (x, y, side, [fire_events]) ->
 -- @usage enemy_flag = wesmere.is_enemy(1, 3)
 wesmere.is_enemy = (sideA, sideB) ->
 
+----
+-- Matches a side against a given StandardSideFilter.
+-- @function wesmere.match_side
+-- @usage wesmere.message(tostring(wesmere.match_side(1, {{"has_unit", { type = "Troll" }}})))
+wesmere.match_side = (side, filter) ->
 
+----
+-- Returns the starting location of the given side.
+-- @function wesmere.get_starting_location
+-- @usage loc = wesmere.get_starting_location(1)
+-- wesmere.message(string.format("side 1 starts at (%u, %u)", loc[1], loc[2]))
+wesmere.get_starting_location = (side) ->
 
-wesmere.match_side
-wesmere.match_side(side, filter)
-Matches a side against a given StandardSideFilter.
-wesmere.message(tostring(wesmere.match_side(1, {{"has_unit", { type = "Troll" }}})))
-wesmere.get_starting_location
-wesmere.get_starting_location(side)
-Returns the starting location of the given side.
-local loc = wesmere.get_starting_location(1)
-wesmere.message(string.format("side 1 starts at (%u, %u)", loc[1], loc[2]))
-helper.all_teams
-helper.all_teams()
-Returns an iterator over teams that can be used in a for-in loop.
-for team in helper.all_teams() do team.gold = 200 end
+----
+-- Returns an iterator over teams that can be used in a for-in loop.
+-- @function helper.all_teams
+-- @usage for team in helper.all_teams() do team.gold = 200
+helper.all_teams = () ->
