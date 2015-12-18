@@ -1,7 +1,7 @@
 ----
--- LuaWML:Tiles
--- This page describes the LuaWML functions for handling terrains and tiles. The items library can be loaded by
--- @usage items = wesmere.require "lua/wml/items.lua"
+-- LuaWSL:Tiles
+-- This page describes the LuaWSL functions for handling terrains and tiles. The items library can be loaded by
+-- @usage items = wesmere.require "lua/wsl/items.lua"
 -- @submodule wesmere
 
 ----
@@ -64,7 +64,7 @@ wesmere.get_selected_tile = () ->
 wesmere.get_locations = (filter) ->
 
 ----
--- This function, when called without arguments, returns a table containing all the villages present on the map (as tables of two elements). If it's called with a WML table as argument, a table containing only the villages matching the supplied StandardLocationFilter is returned.
+-- This function, when called without arguments, returns a table containing all the villages present on the map (as tables of two elements). If it's called with a WSL table as argument, a table containing only the villages matching the supplied StandardLocationFilter is returned.
 -- @function wesmere.get_villages
 -- @tparam[opt] StandardLocationFilter filter
 -- @treturn {Location,...}
@@ -85,7 +85,7 @@ wesmere.match_location = (x, y, filter) ->
 -- Places a tile overlay (either an image or a halo) at a given location. The overlay is described by a table supporting the same fields as [item]. Note that the overlay is not kept over save/load cycles.
 -- @function wesmere.add_tile_overlay
 -- @usage wesmere.add_tile_overlay(17, 42, { image: "items/orcish-flag.png" })
-wesmere.add_tile_overlay = (x, y, item_wml) ->
+wesmere.add_tile_overlay = (x, y, item_wsl) ->
 
 ----
 -- Removes all the overlays at the given location. If a filename is passed as a third argument, only this overlay (either image or halo) is removed.
@@ -97,12 +97,12 @@ wesmere.add_tile_overlay = (x, y, item_wml) ->
 wesmere.remove_tile_overlay = (x, y, filename) ->
 
 ----
--- Places an image at a given location and registers it as a WML [item] would do, so that it can be restored after save/load.
+-- Places an image at a given location and registers it as a WSL [item] would do, so that it can be restored after save/load.
 -- @function items.place_image
 -- @number x
 -- @number y
 -- @string filename
--- @usage items = wesmere.require "lua/wml/items.lua"
+-- @usage items = wesmere.require "lua/wsl/items.lua"
 -- items.place_image(17, 42, "items/orcish-flag.png")
 items.place_image = (x, y, filename) ->
 

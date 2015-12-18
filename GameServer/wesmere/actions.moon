@@ -1,41 +1,41 @@
 ----
 -- @submodule wesmere
 
--- LuaWML:Events
--- This page describes the LuaWML functions and helpers for interacting with events and action handlers.
+-- LuaWSL:Events
+-- This page describes the LuaWSL functions and helpers for interacting with events and action handlers.
 
 ----
--- Fires a WML action.
+-- Fires a WSL action.
 -- @function wesmere.fire
--- @string wml_action_name the name of the action.
--- @tab wml_action_contents the WML table describing the action. Note: WML variables are substituted.
+-- @string wsl_action_name the name of the action.
+-- @tab wsl_action_contents the WSL table describing the action. Note: WSL variables are substituted.
 -- @usage wesmere.fire("message", { speaker="narrator", message=_ "Hello World!" })
-wesmere.fire = (wml_action_name, wml_action_contents) ->
+wesmere.fire = (wsl_action_name, wsl_action_contents) ->
 
 ----
--- This is not a function but an associative table indexed by WML action names. It contains functions performing the corresponding actions. Using these functions is similar to calling #wesmere.fire, while setting entries of the table is similar to calling #wesmere.register_wml_action.
--- Note: When calling an action handler directly through its function stored in wesmere.wml_actions, the engine is not involved. As a consequence, whether variable substitution will happen is up to the handler. In particular, if the argument is a plain table, the caller should have substituted WML variables beforehand to be on the safe side. Moreover, table arguments might be modified by the action handler, so they should usually not be reused for consecutive calls. If variable substitution should happen and/or table content should be preserved, one can call #wesmere.tovconfig and pass its result to the handler. Calling #wesmere.fire is another possibility.
--- @table wesmere.wml_actions
--- @usage function wesmere.wml_actions.freeze_unit(cfg)
---     local unit_id = cfg.id or helper.wml_error "[freeze_unit] expects an id= attribute."
+-- This is not a function but an associative table indexed by WSL action names. It contains functions performing the corresponding actions. Using these functions is similar to calling #wesmere.fire, while setting entries of the table is similar to calling #wesmere.register_wsl_action.
+-- Note: When calling an action handler directly through its function stored in wesmere.wsl_actions, the engine is not involved. As a consequence, whether variable substitution will happen is up to the handler. In particular, if the argument is a plain table, the caller should have substituted WSL variables beforehand to be on the safe side. Moreover, table arguments might be modified by the action handler, so they should usually not be reused for consecutive calls. If variable substitution should happen and/or table content should be preserved, one can call #wesmere.tovconfig and pass its result to the handler. Calling #wesmere.fire is another possibility.
+-- @table wesmere.wsl_actions
+-- @usage function wesmere.wsl_actions.freeze_unit(cfg)
+--     local unit_id = cfg.id or helper.wsl_error "[freeze_unit] expects an id= attribute."
 --     helper.modify_unit({ id = unit_id }, { moves = 0 })
--- -- The new tag can now be used in plain WML code.
+-- -- The new tag can now be used in plain WSL code.
 -- [freeze_unit]
 --    id=Delfador
 -- [/freeze_unit]
 -- @usage You can override functions already assigned to the table. This is useful if you need to extend functionality of core tags. For instance, the following script overrides the [print] tag so that messages are displayed with a bigger font.
--- function wesmere.wml_actions.print(cfg)
+-- function wesmere.wsl_actions.print(cfg)
 --   cfg.size = (cfg.size or 12) + 10
---   wml_actions.print(cfg)
+--   wsl_actions.print(cfg)
 
 
 ----
--- This is an associative table like wesmere.wml_actions. You can use it to define new conditional wml tags that will be recognized in WML when using [if], [show_if], [while], etc., or more generally when wesmere.eval_conditional is run.
--- @table wesmere.wml_conditionals
--- @usage function wesmere.wml_conditionals.foo(cfg)
+-- This is an associative table like wesmere.wsl_actions. You can use it to define new conditional wsl tags that will be recognized in WSL when using [if], [show_if], [while], etc., or more generally when wesmere.eval_conditional is run.
+-- @table wesmere.wsl_conditionals
+-- @usage function wesmere.wsl_conditionals.foo(cfg)
 --      local bar = cfg.bar or error("[foo] tag did not have 'bar' attribute")
 --      return (bar == "baz")
--- @usage If this lua code is executed, it would make the following syntax be valid WML in your add-on:
+-- @usage If this lua code is executed, it would make the following syntax be valid WSL in your add-on:
 -- [if]
 --    [foo]
 --       bar = $X
@@ -50,11 +50,11 @@ wesmere.fire = (wml_action_name, wml_action_contents) ->
 
 ----
 -- This is not a function but an associative table indexed by engine action names. It contains function hooks the engine calls whenever it performs a particular action.
--- The on_save and on_load hooks can be used to manipulate data that are neither meant to be forwarded to the next level nor substituted on the fly. (For either of these two purposes, WML variables are the best choice.) For instance, toplevel tags like [item], [event], [time_area], and so on, could typically be handled by such hooks.
+-- The on_save and on_load hooks can be used to manipulate data that are neither meant to be forwarded to the next level nor substituted on the fly. (For either of these two purposes, WSL variables are the best choice.) For instance, toplevel tags like [item], [event], [time_area], and so on, could typically be handled by such hooks.
 -- @table wesmere.game_events
--- @func on_save: function called when the engine (auto)saves a scenario file; it should return a WML table and the children of this table are added to the savefile.
--- @func on_load: function called when the engine loads a scenario file; its argument is a WML table that contains all the children of the savefile that the engine did not handle.
--- @func on_event: function called before each WML event is executed; its argument is the event name; other event arguments can be recovered from wesmere.current.event_context.
+-- @func on_save: function called when the engine (auto)saves a scenario file; it should return a WSL table and the children of this table are added to the savefile.
+-- @func on_load: function called when the engine loads a scenario file; its argument is a WSL table that contains all the children of the savefile that the engine did not handle.
+-- @func on_event: function called before each WSL event is executed; its argument is the event name; other event arguments can be recovered from wesmere.current.event_context.
 -- some value that survives save/load cycles, but that is not forwarded to the next level
 -- @usage level_local_data = 0
 -- local old_on_load = wesmere.game_event.on_load
@@ -86,12 +86,12 @@ Note: Some tag names are reserved for engine use and should not be modified usin
 "terrain_graphics", "time", "time_area", "tunnel", "variables"
 Note: a on_event handler will not prevent undoing of that event, so usually you need to add an event to diallow undo to prevent OOS. You can add an event handler for that event inside a on_event callback. A possible way to define a disallow_undo function is:
 function disallow_undo()
-	wesmere.wml_actions.event { name = wesmere.current.event_context.name }
+	wesmere.wsl_actions.event { name = wesmere.current.event_context.name }
 end
 Which should then be called from every on_event callback which changes the gamestate.
 
 ----
--- Fires all the WML events with the given name. Optional parameters allow passing two locations and two tables. These parameters will be matched against the [filter], [filter_second], [filter_attack], and [filter_second_attack] of any event handler, and are used to fill the WML variables "unit", "second_unit", "weapon", and "second_weapon". These parameters can also be read through current.event_context.
+-- Fires all the WSL events with the given name. Optional parameters allow passing two locations and two tables. These parameters will be matched against the [filter], [filter_second], [filter_attack], and [filter_second_attack] of any event handler, and are used to fill the WSL variables "unit", "second_unit", "weapon", and "second_weapon". These parameters can also be read through current.event_context.
 -- @function wesmere.fire_event
 -- @string event_name
 -- @number x1
@@ -105,7 +105,7 @@ Which should then be called from every on_event callback which changes the games
 wesmere.fire_event = (event_name, [x1, y1, [x2, y2]], [first_weapon, [second_weapon]]) ->
 
 ----
--- Registers a new event handler. This takes a WML table containing the same information normally used by the [event] tag.
+-- Registers a new event handler. This takes a WSL table containing the same information normally used by the [event] tag.
 -- @function wesmere.add_event_handler
 wesmere.add_event_handler = (cfg) ->
 
@@ -116,7 +116,7 @@ wesmere.add_event_handler = (cfg) ->
 wesmere.remove_event_handler = (id) ->
 
 ----
--- Returns true if the conditional described by the WML table passes. Note: WML variables are substituted.
+-- Returns true if the conditional described by the WSL table passes. Note: WSL variables are substituted.
 -- wesmere.eval_conditional
 -- @usage result = wesmere.eval_conditional {
 --   { "have_unit", { id: "hero" } }
@@ -126,32 +126,32 @@ wesmere.eval_conditional = (conditional_tags) ->
 
 
 ----
--- Converts a WML table into a proxy object which performs variable substitution on the fly.
+-- Converts a WSL table into a proxy object which performs variable substitution on the fly.
 -- @function wesmere.tovconfig
 wesmere.tovconfig = (config) ->
 -- @usage wesmere.set_variable("varname", "to_be_deleted")
--- wesmere.wml_actions.clear_variable { name = "to_be_deleted" }              -- correct
--- wesmere.wml_actions.clear_variable { name = "$varname" }                    -- error: try to delete a variable literally called "$varname"
--- wesmere.wml_actions.clear_variable(wesmere.tovconfig { name: "$varname" }) -- correct: "$varname" is replaced by "to_be_deleted" at the right time
+-- wesmere.wsl_actions.clear_variable { name = "to_be_deleted" }              -- correct
+-- wesmere.wsl_actions.clear_variable { name = "$varname" }                    -- error: try to delete a variable literally called "$varname"
+-- wesmere.wsl_actions.clear_variable(wesmere.tovconfig { name: "$varname" }) -- correct: "$varname" is replaced by "to_be_deleted" at the right time
 
 ----
--- @function helper.set_wml_action_metatable
-helper.set_wml_action_metatable = () ->
--- Sets the metatable of a table so that it can be used to fire WML actions. Returns the table. The fields of the table are then simple wrappers around a call to #wesmere.fire.
--- @usage W = helper.set_wml_action_metatable {}
+-- @function helper.set_wsl_action_metatable
+helper.set_wsl_action_metatable = () ->
+-- Sets the metatable of a table so that it can be used to fire WSL actions. Returns the table. The fields of the table are then simple wrappers around a call to #wesmere.fire.
+-- @usage W = helper.set_wsl_action_metatable {}
 -- W.message { speaker = "narrator", message = "?" }
 
 ----
--- Interrupts the current execution and displays a chat message that looks like a WML error.
--- @function helper.wml_error
--- @usage names = cfg.name or helper.wml_error("[clear_variable] missing required name= attribute.")
-helper.wml_error = (message) ->
+-- Interrupts the current execution and displays a chat message that looks like a WSL error.
+-- @function helper.wsl_error
+-- @usage names = cfg.name or helper.wsl_error("[clear_variable] missing required name= attribute.")
+helper.wsl_error = (message) ->
 
 ----
--- Returns the __literal field of its argument if it is a userdata, the argument itself otherwise. This function is meant to be called when a WML action handler can be called indifferently from WML (hence receiving a userdata) or from Lua (hence possibly receiving a table).
+-- Returns the __literal field of its argument if it is a userdata, the argument itself otherwise. This function is meant to be called when a WSL action handler can be called indifferently from WSL (hence receiving a userdata) or from Lua (hence possibly receiving a table).
 -- Note: when the argument is a plain table, the function returns it as is. In particular, modifying the fields of the returned table causes the original table to be modified too.
 -- @function helper.literal
--- @usage function wml_actions.display_literal_value(cfg)
+-- @usage function wsl_actions.display_literal_value(cfg)
 --     cfg = helper.literal(cfg)
 --     wesmere.message(tostring(cfg.value))
 helper.literal = (config) ->

@@ -4,8 +4,8 @@
 ----
 -- @section Time
 
--- LuaWML:Time
--- LuaWML functions revolving around Time of Day schedule functionality, including time areas.
+-- LuaWSL:Time
+-- LuaWSL functions revolving around Time of Day schedule functionality, including time areas.
 
 ----
 -- time_of_day table
@@ -28,7 +28,7 @@
 wesmere.get_time_of_day = ([for_turn], [ {x, y, [consider_illuminates]} ]) ->
 
 ----
--- Creates a new time area. This takes a WML table containing the same information normally used by the 'time_area' table.
+-- Creates a new time area. This takes a WSL table containing the same information normally used by the 'time_area' table.
 -- @function wesmere.add_time_area
 -- @tab cfg
 wesmere.add_time_area = (cfg) ->

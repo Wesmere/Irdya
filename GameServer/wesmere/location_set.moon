@@ -5,14 +5,14 @@
 ----
 -- Objects of this class store a set of locations, with some data (boolean true, by default) attached to each of them. It is not possible to associate nil or false to a location.
 --
--- There is one main constructor #location_set.create and two auxiliary helper constructors #location_set.of_pairs and #location_set.of_wml_var. They are provided by the lua/location_set.lua file. All the other functions are methods from the class and they are available through the ':' operator only.
+-- There is one main constructor #location_set.create and two auxiliary helper constructors #location_set.of_pairs and #location_set.of_wsl_var. They are provided by the lua/location_set.lua file. All the other functions are methods from the class and they are available through the ':' operator only.
 -- @usage local location_set = wesmere.require "lua/location_set.lua"
 -- a_set = location_set.create()
 -- a_set\insert(17, 42, "something")
 -- assert(a_set\get(17, 42) == "something")
 -- b_set = location_set.of_pairs(wesmere.get_locations { { "filter_adjacent", { x=17, y=42 } } })
 -- a_set\union(b_set)
--- a_set\to_wml_var "locations"
+-- a_set\to_wsl_var "locations"
 class Location_set
 
   index = (x, y) ->
@@ -192,10 +192,10 @@ class Location_set
           values[index(v[x_index], v[y_index])] = true
 
   ----
-  -- location_set:of_wml_var
-  -- Inserts all the locations from a WML array. If a container has more than just x and y attributes, the remaining attributes and children are associated to the location as a WML table. Previous content of the set is kept, unless overwritten by the content of the WML array.
-  -- @usage wesmere.wml_actions.store_locations { variable="target", { "filter_adjacent", { x=17, y=42 } } }
-  of_wml_var: (name) =>
+  -- location_set:of_wsl_var
+  -- Inserts all the locations from a WSL array. If a container has more than just x and y attributes, the remaining attributes and children are associated to the location as a WSL table. Previous content of the set is kept, unless overwritten by the content of the WSL array.
+  -- @usage wesmere.wsl_actions.store_locations { variable="target", { "filter_adjacent", { x=17, y=42 } } }
+  of_wsl_var: (name) =>
 	values = @values
 	for i = 0, wesmere.get_variable(name .. ".length") - 1
       t = wesmere.get_variable(string.format("%s[%d]", name, i))
@@ -219,11 +219,11 @@ class Location_set
 	return res
 
   ----
-  -- location_set:to_wml_var
-  -- Fills a WML array with the content of the set. The order of the elements is safe.
+  -- location_set:to_wsl_var
+  -- Fills a WSL array with the content of the set. The order of the elements is safe.
   -- @usage some_set = location_set.of_pairs(wesmere.get_locations { { "filter_adjacent", { x=17, y=42 } } })
-  -- some_set\to_wml_var "locations"
-  to_wml_var: (name) =>
+  -- some_set\to_wsl_var "locations"
+  to_wsl_var: (name) =>
 	i = 0
 	wesmere.set_variable(name)
 	@stable_iter( (x, y, v) ->
@@ -253,11 +253,11 @@ class Location_set
     return s
 
   ----
-  -- location_set.of_wml_var
-  -- @return location_set Returns a fresh location set filled by #location_set:of_wml_var.
-  of_wml_var: (name) ->
+  -- location_set.of_wsl_var
+  -- @return location_set Returns a fresh location set filled by #location_set:of_wsl_var.
+  of_wsl_var: (name) ->
     s = location_set.create()
-    s\of_wml_var(name)
+    s\of_wsl_var(name)
     return s
 
 return location_set

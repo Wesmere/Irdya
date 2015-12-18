@@ -1,8 +1,8 @@
 ----
 -- @submodule wesmere
 
--- LuaWML:Misc
--- This page describes miscellaneous LuaWML objects and helpers.
+-- LuaWSL:Misc
+-- This page describes miscellaneous LuaWSL objects and helpers.
 
 ----
 -- Contrarily to the other values of the wesmere table, game_config is simply a proxy table. Its fields offer an interface to the global settings of Wesmere:
@@ -75,7 +75,7 @@ wesmere.get_era = (id) ->
 -- @table wesmere.current
 -- @number side: integer (read only)
 -- @number turn: integer (read only)
--- @tab event_context: WML table with attributes name, x1, y1, x2, y2, and children weapon, second_weapon, describing the trigger for the current event. (Version 1.13.2 and later only) unit_x, unit_y contain the location of the primary unit involved in the event. Currently the only case where this can be different from x1 and y1 are enter_hex and exit_hex events.
+-- @tab event_context: WSL table with attributes name, x1, y1, x2, y2, and children weapon, second_weapon, describing the trigger for the current event. (Version 1.13.2 and later only) unit_x, unit_y contain the location of the primary unit involved in the event. Currently the only case where this can be different from x1 and y1 are enter_hex and exit_hex events.
 -- synced_state (Version 1.13.0 and later only) whether the current code runs in a synced contex, this returns a string, the possible values are:
 -- synced the current code runs on all mp clients, this is the normal context, in which all gamestatechaning actions should take place.
 -- unsynced for example during select events or during the calculation of a wesmere.theme_items, don't change the gamestate in this context because the current code only runs on one machine, so changign the gamestate here will cause OOS. Typical things to do here are UI related things, or entering the synced state via [do_command]
@@ -85,7 +85,7 @@ wesmere.get_era = (id) ->
 
 ----
 -- (Version 1.13.2 and later only) wesmere.synchronize_choice([description], function, [ai_function], [for_side])
--- Recovers a WML table that was computed on one client only or was stored in a replay. The actual computation is performed by the function passed as the first function argument, assuming that the client is the side currently playing. For all the other clients, the function will not be called. An optional second function can be passed; if present, it will be used instead of the first one when the client happens to be an AI (hence not enable to interact with a user interface).
+-- Recovers a WSL table that was computed on one client only or was stored in a replay. The actual computation is performed by the function passed as the first function argument, assuming that the client is the side currently playing. For all the other clients, the function will not be called. An optional second function can be passed; if present, it will be used instead of the first one when the client happens to be an AI (hence not enable to interact with a user interface).
 -- local result = wesmere.synchronize_choice(
 --   function()
 --     -- Called only on the client handling the current side, if it is a human.
@@ -102,7 +102,7 @@ wesmere.get_era = (id) ->
 --     return { value = math.random(some_list_size) }
 --   end)
 -- wesmere.message(string.format("Selected item: %d", result.value))
--- Note: The return value must be a valid WML table - the same kind of thing you could store to a WML variable, and not, for instance, a proxy unit, anything else that uses metatables, or a lua table with another table as the value of a string attribute. Unlike other lua functions, wesmere.synchronize_choice will NOT throw an error if the table is invalid, but will silently strip out the contents of any invalid subtag.
+-- Note: The return value must be a valid WSL table - the same kind of thing you could store to a WSL variable, and not, for instance, a proxy unit, anything else that uses metatables, or a lua table with another table as the value of a string attribute. Unlike other lua functions, wesmere.synchronize_choice will NOT throw an error if the table is invalid, but will silently strip out the contents of any invalid subtag.
 -- When wesmere is running in debug mode (e.g. --debug flag on command line) synchronize_choice will chat a "Lua Warning" if it finds that the table returned was partially invalid.
 -- (Version 1.13.2 and later only) This function takes now takes these arguments:
 -- An optional translatable string descibing the type of the user input. This is displayed to the other clients while one client executes the passeed function. Defaults to "input".
@@ -115,10 +115,10 @@ wesmere.synchronize_choice = (function, [ai_function]) ->
 ----
 -- (Version 1.13.2 and later only) Similar to the singular form above, this function takes a function parameter and evaluates it on the specified sides. It takes the following arguments:
 -- An optional translatable string descibing the type of the user input. This is displayed to the other clients while the specified clients execute the passeed function. Defaults to "input"
--- A function that evaluates the choice returning a wml table. Unlike above, this function is called for ai and human sides (use if controller == "ai" for checking if it is a ai side)
+-- A function that evaluates the choice returning a wsl table. Unlike above, this function is called for ai and human sides (use if controller == "ai" for checking if it is a ai side)
 -- An optional function for evaluating the choice in case this side was null controlled. If this function is called, it is called on all clients (unlike the first passed function) defaults to a function returning an empty table.
 -- An array of integers specifying on which sides this function should be evaluated, the function is evaluated on all passed sides, each side may only appear once in this array. All specified sides execute the function simultaniously.
--- This function returns a table with integer as keys and WML tables as values. the keys are the sides where that action was evaluated. The values are the values computed by the passed function. Example:
+-- This function returns a table with integer as keys and WSL tables as values. the keys are the sides where that action was evaluated. The values are the values computed by the passed function. Example:
 -- [event]
 --   name = "start"
 --   [lua]
@@ -170,7 +170,7 @@ wesmere.compare_versions = (version1, operator, version2) ->
 wesmere.have_file = (filename) ->
 
 ----
--- Takes a userdata with metatable wml object or a wml table and dumps its content into a pretty string.
+-- Takes a userdata with metatable wsl object or a wsl table and dumps its content into a pretty string.
 -- wesmere.set_variable("number", 100)
 -- local vconfig = wesmere.tovconfig({ key = "$number", another_key = true,
 --     {"a_subtag", { a_key_in_the_subtag = "foo" }}
@@ -178,7 +178,7 @@ wesmere.have_file = (filename) ->
 -- wesmere.message(wesmere.debug(vconfig))
 -- wesmere.message(wesmere.debug(vconfig.__literal))
 -- @function wesmere.debug
-wesmere.debug = (wml_table) ->
+wesmere.debug = (wsl_table) ->
 
 ----
 -- This function retrieves the current time stamp, that is the amount of milliseconds passed from when the SDL library was initialized. It takes no arguments and returns an integer. WARNING: this function uses the same code as [set_variable] time=stamp, and so it is MP-unsafe. It is provided only for benchmark purposes and AI development, although it should work inside wesmere.synchronize_choice() as well.
@@ -193,13 +193,13 @@ wesmere.random = ([m, [n]]) ->
 
 ----
 -- Sets the metable of a table so that it can be used to create subtags with less brackets. Returns the table. The fields of the table are simple wrappers around table constructors.
--- T = helper.set_wml_tag_metatable {}
+-- T = helper.set_wsl_tag_metatable {}
 -- W.event { name = "new turn", T.message { speaker = "narrator", message = "?" } }
--- @function helper.set_wml_tag_metatable
-helper.set_wml_tag_metatable = () ->
+-- @function helper.set_wsl_tag_metatable
+helper.set_wsl_tag_metatable = () ->
 
 ----
--- Modifies all the units satisfying the given filter (argument 1) with some WML attributes/objects (argument 2). This is a Lua implementation of the MODIFY_UNIT macro.
+-- Modifies all the units satisfying the given filter (argument 1) with some WSL attributes/objects (argument 2). This is a Lua implementation of the MODIFY_UNIT macro.
 -- helper.modify_unit({ id="Delfador" }, { moves=0 })
 -- Note: This appears to be less powerful than the [modify_unit] tag and may be removed at some point in the future.
 -- @function helper.modify_unit

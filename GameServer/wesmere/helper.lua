@@ -2,7 +2,7 @@
 
 local helper = {}
 
-local wml_actions = wesmere.wml_actions
+local wsl_actions = wesmere.wsl_actions
 
 --! Returns an iterator over all the sides matching a given filter that can be used in a for-in loop.
 function helper.get_sides(cfg)
@@ -19,9 +19,9 @@ function helper.get_sides(cfg)
 	return f, { i = 0 }
 end
 
---! Interrupts the current execution and displays a chat message that looks like a WML error.
-function helper.wml_error(m)
-	error("~wml:" .. m, 0)
+--! Interrupts the current execution and displays a chat message that looks like a WSL error.
+function helper.wsl_error(m)
+	error("~wsl:" .. m, 0)
 end
 
 --! Returns an iterator over teams that can be used in a for-in loop.
@@ -95,9 +95,9 @@ end
 
 --! Modifies all the units satisfying the given @a filter.
 --! @param vars key/value pairs that need changing.
---! @note Usable only during WML actions.
+--! @note Usable only during WSL actions.
 function helper.modify_unit(filter, vars)
-	wml_actions.store_unit({
+	wsl_actions.store_unit({
 		[1] = { "filter", filter },
 		variable = "LUA_modify_unit",
 		kill = true
@@ -107,7 +107,7 @@ function helper.modify_unit(filter, vars)
 		for k, v in pairs(vars) do
 			wesmere.set_variable(u .. '.' .. k, v)
 		end
-		wml_actions.unstore_unit({
+		wsl_actions.unstore_unit({
 			variable = u,
 			find_vacant = false
 		})
@@ -116,9 +116,9 @@ function helper.modify_unit(filter, vars)
 end
 
 --! Fakes the move of a unit satisfying the given @a filter to position @a x, @a y.
---! @note Usable only during WML actions.
+--! @note Usable only during WSL actions.
 function helper.move_unit_fake(filter, to_x, to_y)
-	wml_actions.store_unit({
+	wsl_actions.store_unit({
 		[1] = { "filter", filter },
 		variable = "LUA_move_unit",
 		kill = false
@@ -126,7 +126,7 @@ function helper.move_unit_fake(filter, to_x, to_y)
 	local from_x = wesmere.get_variable("LUA_move_unit.x")
 	local from_y = wesmere.get_variable("LUA_move_unit.y")
 
-	wml_actions.scroll_to({ x=from_x, y=from_y })
+	wsl_actions.scroll_to({ x=from_x, y=from_y })
 
 	if to_x < from_x then
 		wesmere.set_variable("LUA_move_unit.facing", "sw")
@@ -136,14 +136,14 @@ function helper.move_unit_fake(filter, to_x, to_y)
 	wesmere.set_variable("LUA_move_unit.x", to_x)
 	wesmere.set_variable("LUA_move_unit.y", to_y)
 
-	wml_actions.kill({
+	wsl_actions.kill({
 		x = from_x,
 		y = from_y,
 		animate = false,
 		fire_event = false
 	})
 
-	wml_actions.move_unit_fake({
+	wsl_actions.move_unit_fake({
 		type      = "$LUA_move_unit.type",
 		gender    = "$LUA_move_unit.gender",
 		variation = "$LUA_move_unit.variation",
@@ -152,8 +152,8 @@ function helper.move_unit_fake(filter, to_x, to_y)
 		y         = from_y .. ',' .. to_y
 	})
 
-	wml_actions.unstore_unit({ variable="LUA_move_unit", find_vacant=true })
-	wml_actions.redraw({})
+	wsl_actions.unstore_unit({ variable="LUA_move_unit", find_vacant=true })
+	wsl_actions.redraw({})
 	wesmere.set_variable("LUA_move_unit")
 end
 
@@ -207,13 +207,13 @@ local root_variable_mt = {
 	end
 }
 
---! Sets the metable of @a t so that it can be used to access WML variables.
+--! Sets the metable of @a t so that it can be used to access WSL variables.
 --! @return @a t.
 --! @code
---! helper.set_wml_var_metatable(_G)
+--! helper.set_wsl_var_metatable(_G)
 --! my_persistent_variable = 42
 --! @endcode
-function helper.set_wml_var_metatable(t)
+function helper.set_wsl_var_metatable(t)
 	return setmetatable(t, root_variable_mt)
 end
 
@@ -223,13 +223,13 @@ local fire_action_mt = {
 	end
 }
 
---! Sets the metable of @a t so that it can be used to fire WML actions.
+--! Sets the metable of @a t so that it can be used to fire WSL actions.
 --! @return @a t.
 --! @code
---! W = helper.set_wml_action_metatable {}
+--! W = helper.set_wsl_action_metatable {}
 --! W.message { speaker = "narrator", message = "?" }
 --! @endcode
-function helper.set_wml_action_metatable(t)
+function helper.set_wsl_action_metatable(t)
 	return setmetatable(t, fire_action_mt)
 end
 
@@ -242,14 +242,14 @@ local create_tag_mt = {
 --! Sets the metable of @a t so that it can be used to create subtags with less brackets.
 --! @return @a t.
 --! @code
---! T = helper.set_wml_tag_metatable {}
+--! T = helper.set_wsl_tag_metatable {}
 --! W.event { name = "new turn", T.message { speaker = "narrator", message = "?" } }
 --! @endcode
-function helper.set_wml_tag_metatable(t)
+function helper.set_wsl_tag_metatable(t)
 	return setmetatable(t, create_tag_mt)
 end
 
---! Fetches all the WML container variables with name @a var.
+--! Fetches all the WSL container variables with name @a var.
 --! @returns a table containing all the variables (starting at index 1).
 function helper.get_variable_array(var)
 	local result = {}
@@ -259,7 +259,7 @@ function helper.get_variable_array(var)
 	return result
 end
 
---! Puts all the elements of table @a t inside a WML container with name @a var.
+--! Puts all the elements of table @a t inside a WSL container with name @a var.
 function helper.set_variable_array(var, t)
 	wesmere.set_variable(var)
 	for i, v in ipairs(t) do
@@ -267,7 +267,7 @@ function helper.set_variable_array(var, t)
 	end
 end
 
---! Creates proxies for all the WML container variables with name @a var.
+--! Creates proxies for all the WSL container variables with name @a var.
 --! This is similar to helper.get_variable_array, except that the elements
 --! can be used for writing too.
 --! @returns a table containing all the variable proxies (starting at index 1).
@@ -279,7 +279,7 @@ function helper.get_variable_proxy_array(var)
 	return result
 end
 
---! Displays a WML message box with attributes from table @attr and options
+--! Displays a WSL message box with attributes from table @attr and options
 --! from table @options.
 --! @return the index of the selected option.
 --! @code
@@ -301,14 +301,14 @@ function helper.get_user_choice(attr, options)
 				code = string.format("wesmere.__user_choice_helper(%d)", k)
 			}}}}}})
 	end
-	wml_actions.message(msg)
+	wsl_actions.message(msg)
 	wesmere.__user_choice_helper = nil
 	return result
 end
 
 local function is_even(v) return v % 2 == 0 end
 
---! Returns the distance between two tiles given by their WML coordinates.
+--! Returns the distance between two tiles given by their WSL coordinates.
 function helper.distance_between(x1, y1, x2, y2)
 	local hdist = math.abs(x1 - x2)
 	local vdist = math.abs(y1 - y2)
@@ -380,7 +380,7 @@ function helper.shallow_parsed(cfg)
 end
 
 function helper.rand (possible_values)
-	wml_actions.set_variable({ name = "LUA_rand", rand = possible_values })
+	wsl_actions.set_variable({ name = "LUA_rand", rand = possible_values })
 	local result = wesmere.get_variable("LUA_rand")
 	wesmere.set_variable("LUA_rand")
 	return result

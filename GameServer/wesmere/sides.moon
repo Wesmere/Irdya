@@ -1,8 +1,8 @@
 ---
 -- @submodule wesmere
 
--- LuaWML:Sides
--- This page describes the LuaWML functions and helpers for handling sides and villages.
+-- LuaWSL:Sides
+-- This page describes the LuaWSL functions and helpers for handling sides and villages.
 
 ----
 -- This is not a function but a table indexed by side numbers.
@@ -32,9 +32,9 @@
 -- @string village_support (read/write)
 -- @string flag (read)
 -- @string flag_icon (read)
--- @string defeat_condition (read/write) See description at SideWML, ScenarioWML#Scenario_End_Conditions
+-- @string defeat_condition (read/write) See description at SideWSL, ScenarioWSL#Scenario_End_Conditions
 -- @bool lost (read/write) If lost=true this side will be removed from the persitent list at the end of the scenario. This key can also be used to stop the engine from removing a side by setting it to false. Writing this key only works in a victory/defeat event.
--- @tab __cfg WML table (dump)
+-- @tab __cfg WSL table (dump)
 
 ----
 -- Returns a table array containing proxy tables for these sides matching the passed StandardSideFilter.

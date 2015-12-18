@@ -1,5 +1,5 @@
 ----
--- This page describes the LuaWML functions and helpers for finding paths.
+-- This page describes the LuaWSL functions and helpers for finding paths.
 -- @submodule wesmere
 
 ---
@@ -41,14 +41,14 @@
 
 wesmere.find_path = (x1, y1, x2, y2, [path_options | cost_function]) ->
 
-The source location is given either by coordinates as two arguments x and y; there must be a unit at the source location when using the standard path calculator. The source location can also be given by a unit as a single argument (as returned by the functions from LuaWML:Units). The second location is given by its coordinates.
+The source location is given either by coordinates as two arguments x and y; there must be a unit at the source location when using the standard path calculator. The source location can also be given by a unit as a single argument (as returned by the functions from LuaWSL:Units). The second location is given by its coordinates.
 
 
 ----
 -- Returns the two coordinates of an empty tile the closest to the tile passed by coordinates.
 -- @number x
 -- @number y
--- @tparam[opt] Unit unit An optional unit (either a WML table or a proxy object) can be passed as a third argument; if so, the returned tile has terrain which is passable for the passed unit.
+-- @tparam[opt] Unit unit An optional unit (either a WSL table or a proxy object) can be passed as a third argument; if so, the returned tile has terrain which is passable for the passed unit.
 -- @usage function teleport(src_x, src_y, dst_x, dst_y)
 -- u = wesmere.get_units({x = src_x, y = src_y })[1]
 -- ut = u.__cfg

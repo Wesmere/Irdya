@@ -1,8 +1,8 @@
 ----
--- This page describes the LuaWML functions and helpers for interfacing with the user.
+-- This page describes the LuaWSL functions and helpers for interfacing with the user.
 -- @submodule wesmere
 
--- LuaWML:Display
+-- LuaWSL:Display
 
 ----
 -- Displays a string in the chat window and dumps it to the lua/info log domain (--log-info=scripting/lua on the command-line).
@@ -11,7 +11,7 @@
 -- @string message
 -- @usage wesmere.message "Hello World!"
 -- @usage wesmere.message("Big Brother", "I'm watching you.") -- will result in "<Big Brother> I'm watching you."
--- See also @see helper.wml_error for displaying error messages.
+-- See also @see helper.wsl_error for displaying error messages.
 wesmere.message = ([speaker,] message) ->
 
 ----
@@ -73,7 +73,7 @@ wesmere.scroll_to_tile = (x, y, [only_if_visible, [instant]]) ->
 -- @function wesmere.lock_view
 wesmere.lock_view = (lock) ->
 -- Locks or unlocks gamemap view scrolling for human players. If true is passed as the first parameter, the view is locked; pass false to unlock.
--- Human players cannot scroll the gamemap view as long as it is locked, but Lua or WML actions such as wesmere.scroll_to_tile still can; the locked/unlocked state is preserved when saving the current game. This feature is generally intended to be used in cutscenes to prevent the player scrolling away from scripted actions.
+-- Human players cannot scroll the gamemap view as long as it is locked, but Lua or WSL actions such as wesmere.scroll_to_tile still can; the locked/unlocked state is preserved when saving the current game. This feature is generally intended to be used in cutscenes to prevent the player scrolling away from scripted actions.
 -- @usage wesmere.lock_view(true)
 -- wesmere.scroll_to_tile(12, 14, false, true)
 
@@ -95,21 +95,21 @@ wesmere.play_sound = (sound, [repeat_count]) ->
 ----
 -- wesmere.set_music
 wesmere.set_music(music_entry)
--- Sets the given table as an entry into the music list. See MusicListWML for the recognized attributes.
+-- Sets the given table as an entry into the music list. See MusicListWSL for the recognized attributes.
 -- wesmere.set_music { name = "traveling_minstrels.ogg" }
--- Passing no argument forces the engine to take into account all the recent changes to the music list. (Note: this is done automatically when sequences of WML commands end, so it is useful only for long events.)
+-- Passing no argument forces the engine to take into account all the recent changes to the music list. (Note: this is done automatically when sequences of WSL commands end, so it is useful only for long events.)
 
 ----
 -- wesmere.show_message_dialog
 wesmere.show_message_dialog(attributes, [options, [text_input_attributes]])
 -- (Version 1.13.2 and later only)
--- Shows a message dialog, of the type used by the [message] ActionWML tag. Unlike the [message] tag, this is unsynced; if you need it synced, you must do it yourself. The first argument is a table describing the dialog with the following keys:
+-- Shows a message dialog, of the type used by the [message] ActionWSL tag. Unlike the [message] tag, this is unsynced; if you need it synced, you must do it yourself. The first argument is a table describing the dialog with the following keys:
 -- title - The title to show on the message. For example, the speaker's name.
 -- message - The message content.
 -- portrait - An image to show along with the message. By default, no image is shown.
 -- left_side - The default is true; set to false to show the image on the right.
 -- mirror - If true, the image will be flipped horizontally.
--- The second argument is a list of options as a Lua array. Each option is either a (possibly-translatable) string or a config with DescriptionWML keys. The array itself can also have an optional default key which if present should be the index of the initially selected option (useful if you don't need full DescriptionWML but want to set a default). If present it overrides any defaults set in individual options.
+-- The second argument is a list of options as a Lua array. Each option is either a (possibly-translatable) string or a config with DescriptionWSL keys. The array itself can also have an optional default key which if present should be the index of the initially selected option (useful if you don't need full DescriptionWSL but want to set a default). If present it overrides any defaults set in individual options.
 -- The third argument is a table describing the text input field with the following keys:
 -- label - A label to show to the left of the text field.
 -- text - Initial contents of the text field.
@@ -142,20 +142,20 @@ wesmere.show_message_dialog(attributes, [options, [text_input_attributes]])
 wesmere.show_popup_dialog = (title, message, [image]) ->
 
 ----
--- Displays a dialog box described by a WML table and returns:
+-- Displays a dialog box described by a WSL table and returns:
 -- @function wesmere.show_dialog
 --
-wesmere.show_dialog = (wml_dialog_table, [pre_show_function, [post_show_function]]) ->
+wesmere.show_dialog = (wsl_dialog_table, [pre_show_function, [post_show_function]]) ->
 
 -- if the dialog was dismissed by a button click, the integer value associated to the button via the "return_value" keyword.
 -- if the dialog was closed with the enter key, -1.
 -- if the dialog was closed with the escape key, -2.
--- The dialog box is equivalent to the resolution section of a GUI window as described in GUIToolkitWML and must therefore contain at least the following children: [tooltip], [helptip], and [grid]. The [grid] must contain nested [row], [column] and [grid] tags which describe the layout of the window. (More information can be found in GUILayout; suffice to say that the basic structure is grid -> row -> column -> widget, where the widget is considered to be in a cell defined by the row and column of the grid. A list of widgets can be found at GUIWidgetInstanceWML.)
+-- The dialog box is equivalent to the resolution section of a GUI window as described in GUIToolkitWSL and must therefore contain at least the following children: [tooltip], [helptip], and [grid]. The [grid] must contain nested [row], [column] and [grid] tags which describe the layout of the window. (More information can be found in GUILayout; suffice to say that the basic structure is grid -> row -> column -> widget, where the widget is considered to be in a cell defined by the row and column of the grid. A list of widgets can be found at GUIWidgetInstanceWSL.)
 -- Two optional functions can be passed as second and third arguments; the first one is called once the dialog is created and before it is shown; the second one is called once the dialog is closed. These functions are helpful in setting the initial values of the fields and in recovering the final user values. These functions can call the #wesmere.set_dialog_value, #wesmere.get_dialog_value, and #wesmere.set_dialog_callback functions for this purpose.
 -- This function should be called in conjunction with #wesmere.synchronize_choice, in order to ensure that only one client displays the dialog and that the other ones recover the same input values from this single client.
 -- The example below defines a dialog with a list and two buttons on the left, and a big image on the right. The preshow function fills the list and defines a callback on it. This select callback changes the displayed image whenever a new list item is selected. The postshow function recovers the selected item before the dialog is destroyed.
 -- local helper = wesmere.require "lua/helper.lua"
--- local T = helper.set_wml_tag_metatable {}
+-- local T = helper.set_wsl_tag_metatable {}
 -- local _ = wesmere.textdomain "wesmere"
 
 -- local dialog = {
@@ -272,7 +272,7 @@ wesmere.set_dialog_focus = (focused?, path, to, widget, id) ->
 wesmere.set_dialog_visible = (visible?, path, to, widget, id) ->
 
 ----
--- Sets the WML passed as the second argument as the canvas content (index given by the first argument) of the widget obtained by following the path of the other arguments (see #wesmere.set_dialog_value). The content of the WML table is described at GUICanvasWML.
+-- Sets the WSL passed as the second argument as the canvas content (index given by the first argument) of the widget obtained by following the path of the other arguments (see #wesmere.set_dialog_value). The content of the WSL table is described at GUICanvasWSL.
 -- -- draw two rectangles in the upper-left corner of the window (empty path = window widget)
 -- wesmere.set_dialog_canvas(2, {
 --     T.rectangle { x = 20, y = 20, w = 20, h = 20, fill_color= "0,0,255,255" },
@@ -309,7 +309,7 @@ wesmere.get_displayed_unit = () ->
 -- local name = tostring(wesmere.get_displayed_unit().name)
 
 ----
--- This field is not a function but an associative table. It links item names to the functions that describe their content. These functions are called whenever the user interface is refreshed. The description of an item is a WML table containing [element] children. Each subtag shall contain either a text or an image field that is displayed to the user. It can also contain a tooltip field that is displayed to the user when moused over, and a "help" field that points to the help section that is displayed when the user clicks on the theme item.
+-- This field is not a function but an associative table. It links item names to the functions that describe their content. These functions are called whenever the user interface is refreshed. The description of an item is a WSL table containing [element] children. Each subtag shall contain either a text or an image field that is displayed to the user. It can also contain a tooltip field that is displayed to the user when moused over, and a "help" field that points to the help section that is displayed when the user clicks on the theme item.
 -- Note that the wesmere.theme_items table is originally empty and using pairs or next on it will not return the items from the current theme. Its metatable ensures that the drawing functions of existing items can be recovered though, as long as their name is known. The example below shows how to modify the unit_status item to display a custom status:
 -- local old_unit_status = wesmere.theme_items.unit_status
 -- function wesmere.theme_items.unit_status()
@@ -386,7 +386,7 @@ wesmere.get_displayed_unit = () ->
 -- @field report_countdown
 
 ----
--- Displays a WML message box querying a choice from the user. Attributes and options are taken from given tables (see [message]). The index of the selected option is returned.
+-- Displays a WSL message box querying a choice from the user. Attributes and options are taken from given tables (see [message]). The index of the selected option is returned.
 -- @function helper.get_user_choice
 -- @usage result = helper.get_user_choice({ speaker: "narrator" }, { "Choice 1", "Choice 2" })
 helper.get_user_choice = (message_table, options) ->

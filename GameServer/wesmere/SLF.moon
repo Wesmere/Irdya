@@ -2,7 +2,7 @@
 -- @submodule wesmere
 
 ----
--- From FilterWML, this is the standard way of filtering on locations. The term StandardLocationFilter means that the set of such keys and tags (see below) can appear at that point. Sometimes a StandardLocationFilter needs to be included in a [filter_location] tag. There are however many tags which accept the StandardLocationFilter directly as an argument such as [store_locations]. Generally, if the tag [filter_location] is not mentioned to be a possible subtag of the outer tag in question, then don't put it.
+-- From FilterWSL, this is the standard way of filtering on locations. The term StandardLocationFilter means that the set of such keys and tags (see below) can appear at that point. Sometimes a StandardLocationFilter needs to be included in a [filter_location] tag. There are however many tags which accept the StandardLocationFilter directly as an argument such as [store_locations]. Generally, if the tag [filter_location] is not mentioned to be a possible subtag of the outer tag in question, then don't put it.
 -- The following attributes and sub-tags are permitted:
 -- @table StandardLocationFilter
 -- @string time_of_day filter matches only on a given time of day (one of lawful, chaotic, or neutral). Note: chaotic, lawful, and neutral; these are not times of day, these are alignments. To match against 'dawn', 'dusk', 'first watch' etc., use the time_of_day_id key described below.
@@ -99,7 +99,7 @@
 -- *^V* matches all village-terrain
 -- Notice how the * can be used separately for both layers (base and overlay layers are separated by the ^-character).
 
--- For a list of terrain types and their string codes see TerrainCodesWML.
+-- For a list of terrain types and their string codes see TerrainCodesWSL.
 -- See Also
 
 -- Examples - How to use filters

@@ -54,9 +54,9 @@ Location = require "kernel/Location"
 -- @tfield bool status.unhealable
 -- @tfield {tab,...} attack
 -- @tfield tstring attack.description a translatable text for name of the attack, to be displayed to the user.
--- @tfield string attack.name the name of the attack. Used as a default description, if description is not present, and to determine the default icon, if icon is not present (if name=x then icon=attacks/x.png is assumed unless present). Non-translatable. Used for the has_weapon key and animation filters; see StandardUnitFilter and AnimationWML
+-- @tfield string attack.name the name of the attack. Used as a default description, if description is not present, and to determine the default icon, if icon is not present (if name=x then icon=attacks/x.png is assumed unless present). Non-translatable. Used for the has_weapon key and animation filters; see StandardUnitFilter and AnimationWSL
 -- @tfield string attack.type the damage type of the attack. Used in determining resistance to this attack (see [resistance]).
--- @tfield tab attack.specials contains the specials of the attack. See AbilitiesWML.
+-- @tfield tab attack.specials contains the specials of the attack. See AbilitiesWSL.
 -- @tfield string attack.icon the image to use as an icon for the attack in the attack choice menu, as a path relative to the images directory.
 -- @tfield string attack.range the range of the attack. Used to determine the enemy's retaliation, which will be of the same type. Also displayed on the status table in parentheses; 'melee'(default) displays "melee", while 'ranged' displays "ranged". Range can be anything. Standard values are now "melee" and "ranged". From now on, short and long will be treated as totally different ranges. You can create any number of ranges now (with any name), and units can only retaliate against attacks for which they have a corresponding attack of the same range. This value is translatable.
 -- @tfield number attack.damage the damage of this attack
@@ -70,7 +70,7 @@ Location = require "kernel/Location"
 -- @tfield {tab,...} modifications
 -- @tfield {tab,...} modifications.trait a trait the unit has. Same format as [trait], UnitsWSL.
 -- @tfield {tab,...} modifications.object an object the unit has. Same format as [object], DirectActionsWSL.
--- @tfield {tab,...} modifications.advance an advancement the unit has. Same format as [advancement], UnitTypeWSL. Might be used if the unit type has some advancements, but this particular one is supposed to have some of them already taken. (Version 1.13.2 and later only) In 1.13.2 and later this has been renamed to [advancement], to match the UnitTypeWML tag of the same name.
+-- @tfield {tab,...} modifications.advance an advancement the unit has. Same format as [advancement], UnitTypeWSL. Might be used if the unit type has some advancements, but this particular one is supposed to have some of them already taken. (Version 1.13.2 and later only) In 1.13.2 and later this has been renamed to [advancement], to match the UnitTypeWSL tag of the same name.
 
 ----
 -- Unit
@@ -118,7 +118,7 @@ class Unit
         log.warn("Not implemented yet")
 
     ----
-    -- Returns true if the given unit matches the WML filter passed as the second argument. If other_unit is specified, it is used for the $other_unit auto-stored variable in the filter. Otherwise, this variable is not stored for the filter.
+    -- Returns true if the given unit matches the WSL filter passed as the second argument. If other_unit is specified, it is used for the $other_unit auto-stored variable in the filter. Otherwise, this variable is not stored for the filter.
     -- @tparam Unit self
     -- @tparam StandardUnitFilter filter
     -- @tparam[opt] Unit other_unit
@@ -157,14 +157,14 @@ class Unit
     return true
 
     ----
-    -- Places a unit on the map. This unit is described either by a WML table or by a proxy unit. Coordinates can be passed as the first two arguments, otherwise the table is expected to have two fields x and y, which indicate where the unit will be placed. If the function is called with coordinates only, the unit on the map at the given coordinates is removed instead. (Version 1.13.2 and later only) This use is now deprecated; use wesmere.erase_unit instead.
+    -- Places a unit on the map. This unit is described either by a WSL table or by a proxy unit. Coordinates can be passed as the first two arguments, otherwise the table is expected to have two fields x and y, which indicate where the unit will be placed. If the function is called with coordinates only, the unit on the map at the given coordinates is removed instead. (Version 1.13.2 and later only) This use is now deprecated; use wesmere.erase_unit instead.
     -- @tparam Unit self
     -- @number[opt] x
     -- @number[opt] y
     -- @usage -- create a unit with random traits, then erase it
     -- wesmere.put_unit(17, 42, { type: "Elvish Lady" })
     -- wesmere.put_unit(17, 42)
-    -- When the argument is a proxy unit, no duplicate is created. In particular, if the unit was private or on a recall list, it no longer is; and if the unit was on the map, it has been moved to the new location. Note: passing a WML table is just a shortcut for calling #wesmere.create_unit and then putting the resulting unit on the map.
+    -- When the argument is a proxy unit, no duplicate is created. In particular, if the unit was private or on a recall list, it no longer is; and if the unit was on the map, it has been moved to the new location. Note: passing a WSL table is just a shortcut for calling #wesmere.create_unit and then putting the resulting unit on the map.
     -- -- move the leader back to the top-left corner
     -- wesmere.put_unit(1, 1, wesmere.get_units({ can_recruit: true })[1])
     to_map: (x, y) =>
@@ -176,7 +176,7 @@ class Unit
     erase: () =>
 
     ----
-    -- Places a unit on a recall list. This unit is described either by a WML table or by a proxy unit. The side of the recall list is given by the second argument, or by the side of the unit if missing.
+    -- Places a unit on a recall list. This unit is described either by a WSL table or by a proxy unit. The side of the recall list is given by the second argument, or by the side of the unit if missing.
     -- @tparam Unit self
     -- @number[opt] side the list is inserted into
     to_recall: (side) =>
@@ -192,7 +192,7 @@ class Unit
     -- Modifies the unit.
     -- @tparam Unit self
     -- @string type the type of the modification (one of "trait", "object", or "advancement").
-    -- @tab effects See EffectWML for details about effects.
+    -- @tab effects See EffectWSL for details about effects.
     -- @bool[opt] write_to_mods
     add_modification: (type, effects, write_to_mods) =>
 
@@ -227,13 +227,13 @@ class Unit
     transform: (to_type) =>
 
     ----
-    -- Returns the resistance of a unit against an attack type. (Note: it is a WML resistance. So the higher it is, the weaker the unit is.) The third argument indicates whether the unit is the attacker. Last arguments are the coordinates of an optional map location (for the purpose of taking abilities into account).
+    -- Returns the resistance of a unit against an attack type. (Note: it is a WSL resistance. So the higher it is, the weaker the unit is.) The third argument indicates whether the unit is the attacker. Last arguments are the coordinates of an optional map location (for the purpose of taking abilities into account).
     -- @tparam Unit self
     -- @string damage_type
     resistance: (damage_type) =>
 
     ----
-    -- Returns the defense of a unit on a particular terrain. (Note: it is a WML defense. So the higher it is, the weaker the unit is.)
+    -- Returns the defense of a unit on a particular terrain. (Note: it is a WSL defense. So the higher it is, the weaker the unit is.)
     -- @tparam Unit self
     -- @string terrain_code
     defense: (terrain_code) =>
