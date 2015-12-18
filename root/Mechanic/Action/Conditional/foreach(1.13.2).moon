@@ -1,24 +1,24 @@
 
 
--- function wml_actions.foreach(cfg)
---     local array_name = cfg.variable or helper.wml_error "[foreach] missing required variable= attribute"
+-- function wsl_actions.foreach(cfg)
+--     local array_name = cfg.variable or helper.wsl_error "[foreach] missing required variable= attribute"
 --     local array = helper.get_variable_array(array_name)
 --     if #array == 0 then return end -- empty and scalars unwanted
 --     local item_name = cfg.item_var or "this_item"
 --     local this_item = utils.start_var_scope(item_name) -- if this_item is already set
 --     local i_name = cfg.index_var or "i"
 --     local i = utils.start_var_scope(i_name) -- if i is already set
---     local array_length = wesnoth.get_variable(array_name .. ".length")
+--     local array_length = wesmere.get_variable(array_name .. ".length")
 
 --     for index, value in ipairs(array) do
 --         -- Some protection against external modification
 --         -- It's not perfect, though - it'd be nice if *any* change could be detected
---         if array_length ~= wesnoth.get_variable(array_name .. ".length") then
---             helper.wml_error("WML array length changed during [foreach] iteration")
+--         if array_length ~= wesmere.get_variable(array_name .. ".length") then
+--             helper.wsl_error("WSL array length changed during [foreach] iteration")
 --         end
---         wesnoth.set_variable(item_name, value)
+--         wesmere.set_variable(item_name, value)
 --         -- set index variable
---         wesnoth.set_variable(i_name, index-1) -- here -1, because of WML array
+--         wesmere.set_variable(i_name, index-1) -- here -1, because of WSL array
 --         -- perform actions
 --         for do_child in helper.child_range(cfg, "do") do
 --             local action = utils.handle_event_commands(do_child, "loop")
@@ -34,7 +34,7 @@
 --         end
 --         -- set back the content, in case the author made some modifications
 --         if not cfg.readonly then
---             array[index] = wesnoth.get_variable(item_name)
+--             array[index] = wesmere.get_variable(item_name)
 --         end
 --     end
 --     ::exit::

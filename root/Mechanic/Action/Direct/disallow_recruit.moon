@@ -3,9 +3,9 @@ wsl_action
     id: "disallow_recruit"
     description: "Prevents a side from recruiting units it could previously recruit."
 
-    action: (cfg, wesnoth) ->
+    action: (cfg, wesmere) ->
         unit_types = cfg.type
-        for team in *wesnoth.get_sides(cfg)
+        for team in *wesmere.get_sides(cfg)
             if unit_types
                 v = team.recruit
                 for w in utils.split(unit_types)

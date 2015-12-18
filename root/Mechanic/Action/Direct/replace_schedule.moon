@@ -8,7 +8,7 @@ wsl_action
 
     scheme:
         schedule:
-            --TimeWML:
+            --TimeWSL:
             description: "the new schedule."
 
         current_time:

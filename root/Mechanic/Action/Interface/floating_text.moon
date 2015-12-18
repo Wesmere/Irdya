@@ -2,11 +2,11 @@ wsl_action
     id: "floating_text"
     description: "Floats text (similar to the damage and healing numbers) on the given locations."
 
-    action: (cfg, wesnoth) ->
-        locs = wesnoth.get_locations(cfg)
-        text = cfg.text or helper.wml_error("[floating_text] missing required text= attribute")
+    action: (cfg, wesmere) ->
+        locs = wesmere.get_locations(cfg)
+        text = cfg.text or helper.wsl_error("[floating_text] missing required text= attribute")
         for loc in *locs
-            wesnoth.float_label(loc[1], loc[2], text)
+            wesmere.float_label(loc[1], loc[2], text)
 
     scheme:
         StandardLocationFilter:

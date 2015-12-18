@@ -243,10 +243,10 @@ FLAG_VARIANT6 = (NAME, cfg) ->
 --         [image]
 --             layer=0
 --             center=92,138
---             # wmlscope: start ignoring
+--             # wslscope: start ignoring
 --             # FIXME: More implicit-path breakage
 --             name="../scenery/mausoleum[01~18].png:140"
---             # wmlscope: stop ignoring
+--             # wslscope: stop ignoring
 --         [/image]
 --     [/terrain_graphics]
 -- #enddef

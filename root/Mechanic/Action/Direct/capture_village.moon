@@ -2,19 +2,19 @@ wsl_action
     id: "capture_village"
     description: "Changes the ownership of a village."
 
-    action: (cfg, wesnoth) ->
+    action: (cfg, wesmere) ->
         side = cfg.side
         filter_side = cfg.filter_side
         fire_event = cfg.fire_event
 
         if filter_side
-            if side then helper.wml_error("duplicate side information in 'capture_village'")
-            side = wesnoth.get_sides(filter_side)[1]
+            if side then helper.wsl_error("duplicate side information in 'capture_village'")
+            side = wesmere.get_sides(filter_side)[1]
             if side then side = side.side
 
-        locs = wesnoth.get_locations(cfg)
+        locs = wesmere.get_locations(cfg)
         for loc in *locs
-            wesnoth.set_village_owner(loc[1], loc[2], side, fire_event)
+            wesmere.set_village_owner(loc[1], loc[2], side, fire_event)
 
     scheme:
         filter_location:

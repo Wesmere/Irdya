@@ -5,9 +5,9 @@ wsl_action
     action: (cfg, kernel) ->
 
         new_cfg = helper.parsed( cfg )
-        for location in *wesnoth.get_locations(cfg)
+        for location in *wesmere.get_locations(cfg)
             new_cfg.x, new_cfg.y = location[1], location[2]
-            wesnoth.label( new_cfg )
+            wesmere.label( new_cfg )
 
         -- locs = kernel\get_locs(cfg.filter_location)
         -- labels = if team = cfg.team_id

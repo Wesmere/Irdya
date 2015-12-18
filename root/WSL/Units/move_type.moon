@@ -12,9 +12,9 @@ name: an ID for this movetype. Units with the attribute movement_type=name will 
 flies: either 'true' or 'false'(default). A unit with flies=true does not have its image's height adjusted for different terrains.]]
     scheme:
         movement_costs:
-            description: [[describes how fast the unit moves on different terrains. The attribute terrain=speed means that the unit will need to use speed move points to move onto terrain with id=terrain (see TerrainWML).]]
+            description: [[describes how fast the unit moves on different terrains. The attribute terrain=speed means that the unit will need to use speed move points to move onto terrain with id=terrain (see TerrainWSL).]]
         vision_costs:
-            description: [[describes how far the unit clears fog and shroud on different terrains. The attribute terrain=cost means that the unit will need to use cost vision points to view into terrain with id=terrain (see TerrainWML). (If not specified for a particular terrain, the vision cost defaults to the movement cost.)]]
+            description: [[describes how far the unit clears fog and shroud on different terrains. The attribute terrain=cost means that the unit will need to use cost vision points to view into terrain with id=terrain (see TerrainWSL). (If not specified for a particular terrain, the vision cost defaults to the movement cost.)]]
         defense:
             description: [[describes how likely the unit is to be hit on different terrains. The attribute terrain=defense means that the unit will be hit defense percent of the time in the terrain with id=terrain. If the defense value is negative, then the unit will be hit as though the value were positive with one difference: the number is also the best defense that the unit may have if there is more than one terrain type for the terrain the unit is on.]]
         resistance:

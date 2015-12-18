@@ -2,15 +2,15 @@ wsl_action
     id: "message"
     description: [[The most commonly used interface action is [message], which displays a message to the user in a dialog box. It can also be used to take input from the user. [message] elements should be constructed so that it is either guaranteed that a certain unit is alive, or so that dialog flows smoothly even if the message isn't displayed.]]
 
-    action: (cfg, wesnoth) ->
+    action: (cfg, wesmere) ->
 
-        helper = wesnoth.require "lua/helper.lua"
-        utils = wesnoth.require "lua/wml-utils.lua"
-        location_set = wesnoth.require "lua/location_set.lua"
-        _ = wesnoth.textdomain "wesnoth"
+        helper = wesmere.require "lua/helper.lua"
+        utils = wesmere.require "lua/wsl-utils.lua"
+        location_set = wesmere.require "lua/location_set.lua"
+        _ = wesmere.textdomain "wesmere"
 
         log = (msg, level) ->
-            wesnoth.wml_actions.wml_message
+            wesmere.wsl_actions.wsl_message
                 message: msg
                 logger: level
 
@@ -35,16 +35,16 @@ wsl_action
 
         get_speaker = (cfg) ->
             local speaker
-            context = wesnoth.current.event_context
+            context = wesmere.current.event_context
 
             if cfg.speaker == "narrator"
                 speaker = "narrator"
             elseif cfg.speaker == "unit"
-                speaker = wesnoth.get_unit(context.x1 or 0, context.y1 or 0)
+                speaker = wesmere.get_unit(context.x1 or 0, context.y1 or 0)
             elseif cfg.speaker == "second_unit"
-                speaker = wesnoth.get_unit(context.x2 or 0, context.y2 or 0)
+                speaker = wesmere.get_unit(context.x2 or 0, context.y2 or 0)
             else
-                speaker = wesnoth.get_units(cfg)[1]
+                speaker = wesmere.get_units(cfg)[1]
 
             return speaker
 
@@ -86,10 +86,10 @@ wsl_action
                     max_length: input_max_size
 
             return () ->
-                option_chosen, ti_content = wesnoth.show_message_dialog(msg_cfg, options, text_input)
+                option_chosen, ti_content = wesmere.show_message_dialog(msg_cfg, options, text_input)
 
                 if option_chosen == -2 -- Pressed Escape (only if no input)
-                    wesnoth.skip_messages()
+                    wesmere.skip_messages()
 
                 result_cfg = {}
 
@@ -102,7 +102,7 @@ wsl_action
                 return result_cfg
 
         show_if = helper.get_child(cfg, "show_if") or {}
-        unless wesnoth.eval_conditional(show_if)
+        unless wesmere.eval_conditional(show_if)
             log("[message] skipped because [show_if] did not pass", "debug")
             return
 
@@ -118,11 +118,11 @@ wsl_action
         for option in helper.child_range(cfg, "option")
             condition = helper.get_child(option, "show_if") or {}
 
-            if wesnoth.eval_conditional(condition)
+            if wesmere.eval_conditional(condition)
                 if option.message and not option.image and not option.label
                     message = tostring(option.message)
                     if message\find("&") or message:find("=") or message\find("*") == 1
-                        wesnoth.wml_actions.deprecated_message{message: '[option]message="&image=col1=col2" is deprecated, use new DescriptionWML instead (default, image, label, description)'}
+                        wesmere.wsl_actions.deprecated_message{message: '[option]message="&image=col1=col2" is deprecated, use new DescriptionWSL instead (default, image, label, description)'}
 
                     -- Legacy format
                     table.insert(options, option.message)
@@ -145,7 +145,7 @@ wsl_action
         -- Check if there is any input to be made, unless the message may be skipped
         has_input = text_input ~= nil or #options > 0
 
-        unless has_input and wesnoth.is_skipping_messages!
+        unless has_input and wesmere.is_skipping_messages!
             -- No input to get and the user is not interested either
             log("Skipping [message] because user not interested", "debug")
             return
@@ -157,7 +157,7 @@ wsl_action
             -- Sanity checks on side number and controller
             for side in utils.split(sides_for)
                 side = tonumber(side)
-                if side > 0 and side < #wesnoth.sides and wesnoth.sides[side].controller == "human"
+                if side > 0 and side < #wesmere.sides and wesmere.sides[side].controller == "human"
                     show_for_side = true
                     break
 
@@ -173,17 +173,17 @@ wsl_action
             return
         elseif speaker == "narrator"
             -- Narrator, so deselect units
-            wesnoth.deselect_hex!
+            wesmere.deselect_hex!
             -- The speaker is expected to be either nil or a unit later
             speaker = nil
         else
             -- Check ~= false, because the default if omitted should be true
             if cfg.scroll ~= false
-                wesnoth.scroll_to_tile(speaker.x, speaker.y)
+                wesmere.scroll_to_tile(speaker.x, speaker.y)
 
-            wesnoth.select_hex(speaker.x, speaker.y, false)
+            wesmere.select_hex(speaker.x, speaker.y, false)
 
-        if cfg.sound then wesnoth.play_sound(cfg.sound)
+        if cfg.sound then wesmere.play_sound(cfg.sound)
 
         msg_dlg = message_user_choice(cfg, speaker, options, text_input)
 
@@ -196,13 +196,13 @@ wsl_action
             if type(sides_for) ~= "number"
                 -- 0 means currently playing side.
                 sides_for = 0
-            choice = wesnoth.synchronize_choice(wait_description, msg_dlg, sides_for)
+            choice = wesmere.synchronize_choice(wait_description, msg_dlg, sides_for)
 
             option_chosen = tonumber(choice.value)
 
             if text_input ~= nil
                 -- Implement the consequences of the choice
-                wesnoth.set_variable(text_input.variable or "input", choice.text)
+                wesmere.set_variable(text_input.variable or "input", choice.text)
 
         if #options > 0
             if option_chosen > #options
@@ -229,7 +229,7 @@ wsl_action
 -- male_message, female_message: (Version 1.13.2 and later only) (translatable) Used instead of message if the unit's gender matches. Never used if there is no unit (ie speaker=narrator).
 -- wait_description: (Version 1.13.2 and later only) the description of this message displayed when other players in a mp game wait for one player doing input in a [message] (with [option]s or [text_input]).
         show_if:
-            description: [[if present then this message will only be displayed if the conditional statement in this tag is passed (see ConditionalActionsWML)]]
+            description: [[if present then this message will only be displayed if the conditional statement in this tag is passed (see ConditionalActionsWSL)]]
         side_for:
             description: [[(default: all sides) comma-separated list of sides for who message is shown. This will not work with messages that take user input ([option]/[text_input]), which can only ever be shown to the current player. (Version 1.13.0 and later only) side_for= is now also accepted for messages with user input, it specifies on which side the message is shown (defaults to the currently playing side). For messages with input it does not accept a comma seperated list only a single number.]]
         image:
@@ -237,7 +237,7 @@ wsl_action
 (Version 1.13.0 and later only) none: display no image]]
             type: "String"
         caption:
-            description: [[(default: name of speaker) the caption to display beside the image. Name to be displayed. Note: use a translation mark to avoid wmllint errors.]]
+            description: [[(default: name of speaker) the caption to display beside the image. Name to be displayed. Note: use a translation mark to avoid wsllint errors.]]
             type: "tString"
         scroll:
             description: [[Boolean specifying whether the game view should scroll to the speaking unit. Defaults to yes.]]
@@ -256,10 +256,10 @@ wsl_action
             type: "Table"
             scheme:
                 message:
-                    description: [[(translatable) the text displayed for the option (see DescriptionWML) (Version 1.13.2 and later only) This is now a synonym for label=.]]
--- image, label, description, default: See DescriptionWML.
+                    description: [[(translatable) the text displayed for the option (see DescriptionWSL) (Version 1.13.2 and later only) This is now a synonym for label=.]]
+-- image, label, description, default: See DescriptionWSL.
                 show_if:
-                    description: [[if present then this option will only be displayed if the conditional statement in this tag is passed (see ConditionalActionsWML)]]
+                    description: [[if present then this option will only be displayed if the conditional statement in this tag is passed (see ConditionalActionsWSL)]]
                 command:
                     description: [[a function containing actions which are executed if the option is selected.]]
                 text_input:
@@ -272,4 +272,4 @@ wsl_action
                     description: [[the maximum number of characters that may be typed into the field]]
                 text:
                     description: [[text that is written into the field in the beginning]]
--- Check EventWML#Multiplayer_safety to find out in which events you can safely use [option] and [text_input] without causing OOS.
+-- Check EventWSL#Multiplayer_safety to find out in which events you can safely use [option] and [text_input] without causing OOS.

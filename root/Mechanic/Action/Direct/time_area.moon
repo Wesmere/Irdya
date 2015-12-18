@@ -3,11 +3,11 @@ wsl_action
     id: "time_area"
     description: "How a day should progress in a given area. Everywhere not specified in a [time_area] table is affected by the [time] tables in the [scenario] table."
 
-    action: (cfg, wesnoth) ->
+    action: (cfg, wesmere) ->
         if cfg.remove
-            wml_actions.remove_time_area(cfg)
+            wsl_actions.remove_time_area(cfg)
         else
-            wesnoth.add_time_area(cfg)
+            wesmere.add_time_area(cfg)
 
     scheme:
         filter_location:

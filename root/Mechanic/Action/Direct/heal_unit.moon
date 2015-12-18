@@ -2,8 +2,8 @@ wsl_action
     id: "heal_unit"
     description: [[Heal a unit. The variable $heal_amount will be set to the exact number of points healed (i.e can be lesser than the parameter amount if the unit is fully healed). $heal_amount contains only the number of hitpoints the first unit that was found got healed.]]
 
-    action: (cfg, wesnoth) ->
-        wesnoth.heal_unit(cfg)
+    action: (cfg, wesmere) ->
+        wesmere.heal_unit(cfg)
 
     scheme:
         filter:

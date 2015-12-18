@@ -155,7 +155,7 @@ ABILITY_TELEPORT]]
         teleport:
             scheme:
                 tunnel:
-                    description: [[- a tunnel tag (see DirectActionsWML#.5Btunnel.5D) (without the remove key) defining the tunneling source and target hexes, and maybe other conditions. (It automatically applies only to the unit with the ability.) You may use $teleport_unit inside the tunnel tag for filtering purposes.]]
+                    description: [[- a tunnel tag (see DirectActionsWSL#.5Btunnel.5D) (without the remove key) defining the tunneling source and target hexes, and maybe other conditions. (It automatically applies only to the unit with the ability.) You may use $teleport_unit inside the tunnel tag for filtering purposes.]]
             description: [[allows the unit to teleport]]
         hides:
             scheme:

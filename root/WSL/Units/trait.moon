@@ -13,10 +13,10 @@ Trait =
     description:
         description: [[text displayed for the description of the trait.]]
     effect:
-        description: [[described in EffectWML. More than one of these can be used.]]
+        description: [[described in EffectWSL. More than one of these can be used.]]
         type: "table"
         is_list: true
-        scheme: EffectWML
+        scheme: EffectWSL
 
 wsl_handler
     id: "trait"

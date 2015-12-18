@@ -1,14 +1,14 @@
 wsl_action
     id: "test_condition"
 
-    description: "Evaluates the contained conditional tags. If they evaluate to the expected value, it prints out a message to the console explaining which part of the condition caused this result in a way similar to [wml_message]. This can be used if your conditional test is failing and you're not sure why."
+    description: "Evaluates the contained conditional tags. If they evaluate to the expected value, it prints out a message to the console explaining which part of the condition caused this result in a way similar to [wsl_message]. This can be used if your conditional test is failing and you're not sure why."
 
     scheme:
         result: "Whether you expect the conditions to fail or succeed. If no (the default), a message will be printed if the conditional tags fail. If yes, a message will instead be printed if the conditional tags pass."
-        logger: [[Same as for [wml_message]. Defaults to "warning".]]
+        logger: [[Same as for [wsl_message]. Defaults to "warning".]]
 
 -- This is mainly for use in unit test macros, but maybe it can be useful elsewhere too
-    action: (cfg, wesnoth) ->
+    action: (cfg, wesmere) ->
         logger = cfg.logger or "warning"
 
         -- This function returns true if it managed to explain the failure
@@ -27,7 +27,7 @@ wsl_action
                 elseif tag == "true" or tag == "false"
                     -- We don't explain these ones.
                     return true
-                elseif wesnoth.eval_conditional{t} == expect
+                elseif wesmere.eval_conditional{t} == expect
                     explanation = "The following conditional test %s:"
                     if expect
                         explanation = explanation:format("passed")
@@ -47,9 +47,9 @@ wsl_action
 
                     explanation = string.format("%s\n\t[/%s]", explanation, tag)
                     if tag == "variable" then
-                        explanation = string.format("%s\n\tNote: The variable %s currently has the value %q.", explanation, this_cfg.name, tostring(wesnoth.get_variable(this_cfg.name)))
+                        explanation = string.format("%s\n\tNote: The variable %s currently has the value %q.", explanation, this_cfg.name, tostring(wesmere.get_variable(this_cfg.name)))
 
-                    wesnoth.wml_actions.wml_message{message: explanation, logger: logger}
+                    wesmere.wsl_actions.wsl_message{message: explanation, logger: logger}
                     return true
 
         -- Use not twice here to convert nil to false

@@ -1,11 +1,11 @@
-helper = wesnoth.require "lua/helper.lua"
-wml_actions = wesnoth.wml_actions
-game_events = wesnoth.game_events
+helper = wesmere.require "lua/helper.lua"
+wsl_actions = wesmere.wsl_actions
+game_events = wesmere.game_events
 
 scenario_items = {}
 
 add_overlay = (x, y, cfg) ->
-	wesnoth.add_tile_overlay(x, y, cfg)
+	wesmere.add_tile_overlay(x, y, cfg)
 	items = scenario_items[x * 10000 + y]
 	unless items
 		items = {}
@@ -16,7 +16,7 @@ end
 local function remove_overlay(x, y, name)
 	local items = scenario_items[x * 10000 + y]
 	if not items then return end
-	wesnoth.remove_tile_overlay(x, y, name)
+	wesmere.remove_tile_overlay(x, y, name)
 	if name then
 		for i = #items,1,-1 do
 			local item = items[i]

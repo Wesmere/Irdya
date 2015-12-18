@@ -1,14 +1,14 @@
--- # This file contains shortcuts for common WML events (such as prestart, side
+-- # This file contains shortcuts for common WSL events (such as prestart, side
 -- # turn, and such), which can be used to write events faster and in less space.
 -- #
 -- # It is recommended that you only use these if you're confident you could write
 -- # the expanded form as well; these are mostly intended as shortcuts for
--- # experienced WML authors.
+-- # experienced WSL authors.
 
 -- # These don't depend on any other macros.  Please don't change this.
 -- # ! in comments is used in generating HTML documentation, ignore it otherwise.
 
--- #define CALL_FUNCTION EVENT_NAME PARAMETER_WML
+-- #define CALL_FUNCTION EVENT_NAME PARAMETER_WSL
 --     # This will fire an event with a set of parameters, for example:
 --     #! {CALL_FUNCTION my_event a,b,c=1,2,3}
 --     #
@@ -19,7 +19,7 @@
 --         mode=insert
 --         name=param[0]
 --         [value]
---             {PARAMETER_WML}
+--             {PARAMETER_WSL}
 --         [/value]
 --     [/set_variables]
 --     [fire_event]

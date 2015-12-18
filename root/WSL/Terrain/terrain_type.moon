@@ -71,7 +71,7 @@ wsl_handler
             description: [[like aliasof but overides it for vision calculation only]]
             type: "Terrain_String"
         income_description:
-            description: [[for terrains with gives_income and owned by nobody this text is shown in the terrain description in the top bar before the brackets. This tag is optional, if not supplied Wesnoth will assume the terrain is a village and sets an appropriate message.]]
+            description: [[for terrains with gives_income and owned by nobody this text is shown in the terrain description in the top bar before the brackets. This tag is optional, if not supplied Wesmere will assume the terrain is a village and sets an appropriate message.]]
             type: "tString"
         income_description_ally:
             type: "tString"

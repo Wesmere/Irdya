@@ -10,8 +10,8 @@ immediate: whether to instantly warp to the target hex regardless of the scroll 
 side: the side or sides for which this should happen. By default, the [scroll_to] happens for everyone.
 [filter_side]: a StandardSideFilter to select the sides for which this should happen. By default, the [scroll_to] happens for everyone.]]
 
-    action: (cfg, wesnoth) ->
-        loc = wesnoth.get_locations( cfg )[1]
+    action: (cfg, wesmere) ->
+        loc = wesmere.get_locations( cfg )[1]
         return unless loc
         return unless utils.optional_side_filter(cfg)
-        wesnoth.scroll_to_tile(loc[1], loc[2], cfg.check_fogged, cfg.immediate)
+        wesmere.scroll_to_tile(loc[1], loc[2], cfg.check_fogged, cfg.immediate)

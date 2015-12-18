@@ -53,8 +53,8 @@ ON_DIFFICULTY = (EASY_VALUE, NORMAL_VALUE, HARD_VALUE) ->
 -- # No tab or space-based indentation for these macros to avoid trouble when these macros are used
 -- # in the middle of a quoted string literal
 -- #
--- # wmlindent: start ignoring
--- # wmlscope: start conditionals
+-- # wslindent: start ignoring
+-- # wslscope: start conditionals
 -- #ifdef EASY
 -- #define ON_DIFFICULTY4 EASY_VALUE NORMAL_VALUE HARD_VALUE NIGHTMARE_VALUE
 -- {EASY_VALUE}#enddef
@@ -71,9 +71,9 @@ ON_DIFFICULTY = (EASY_VALUE, NORMAL_VALUE, HARD_VALUE) ->
 -- #define ON_DIFFICULTY4 EASY_VALUE NORMAL_VALUE HARD_VALUE NIGHTMARE_VALUE
 -- {NIGHTMARE_VALUE}#enddef
 -- #endif
--- # wmlscope: stop conditionals
--- # wmlindent: stop ignoring
--- # wmlscope: prune ON_DIFFICULTY4
+-- # wslscope: stop conditionals
+-- # wslindent: stop ignoring
+-- # wslscope: prune ON_DIFFICULTY4
 
 ----
 -- Function to define number of turns for different difficulty levels.
@@ -186,7 +186,7 @@ CLEAR_GLOBAL_VARIABLE = (NAMESPACE, MY_VARIABLE_NAME, SIDE) ->
         immediate: false
 
 -- #define FOREACH ARRAY_VALUE VAR
--- # Macro to begin a WML clause that iterates over an array.
+-- # Macro to begin a WSL clause that iterates over an array.
 -- {VARIABLE {VAR} 0}
 -- [while]
 --     [variable]
@@ -196,7 +196,7 @@ CLEAR_GLOBAL_VARIABLE = (NAMESPACE, MY_VARIABLE_NAME, SIDE) ->
 --     [do]
 
 -- #define NEXT VAR
--- # Macro to end a WML clause that iterates over an array.
+-- # Macro to end a WSL clause that iterates over an array.
 --     [set_variable]
 --     name={VAR}
 --     add=1
@@ -205,8 +205,8 @@ CLEAR_GLOBAL_VARIABLE = (NAMESPACE, MY_VARIABLE_NAME, SIDE) ->
 -- [/while]
 -- {CLEAR_VARIABLE {VAR}}
 
--- #define REPEAT NUMBER BODY_WML
---     # Macro to execute some WML a defined number of times.
+-- #define REPEAT NUMBER BODY_WSL
+--     # Macro to execute some WSL a defined number of times.
 --     #
 --     # Example that causes screen to quake 5 times:
 --     #! {REPEAT 5 (
@@ -218,7 +218,7 @@ CLEAR_GLOBAL_VARIABLE = (NAMESPACE, MY_VARIABLE_NAME, SIDE) ->
 --             name=REPEAT_i
 --             less_than={NUMBER}
 --         [do]
---             {BODY_WML}
+--             {BODY_WSL}
 --             {VARIABLE_OP REPEAT_i add 1}
 --     {CLEAR_VARIABLE REPEAT_i}
 
@@ -442,7 +442,7 @@ SCATTER_UNITS = (NUMBER, TYPES, PADDING_RADIUS, FILTER, UNIT_WSL) ->
 --             name: "turn_number"
 --             greater_than: 10
 --     }
-FORCE_CHANCE_TO_HIT = (FILTER, SECOND_FILTER, CTH_NUMBER, EXTRA_CONDITIONS_WML) ->
+FORCE_CHANCE_TO_HIT = (FILTER, SECOND_FILTER, CTH_NUMBER, EXTRA_CONDITIONS_WSL) ->
     command = () ->
         for i in unit.attack
             set_variables
@@ -462,7 +462,7 @@ FORCE_CHANCE_TO_HIT = (FILTER, SECOND_FILTER, CTH_NUMBER, EXTRA_CONDITIONS_WML) 
         first_time_only: false
         filter: FILTER
         filter_second: SECOND_FILTER
-        filter_condition: EXTRA_CONDITIONS_WML
+        filter_condition: EXTRA_CONDITIONS_WSL
         :command
     -- The following event is a simple duplicates of the above ones, with the
     -- primary and secondary units reversed so that the effect is applied also on
@@ -472,7 +472,7 @@ FORCE_CHANCE_TO_HIT = (FILTER, SECOND_FILTER, CTH_NUMBER, EXTRA_CONDITIONS_WML) 
         first_time_only: false
         filter: SECOND_FILTER
         filter_second: FILTER
-        filter_condition: EXTRA_CONDITIONS_WML
+        filter_condition: EXTRA_CONDITIONS_WSL
         :command
 ----
 -- Gives a side gold and informs the player about it.
@@ -485,7 +485,7 @@ LOOT = (AMOUNT, SIDE) ->
         side_for: SIDE
         speaker: "narrator"
         message: _ "You retrieve $amount_gold pieces of gold."
-        image: "wesnoth-icon"
+        image: "wesmere-icon"
         sound: "gold"
     gold
         side: SIDE

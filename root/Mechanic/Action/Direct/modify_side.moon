@@ -3,8 +3,8 @@ wsl_action
     id: "modify_side"
     description: "Modifies some details of a given side in the middle of a scenario. The following listed properties are the only properties that [modify_side] can affect!"
 
-    action: (cfg, wesnoth) ->
-        wesnoth.modify_side(cfg)
+    action: (cfg, wesmere) ->
+        wesmere.modify_side(cfg)
 
     scheme:
         side:
@@ -40,10 +40,10 @@ wsl_action
         color:
             description: [[a team color range specification, name (e.g. "red", "blue"), or number (e.g. "1", "2") for this side. The default color range names, numbers, and definitions can be found in data/core/team_colors.cfg.]]
         ai:
-            description: "sets/changes AI parameters for the side. Only parameters that are specified in the tag are changed, this does not reset others to their default values. Uses the same syntax as described in AiWML. Note that [modify_side][ai] works for all simple AI parameters and some, but not all, of the composite ones. If in doubt, use [modify_ai] instead, which always works."
+            description: "sets/changes AI parameters for the side. Only parameters that are specified in the tag are changed, this does not reset others to their default values. Uses the same syntax as described in AiWSL. Note that [modify_side][ai] works for all simple AI parameters and some, but not all, of the composite ones. If in doubt, use [modify_ai] instead, which always works."
 
         switch_ai:
-            description: "replaces a side ai with a new AI from specified file(ignoring those AI parameters above). Path to file follows the usual WML convention."
+            description: "replaces a side ai with a new AI from specified file(ignoring those AI parameters above). Path to file follows the usual WSL convention."
         reset_maps:
             description: "If set to 'true', then the shroud is spread to all hexes, covering the parts of the map that had already been explored by the side, including hexes currently seen. (Seen hexes will be cleared at the end of most events; they can also be manually cleared with [redraw].) This is only effective if shroud is on, but this is evaluated after shroud= (and before shroud_data=)."
         reset_view:

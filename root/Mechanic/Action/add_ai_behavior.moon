@@ -2,13 +2,13 @@ wsl_action
     id: "add_ai_behavior"
     description: ""
 
-    action: (cfg, wesnoth) ->
+    action: (cfg, wesmere) ->
 
-        unit = wesnoth.get_units(helper.get_child(cfg, "filter"))[1] or
-		helper.wml_error("[add_ai_behavior]: no unit specified")
+        unit = wesmere.get_units(helper.get_child(cfg, "filter"))[1] or
+		helper.wsl_error("[add_ai_behavior]: no unit specified")
 
         side = cfg.side or
-            helper.wml_error("[add_ai_behavior]: no side attribute given")
+            helper.wsl_error("[add_ai_behavior]: no side attribute given")
 
         sticky = cfg.sticky or false
         loop_id = cfg.loop_id or "main_loop"
@@ -20,7 +20,7 @@ wsl_action
         uy = unit.y
 
         unless (eval and exec)
-            helper.wml_error("[add_ai_behavior]: invalid execution/evaluation handler(s)")
+            helper.wsl_error("[add_ai_behavior]: invalid execution/evaluation handler(s)")
 
         path = "stage[" .. loop_id .. "].candidate_action[" .. id .. "]" -- bca: behavior candidate action
 
@@ -43,5 +43,5 @@ wsl_action
                 }
             }
         }
-        wesnoth.wml_actions.modify_ai(conf)
-        --wesnoth.message("Adding a behavior")
+        wesmere.wsl_actions.modify_ai(conf)
+        --wesmere.message("Adding a behavior")

@@ -2,15 +2,15 @@ wsl_action
     id: "store_reachable_locations"
     description: "Stores locations reachable by the given units. Can store either the movement, attack or vision ranges."
 
-    action: (cfg, wesnoth) ->
+    action: (cfg, wesmere) ->
 
         unit_filter = cfg.filter
-        --    helper.wml_error "[store_reachable_locations] missing required [filter] tag"
+        --    helper.wsl_error "[store_reachable_locations] missing required [filter] tag"
         location_filter = cfg.filter_location
         range = cfg.range or "movement"
         moves = cfg.moves or "current"
         variable = cfg.variable
-        --or helper.wml_error "[store_reachable_locations] missing required variable= key"
+        --or helper.wsl_error "[store_reachable_locations] missing required variable= key"
 
         reach_param = { viewing_side: cfg.viewing_side or 0 }
         if range == "vision"
@@ -19,15 +19,15 @@ wsl_action
 
         reach = location_set.create()
 
-        for i,unit in ipairs(wesnoth.get_units(unit_filter))
+        for i,unit in ipairs(wesmere.get_units(unit_filter))
             local unit_reach
             if moves == "max"
                 saved_moves = unit.moves
                 unit.moves = unit.max_moves
-                unit_reach = location_set.of_pairs(wesnoth.find_reach(unit, reach_param))
+                unit_reach = location_set.of_pairs(wesmere.find_reach(unit, reach_param))
                 unit.moves = saved_moves
             else
-                unit_reach = location_set.of_pairs(wesnoth.find_reach(unit, reach_param))
+                unit_reach = location_set.of_pairs(wesmere.find_reach(unit, reach_param))
 
             if range == "vision" or range == "attack"
                 unit_reach\iter( (x, y) ->
@@ -40,9 +40,9 @@ wsl_action
 
         if location_filter
             reach = reach\filter( (x, y) ->
-                return wesnoth.match_location(x, y, location_filter)
+                return wesmere.match_location(x, y, location_filter)
             )
-        reach\to_wml_var(variable)
+        reach\to_wsl_var(variable)
 
     scheme:
         filter:

@@ -4,14 +4,14 @@ wsl_action
 
     action: (cfg, kernel) ->
         coordinate_error = "invalid coordinate in [move_unit]"
-        to_x = tostring(cfg.to_x or helper.wml_error(coordinate_error))
-        to_y = tostring(cfg.to_y or helper.wml_error(coordinate_error))
+        to_x = tostring(cfg.to_x or helper.wsl_error(coordinate_error))
+        to_y = tostring(cfg.to_y or helper.wsl_error(coordinate_error))
         fire_event = cfg.fire_event
         muf_force_scroll = cfg.force_scroll
         check_passability = cfg.check_passability or true
         cfg = helper.literal(cfg)
         cfg.to_x, cfg.to_y, cfg.fire_event = nil, nil, nil
-        units = wesnoth.get_units(cfg)
+        units = wesmere.get_units(cfg)
 
         pattern = "[^%s,]+"
         for current_unit_index, current_unit in ipairs(units)
@@ -25,10 +25,10 @@ wsl_action
                 x, y = xs(), ys()
                 prevX, prevY = tonumber(current_unit.x), tonumber(current_unit.y)
                 while true do
-                    x = tonumber(x) or helper.wml_error(coordinate_error)
-                    y = tonumber(y) or helper.wml_error(coordinate_error)
-                    unless (x == prevX and y == prevY) then x, y = wesnoth.find_vacant_tile(x, y, pass_check)
-                    unless x or not y then helper.wml_error("Could not find a suitable hex near to one of the target hexes in [move_unit].")
+                    x = tonumber(x) or helper.wsl_error(coordinate_error)
+                    y = tonumber(y) or helper.wsl_error(coordinate_error)
+                    unless (x == prevX and y == prevY) then x, y = wesmere.find_vacant_tile(x, y, pass_check)
+                    unless x or not y then helper.wsl_error("Could not find a suitable hex near to one of the target hexes in [move_unit].")
                     move_string_x = string.format("%s,%u", move_string_x, x)
                     move_string_y = string.format("%s,%u", move_string_y, y)
                     next_x, next_y = xs(), ys()
@@ -39,9 +39,9 @@ wsl_action
                 if current_unit.x < x then current_unit.facing = "se"
                 elseif current_unit.x > x then current_unit.facing = "sw"
 
-                wesnoth.extract_unit(current_unit)
+                wesmere.extract_unit(current_unit)
                 current_unit_cfg = current_unit.__cfg
-                wml_actions.move_unit_fake
+                wsl_actions.move_unit_fake
                     type: current_unit_cfg.type
                     gender: current_unit_cfg.gender
                     variation: current_unit_cfg.variation
@@ -53,10 +53,10 @@ wsl_action
 
                 x2, y2 = current_unit.x, current_unit.y
                 current_unit.x, current_unit.y = x, y
-                wesnoth.put_unit(current_unit)
+                wesmere.put_unit(current_unit)
 
                 if fire_event
-                    wesnoth.fire_event("moveto", x, y, x2, y2)
+                    wesmere.fire_event("moveto", x, y, x2, y2)
 
     scheme:
         StandardUnitFilter:

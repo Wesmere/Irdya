@@ -4,13 +4,13 @@ wsl_action
     description: ""
 
     action: (cfg, kernel) ->
-        for unit in *wesnoth.get_units(cfg)
+        for unit in *wesmere.get_units(cfg)
             unit.status.petrified = false
             -- Extract unit and put it back to update animation (not needed for recall units)
-            wesnoth.extract_unit(unit)
-            wesnoth.put_unit(unit)
+            wesmere.extract_unit(unit)
+            wesmere.put_unit(unit)
 
-        for unit in *wesnoth.get_recall_units(cfg)
+        for unit in *wesmere.get_recall_units(cfg)
             unit.status.petrified = false
 
     scheme:

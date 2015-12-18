@@ -1,12 +1,12 @@
 wsl_action
     id: "remove_event"
     description: [[(Version 1.13.0 and later only)
-Removes the event with the specified id. Equivalent to [event] id=foo remove=yes. See EventWML.]]
+Removes the event with the specified id. Equivalent to [event] id=foo remove=yes. See EventWSL.]]
 
-    action: (cfg, wesnoth) ->
+    action: (cfg, wesmere) ->
         id = cfg.id
         for w in *id
-            wesnoth.remove_event_handler(w)
+            wesmere.remove_event_handler(w)
 
     scheme:
         id:

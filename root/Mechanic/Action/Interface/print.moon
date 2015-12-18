@@ -5,7 +5,7 @@ wsl_action
     description: "Displays a message across the screen. The message will disappear after a certain time."
 
     action: (cfg, kernel) ->
-        wesnoth.print(cfg)
+        wesmere.print(cfg)
 
     scheme:
         text:
@@ -17,7 +17,7 @@ wsl_action
             type: "Signed"
             default: 12
         duration:
-            description: "(default=50) the length of time to display the text for. This is measured in the number of 'frames'. A frame in Wesnoth is usually displayed for around 30ms."
+            description: "(default=50) the length of time to display the text for. This is measured in the number of 'frames'. A frame in Wesmere is usually displayed for around 30ms."
             type: "Signed"
             default: 50
         red:

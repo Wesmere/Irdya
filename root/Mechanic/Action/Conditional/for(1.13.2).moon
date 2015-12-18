@@ -1,9 +1,9 @@
 
--- wesnoth.wml_actions["for"] = function(cfg)
+-- wesmere.wsl_actions["for"] = function(cfg)
 --     local first, last, step
 --     if cfg.array ~= nil then
 --         first = 0
---         last = wesnoth.get_variable(cfg.array .. ".length") - 1
+--         last = wesmere.get_variable(cfg.array .. ".length") - 1
 --         step = 1
 --         if cfg.reverse then
 --             first, last = last, first
@@ -18,7 +18,7 @@
 --         end
 --     end
 --     if step == 0 then -- Sanity check
---         helper.wml_error("[for] has a step of 0!")
+--         helper.wsl_error("[for] has a step of 0!")
 --     end
 --     if (first < last and step < 0) or (first > last and step > 0) then
 --         -- Sanity check: If they specify something like start,end,step=1,4,-1
@@ -28,12 +28,12 @@
 --     local i_var = cfg.variable or "i"
 --     local save_i = utils.start_var_scope(i_var)
 --     local sentinel = last + step
---     wesnoth.set_variable(i_var, first)
+--     wesmere.set_variable(i_var, first)
 --     local function loop_condition()
 --         if first < sentinel then
---             return wesnoth.get_variable(i_var) < sentinel
+--             return wesmere.get_variable(i_var) < sentinel
 --         else
---             return wesnoth.get_variable(i_var) > sentinel
+--             return wesmere.get_variable(i_var) > sentinel
 --         end
 --     end
 --     while loop_condition() do
@@ -49,7 +49,7 @@
 --                 goto exit
 --             end
 --         end
---         wesnoth.set_variable(i_var, wesnoth.get_variable(i_var) + step)
+--         wesmere.set_variable(i_var, wesmere.get_variable(i_var) + step)
 --     end
 --     ::exit::
 --     utils.end_var_scope(i_var, save_i)

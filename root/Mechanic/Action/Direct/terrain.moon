@@ -3,11 +3,11 @@ wsl_action
     description: "Changes the terrain on the map."
 
     action: (cfg, kernel) ->
-        terrain = cfg.terrain or helper.wml_error("[terrain] missing required terrain= attribute")
+        terrain = cfg.terrain or helper.wsl_error("[terrain] missing required terrain= attribute")
         -- cfg = helper.shallow_parsed(cfg)
         cfg.terrain = nil
-        for loc in *wesnoth.get_locations(cfg)
-            wesnoth.set_terrain(loc[1], loc[2], terrain, cfg.layer, cfg.replace_if_failed)
+        for loc in *wesmere.get_locations(cfg)
+            wesmere.set_terrain(loc[1], loc[2], terrain, cfg.layer, cfg.replace_if_failed)
 
     scheme:
         terrain:
@@ -26,6 +26,6 @@ wsl_action
 -- If you want to remove the overlays from a terrain and leave only the base, use:
 -- layer=overlay
 -- terrain="^"
--- Note: When a hex changes from a village terrain to a non-village terrain, and a team owned that village it loses that village. When a hex changes from a non-village terrain to a village terrain and there is a unit on that hex it does not automatically capture the village. The reason for not capturing villages it that there are too many choices to make; should a unit loose its movement points, should capture events be fired. It is easier to do this as wanted by the author in WML.]]
+-- Note: When a hex changes from a village terrain to a non-village terrain, and a team owned that village it loses that village. When a hex changes from a non-village terrain to a village terrain and there is a unit on that hex it does not automatically capture the village. The reason for not capturing villages it that there are too many choices to make; should a unit loose its movement points, should capture events be fired. It is easier to do this as wanted by the author in WSL.]]
             type: "Bool"
             default: false

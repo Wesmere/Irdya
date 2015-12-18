@@ -2,5 +2,5 @@ wsl_action
     id: "unlock_view"
     description: "Unlocks gamemap view scrolling for human players."
 
-    action: (cfg, wesnoth) ->
-        wesnoth.lock_view(false)
+    action: (cfg, wesmere) ->
+        wesmere.lock_view(false)

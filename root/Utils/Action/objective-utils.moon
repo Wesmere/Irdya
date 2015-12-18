@@ -8,10 +8,10 @@ TURNS_RUN_OUT =
     condition: "lose"
     show_turn_counter: true
 
--- #wmllint: markcheck off
+-- #wsllint: markcheck off
 -- #define EARLY_FINISH_BONUS_FOOTNOTE
 -- "<span foreground='white'><small> " + _"(early finish bonus)" + "</small></span>"#enddef
--- #wmllint: markcheck on
+-- #wsllint: markcheck on
 
 -- #define OBJECTIVE_FOOTNOTE TEXT
 --     "<span foreground='white'><small> " + {TEXT} + "</small></span>"

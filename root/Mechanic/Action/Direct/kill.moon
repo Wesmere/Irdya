@@ -4,7 +4,7 @@ wsl_action
     description: "Removes all units (including units in a recall list) that match the filter from the game."
 
     action: (cfg, kernel) =>
-        wesnoth.kill(cfg)
+        wesmere.kill(cfg)
 
     scheme:
         filter:

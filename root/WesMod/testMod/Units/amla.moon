@@ -1,4 +1,4 @@
--- #textdomain wesnoth-help
+-- #textdomain wesmere-help
 -- #this file contains macros for After Max Level Advancement (AMLA)
 
 -- #define AMLA_DEFAULT

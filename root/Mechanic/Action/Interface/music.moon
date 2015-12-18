@@ -1,7 +1,7 @@
 wsl_action
     id: "music"
 
-    description: "This tag is a subtag of [scenario] and also part of ActionWML, which is used to describe a music track to play. You can repeat this tag as many times as you like; if you set the append tag to yes they will form a playlist from which tracks will be selected at random."
+    description: "This tag is a subtag of [scenario] and also part of ActionWSL, which is used to describe a music track to play. You can repeat this tag as many times as you like; if you set the append tag to yes they will form a playlist from which tracks will be selected at random."
 
 -- name specifies the music file, relative to '"music/"'. This is compulsory.
 -- append=yes specifies this is to be added to the current playlist. Without this, the current playlist is replaced by this track. (Note: if the same track is appended multiple times in a row, it will only play once before moving on to the next (different) track)
@@ -26,6 +26,6 @@ wsl_action
 --     append=yes
 --  [/music]
 
-    action: (cfg, wesnoth) ->
-        wesnoth.set_music(cfg)
+    action: (cfg, wesmere) ->
+        wesmere.set_music(cfg)
 

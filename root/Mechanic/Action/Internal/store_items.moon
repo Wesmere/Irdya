@@ -14,19 +14,19 @@ wsl_action
         -- return items
 
         variable = cfg.variable or "items"
-        variable = tostring(variable or helper.wml_error("invalid variable= in [store_items]"))
-        wesnoth.set_variable(variable)
+        variable = tostring(variable or helper.wsl_error("invalid variable= in [store_items]"))
+        wesmere.set_variable(variable)
         index = 0
-        for i, loc in wesnoth.get_locations(cfg)
+        for i, loc in wesmere.get_locations(cfg)
             items = scenario_items[loc[1] * 10000 + loc[2]]
             continue unless items
             for item in *items
-                wesnoth.set_variable(string.format("%s[%u]", variable, index), item)
+                wesmere.set_variable(string.format("%s[%u]", variable, index), item)
                 index += 1
 
     scheme:
         variable:
-            description: [[name of the wml variable array to use (default "items")]]
+            description: [[name of the wsl variable array to use (default "items")]]
             type: "string"
             default: "items"
 

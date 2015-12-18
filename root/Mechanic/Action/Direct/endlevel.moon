@@ -2,28 +2,28 @@ wsl_action
     id: "endlevel"
     description: "Ends the scenario."
 
-    action: (cfg, wesnoth) ->
+    action: (cfg, wesmere) ->
         -- parsed = helper.parsed(cfg)
-        if wesnoth.check_end_level_disabled()
-            wesnoth.message("Repeated [endlevel] execution, ignoring")
+        if wesmere.check_end_level_disabled()
+            wesmere.message("Repeated [endlevel] execution, ignoring")
             return
 
         next_scenario = cfg.next_scenario
         if next_scenario
-            wesnoth.set_next_scenario(next_scenario)
+            wesmere.set_next_scenario(next_scenario)
 
         end_text = cfg.end_text
         end_text_duration = cfg.end_text_duration
         if end_text or end_text_duration
-            wesnoth.set_end_campaign_text(end_text or "", end_text_duration)
+            wesmere.set_end_campaign_text(end_text or "", end_text_duration)
 
         end_credits = cfg.end_credits
         if end_credits ~= nil
-            wesnoth.set_end_campaign_credits(end_credits)
+            wesmere.set_end_campaign_credits(end_credits)
 
         side_results = {}
         for result in cfg.result
-            side = result.side or helper.wml_error("[result] in [endlevel] missing required side= key")
+            side = result.side or helper.wsl_error("[result] in [endlevel] missing required side= key")
             side_results[side] = result
 
         there_is_a_human_victory = false
@@ -38,12 +38,12 @@ wsl_action
             else
                 return b
 
-        for side in *wesnoth.sides
+        for side in *wesmere.sides
             side_result = side_results[side.side] or {}
             victory_or_defeat = side_result.result or cfg.result or "victory"
             victory = victory_or_defeat == "victory"
             if victory_or_defeat ~= "victory" and victory_or_defeat ~= "defeat"
-                return helper.wml_error("invalid result= key in [endlevel] '" .. victory_or_defeat .."'")
+                return helper.wsl_error("invalid result= key in [endlevel] '" .. victory_or_defeat .."'")
 
             if side.controller == "human" or side.controller == "network"
                 if victory
@@ -75,7 +75,7 @@ wsl_action
         proceed_to_next_level = there_is_a_human_victory or (not there_is_a_human_defeat and cfg.result ~= "defeat")
         victory = there_is_a_local_human_victory or (not there_is_a_local_human_defeat and proceed_to_next_level)
 
-        wesnoth.end_level
+        wesmere.end_level
             music: cfg.music
             carryover_report: cfg.carryover_report
             save: cfg.save
@@ -141,14 +141,14 @@ wsl_action
             description: [[(default specified in [scenario] or [game_config] tags) a comma-separated list of music tracks from which one will be chosen and played once after any events related to the end of level result are executed; by default, victory_music is used on victory, and defeat_music on defeat.]]
 
         end_credits:
-            description: [[Whether to display the credits screen at the end of a single-player campaign. Defaults to yes. Note that this has cumulative effects over the campaign - it persists even if the endlevel does not trigger the end of the campaign. See also CampaignWML.]]
+            description: [[Whether to display the credits screen at the end of a single-player campaign. Defaults to yes. Note that this has cumulative effects over the campaign - it persists even if the endlevel does not trigger the end of the campaign. See also CampaignWSL.]]
 
         end_text:
-            description: [[(translatable) Text that is shown centered in a black screen at the end of a campaign. Defaults to "The End". Note that this has cumulative effects over the campaign - it persists even if the endlevel does not trigger the end of the campaign. See also CampaignWML.]]
+            description: [[(translatable) Text that is shown centered in a black screen at the end of a campaign. Defaults to "The End". Note that this has cumulative effects over the campaign - it persists even if the endlevel does not trigger the end of the campaign. See also CampaignWSL.]]
             type: "tString"
 
         end_text_duration:
-            description: [[Delay, in milliseconds, before displaying the game credits at the end of a campaign. In other words, for how much time end_text is displayed on screen. Defaults to 3500. Note that this has cumulative effects over the campaign - it persists even if the endlevel does not trigger the end of the campaign. See also CampaignWML.]]
+            description: [[Delay, in milliseconds, before displaying the game credits at the end of a campaign. In other words, for how much time end_text is displayed on screen. Defaults to 3500. Note that this has cumulative effects over the campaign - it persists even if the endlevel does not trigger the end of the campaign. See also CampaignWSL.]]
             type: "Signed"
             default: 3500
 

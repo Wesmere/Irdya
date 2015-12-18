@@ -9,6 +9,6 @@ wsl_action
         repeat:
             description: "repeats the sound for a specified additional number of times (default=0)]]"
 
-    action: (cfg, wesnoth) ->
-        name = cfg.name or helper.wml_error("[sound] missing required name= attribute")
-        wesnoth.play_sound(name, cfg["repeat"])
+    action: (cfg, wesmere) ->
+        name = cfg.name or helper.wsl_error("[sound] missing required name= attribute")
+        wesmere.play_sound(name, cfg["repeat"])

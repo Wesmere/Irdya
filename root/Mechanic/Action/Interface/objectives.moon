@@ -4,8 +4,8 @@ wsl_action
 
     description: [[The other tag used for plot development is [objectives]. The [objectives] tag overwrites any previously set objectives, and displays text which should describe the objectives of the scenario. Scenario objectives are displayed on the player's first turn after the tag is used, or as part of the event if it triggers during that player's turn. Objectives can also be accessed at any time in a scenario using the "Scenario Objectives" game menu option, making this tag useful for scenario-specific information that the player may need to refer to during play.]]
 
-    action: (cfg, wesnoth) ->
-        sides = wesnoth.get_sides(cfg)
+    action: (cfg, wesmere) ->
+        sides = wesmere.get_sides(cfg)
         silent = cfg.silent
 
         remove_ssf_info_from(cfg)
@@ -19,17 +19,17 @@ wsl_action
                 side.objectives = objectives
                 side.objectives_changed = not silent
 
-        if #sides == #wesnoth.sides or #sides == 0
+        if #sides == #wesmere.sides or #sides == 0
             scenario_objectives[0] = cfg
-            set_objectives(wesnoth.sides)
+            set_objectives(wesmere.sides)
         else
             set_objectives(sides, true)
 
 --------------------------------------------------------------
 
-        -- local helper = wesnoth.require "lua/helper.lua"
-        -- local wml_actions = wesnoth.wml_actions
-        -- local game_events = wesnoth.game_events
+        -- local helper = wesmere.require "lua/helper.lua"
+        -- local wsl_actions = wesmere.wsl_actions
+        -- local game_events = wesmere.game_events
 
         -- local function color_prefix(r, g, b)
         --     return string.format('<span foreground="#%02x%02x%02x">', r, g, b)
@@ -69,7 +69,7 @@ wsl_action
         --     -- need to change the hardcoded default multiplayer objective text in
         --     -- multiplayer_connect.cpp.
 
-        --     local _ = wesnoth.textdomain("wesnoth")
+        --     local _ = wesmere.textdomain("wesmere")
         --     local objectives = ""
         --     local win_objectives = ""
         --     local lose_objectives = ""
@@ -85,15 +85,15 @@ wsl_action
 
         --     for obj in helper.child_range(cfg, "objective") do
         --         local show_if = helper.get_child(obj, "show_if")
-        --         if not show_if or wesnoth.eval_conditional(show_if) then
+        --         if not show_if or wesmere.eval_conditional(show_if) then
         --             local objective_bullet = obj.bullet or bullet
         --             local condition = obj.condition
         --             local description = obj.description or ""
         --             local turn_counter = ""
 
         --             if obj.show_turn_counter then
-        --                 local current_turn = wesnoth.current.turn
-        --                 local turn_limit = wesnoth.game_config.last_turn
+        --                 local current_turn = wesmere.current.turn
+        --                 local turn_limit = wesmere.game_config.last_turn
 
         --                 if turn_limit >= current_turn then
         --                     if turn_limit - current_turn + 1 > 1 then
@@ -127,7 +127,7 @@ wsl_action
 
         --                 lose_objectives = lose_objectives .. color_prefix(r, g, b) .. objective_bullet .. description .. turn_counter .. "</span>" .. "\n"
         --             else
-        --                 wesnoth.message "Unknown condition, ignoring."
+        --                 wesmere.message "Unknown condition, ignoring."
         --             end
         --         end
         --     end
@@ -161,7 +161,7 @@ wsl_action
 
         --     for note in helper.child_range(cfg, "note") do
         --         local show_if = helper.get_child(note, "show_if")
-        --         if not show_if or wesnoth.eval_conditional(show_if) then
+        --         if not show_if or wesmere.eval_conditional(show_if) then
         --             local note_bullet = note.bullet or bullet
         --             local r = note.red or 255
         --             local g = note.green or 255

@@ -8,13 +8,13 @@ wsl_action
         image:
             description: "the image to place on the unit"
 
-    action: (cfg, wesnoth) ->
-        img = cfg.image or helper.wml_error( "[unit_overlay] missing required image= attribute" )
-        for u in *wesnoth.get_units(cfg)
+    action: (cfg, wesmere) ->
+        img = cfg.image or helper.wsl_error( "[unit_overlay] missing required image= attribute" )
+        for u in *wesmere.get_units(cfg)
             ucfg = u.__cfg
             for w in *ucfg.overlays
                 if w == img then ucfg = nil
 
             if ucfg
                 ucfg.overlays = ucfg.overlays .. ',' .. img
-                wesnoth.put_unit(ucfg)
+                wesmere.put_unit(ucfg)

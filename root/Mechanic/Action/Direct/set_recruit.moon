@@ -3,8 +3,8 @@ wsl_action
     description: "Sets the units a side can recruit."
 
     action: (cfg, kernel) ->
-        recruit = cfg.recruit or helper.wml_error("[set_recruit] missing required recruit= attribute")
-        for team in *wesnoth.get_sides(cfg)
+        recruit = cfg.recruit or helper.wsl_error("[set_recruit] missing required recruit= attribute")
+        for team in *wesmere.get_sides(cfg)
             v = for w in *recruit
                 w
             team.recruit = v

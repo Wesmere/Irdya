@@ -1,7 +1,7 @@
 
 
--- function wml_actions.switch(cfg)
---     local var_value = wesnoth.get_variable(cfg.variable)
+-- function wsl_actions.switch(cfg)
+--     local var_value = wesmere.get_variable(cfg.variable)
 --     local found = false
 
 --     -- Execute all the [case]s where the value matches.

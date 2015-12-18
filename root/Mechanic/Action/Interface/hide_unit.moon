@@ -6,9 +6,9 @@ wsl_action
 StandardUnitFilter: All matching units will be hidden]]
 
     action: (cfg, kernel) ->
-        for u in *wesnoth.get_units(cfg)
+        for u in *wesmere.get_units(cfg)
             u.hidden = true
-        wml_actions.redraw {}
+        wsl_actions.redraw {}
 
         -- units = kernel\get_units(cfg.filter)
         -- for unit in *units

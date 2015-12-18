@@ -1,13 +1,13 @@
 
-local helper = wesnoth.require "lua/helper.lua"
-local utils = wesnoth.require "lua/wml-utils.lua"
-local T = helper.set_wml_tag_metatable {}
-local wml_actions = wesnoth.wml_actions
+local helper = wesmere.require "lua/helper.lua"
+local utils = wesmere.require "lua/wsl-utils.lua"
+local T = helper.set_wsl_tag_metatable {}
+local wsl_actions = wesmere.wsl_actions
 
 local used_items = {}
 
-function wml_actions.object(cfg)
-	local context = wesnoth.current.event_context
+function wsl_actions.object(cfg)
+	local context = wesmere.current.event_context
 
 	-- If this item has already been used
 	local obj_id = utils.check_key(cfg.id, "id", "object", true)
@@ -17,9 +17,9 @@ function wml_actions.object(cfg)
 
 	local filter = helper.get_child(cfg, "filter")
 	if filter then
-		unit = wesnoth.get_units(filter)[1]
+		unit = wesmere.get_units(filter)[1]
 	else
-		unit = wesnoth.get_unit(context.x1, context.y1)
+		unit = wesmere.get_unit(context.x1, context.y1)
 	end
 
 	-- If a unit matches the filter, proceed
@@ -30,12 +30,12 @@ function wml_actions.object(cfg)
 		local dvs = cfg.delayed_variable_substitution
 		local add = cfg.no_write ~= true
 		if dvs then
-			wesnoth.add_modification(unit, "object", helper.literal(cfg), add)
+			wesmere.add_modification(unit, "object", helper.literal(cfg), add)
 		else
-			wesnoth.add_modification(unit, "object", helper.parsed(cfg), add)
+			wesmere.add_modification(unit, "object", helper.parsed(cfg), add)
 		end
 
-		wesnoth.select_hex(unit.x, unit.y, false)
+		wesmere.select_hex(unit.x, unit.y, false)
 
 		-- Mark this item as used up
 		if obj_id then used_items[obj_id] = true end
@@ -49,9 +49,9 @@ function wml_actions.object(cfg)
 	if silent == nil then silent = (text:len() == 0) end
 
 	if not silent then
-		wml_actions.redraw{}
+		wsl_actions.redraw{}
 		local name = tostring(cfg.name or "")
-		wesnoth.show_popup_dialog(name, text, cfg.image)
+		wesmere.show_popup_dialog(name, text, cfg.image)
 	end
 
 	for cmd in helper.child_range(cfg, command_type) do
@@ -60,8 +60,8 @@ function wml_actions.object(cfg)
 	end
 end
 
-local old_on_load = wesnoth.game_events.on_load
-function wesnoth.game_events.on_load(cfg)
+local old_on_load = wesmere.game_events.on_load
+function wesmere.game_events.on_load(cfg)
 	for i = 1,#cfg do
 		if cfg[i][1] == "used_items" then
 			-- Not quite sure if this will work
@@ -74,13 +74,13 @@ function wesnoth.game_events.on_load(cfg)
 	old_on_load(cfg)
 end
 
-local old_on_save = wesnoth.game_events.on_save
-function wesnoth.game_events.on_save()
+local old_on_save = wesmere.game_events.on_save
+function wesmere.game_events.on_save()
 	local cfg = old_on_save()
 	table.insert(cfg, T.used_items(used_items) )
 	return cfg
 end
 
-function wesnoth.wml_conditionals.found_item(cfg)
+function wesmere.wsl_conditionals.found_item(cfg)
 	return used_items[utils.check_key(cfg.id, "id", "found_item", true)]
 end

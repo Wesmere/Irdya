@@ -1,4 +1,4 @@
--- #textdomain wesnoth
+-- #textdomain wesmere
 
 -- # Side-utils macros for balancing AI behaviour and setting village ownership.
 -- # You can, for example give an AI side the possibility to recruit high

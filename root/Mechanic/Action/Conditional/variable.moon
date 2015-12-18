@@ -1,6 +1,6 @@
 [[
 [variable]
-Test the value of a WML variable against another value.
+Test the value of a WSL variable against another value.
 name: The name of the variable to test.
 <comparison>: One of the following keys must be used to compare the value of the named variable, represented as $name below, against another value:
 contains: $name contains this string value.

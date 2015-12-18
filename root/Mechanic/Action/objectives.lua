@@ -1,6 +1,6 @@
-local helper = wesnoth.require "lua/helper.lua"
-local wml_actions = wesnoth.wml_actions
-local game_events = wesnoth.game_events
+local helper = wesmere.require "lua/helper.lua"
+local wsl_actions = wesmere.wsl_actions
+local game_events = wesmere.game_events
 
 local function color_prefix(r, g, b)
 	return string.format('<span foreground="#%02x%02x%02x">', r, g, b)
@@ -40,7 +40,7 @@ local function generate_objectives(cfg)
 	-- need to change the hardcoded default multiplayer objective text in
 	-- multiplayer_connect.cpp.
 
-	local _ = wesnoth.textdomain("wesnoth")
+	local _ = wesmere.textdomain("wesmere")
 	local objectives = ""
 	local win_objectives = ""
 	local lose_objectives = ""
@@ -56,15 +56,15 @@ local function generate_objectives(cfg)
 
 	for obj in helper.child_range(cfg, "objective") do
 		local show_if = helper.get_child(obj, "show_if")
-		if not show_if or wesnoth.eval_conditional(show_if) then
+		if not show_if or wesmere.eval_conditional(show_if) then
 			local objective_bullet = obj.bullet or bullet
 			local condition = obj.condition
 			local description = obj.description or ""
 			local turn_counter = ""
 
 			if obj.show_turn_counter then
-				local current_turn = wesnoth.current.turn
-				local turn_limit = wesnoth.game_config.last_turn
+				local current_turn = wesmere.current.turn
+				local turn_limit = wesmere.game_config.last_turn
 
 				if turn_limit >= current_turn then
 					if turn_limit - current_turn + 1 > 1 then
@@ -98,7 +98,7 @@ local function generate_objectives(cfg)
 
 				lose_objectives = lose_objectives .. color_prefix(r, g, b) .. objective_bullet .. description .. turn_counter .. "</span>" .. "\n"
 			else
-				wesnoth.message "Unknown condition, ignoring."
+				wesmere.message "Unknown condition, ignoring."
 			end
 		end
 	end
@@ -132,7 +132,7 @@ local function generate_objectives(cfg)
 
 	for note in helper.child_range(cfg, "note") do
 		local show_if = helper.get_child(note, "show_if")
-		if not show_if or wesnoth.eval_conditional(show_if) then
+		if not show_if or wesmere.eval_conditional(show_if) then
 			local note_bullet = note.bullet or bullet
 			local r = note.red or 255
 			local g = note.green or 255
@@ -178,10 +178,10 @@ local function remove_ssf_info_from(cfg)
 	end
 end
 
-function wml_actions.objectives(cfg)
+function wsl_actions.objectives(cfg)
 	cfg = helper.parsed(cfg)
 
-	local sides = wesnoth.get_sides(cfg)
+	local sides = wesmere.get_sides(cfg)
 	local silent = cfg.silent
 
 	remove_ssf_info_from(cfg)
@@ -195,15 +195,15 @@ function wml_actions.objectives(cfg)
 			team.objectives_changed = not silent
 		end
 	end
-	if #sides == #wesnoth.sides or #sides == 0 then
+	if #sides == #wesmere.sides or #sides == 0 then
 		scenario_objectives[0] = cfg
-		set_objectives(wesnoth.sides)
+		set_objectives(wesmere.sides)
 	else
 		set_objectives(sides, true)
 	end
 end
 
-function wml_actions.show_objectives(cfg)
+function wsl_actions.show_objectives(cfg)
 	local cfg0 = scenario_objectives[0]
 	local function local_show_objectives(sides)
 		local objectives0 = cfg0 and generate_objectives(cfg0)
@@ -214,9 +214,9 @@ function wml_actions.show_objectives(cfg)
 			team.objectives_changed = true
 		end
 	end
-	local sides = wesnoth.get_sides(cfg)
+	local sides = wesmere.get_sides(cfg)
 	if #sides == 0 then
-		local_show_objectives(wesnoth.sides)
+		local_show_objectives(wesmere.sides)
 	else
 		local_show_objectives(sides)
 	end

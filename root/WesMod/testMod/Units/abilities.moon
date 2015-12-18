@@ -1,5 +1,5 @@
 ----
--- Ability macros to be included in the SingleWML description of a unit.
+-- Ability macros to be included in the SingleWSL description of a unit.
 
 _ = (txt) -> return txt
 
@@ -385,10 +385,10 @@ Enemy units cannot see this unit while it is in deep water, except if they have 
                 terrain: "Wo*^*"
 
 
--- wmllint: unbalanced-on
+-- wsllint: unbalanced-on
 ABILITY_FEEDING =
     -- Canned definition of the Feeding ability to be included in an
-    -- [abilities] clause.  Note: this is deliberately unbalanced WML,
+    -- [abilities] clause.  Note: this is deliberately unbalanced WSL,
     -- in order to close the abilities clause then insert the event
     -- then reopen the abilities clause.
     dummy:
@@ -397,7 +397,7 @@ ABILITY_FEEDING =
         female_name:  _ "female^feeding"
         description: _ "This unit gains 1 hitpoint added to its maximum whenever it kills a unit, except units that are immune to plague."
 
--- wmlxgettext: [abilities]
+-- wslxgettext: [abilities]
 -- [/abilities]
 -- [event]
 --     id: ability_feeding_die

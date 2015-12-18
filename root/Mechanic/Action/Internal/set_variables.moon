@@ -1,6 +1,6 @@
 wsl_action
     id: "set_variables"
-    description: "Manipulates a WML array or container"
+    description: "Manipulates a WSL array or container"
 
     action: (cfg, kernel) ->
 
@@ -18,7 +18,7 @@ insert: will insert the given data at the index specified in the name attribute,
             description: "data will be set to the given array"
 
         value:
-            description: "the WML inside the [value] tags will be stored in data, variables will be interpolated directly, use $| in order to escape the $ sign, you can store arrays of WML by supplying multiple [value] tags. (See Example)"
+            description: "the WSL inside the [value] tags will be stored in data, variables will be interpolated directly, use $| in order to escape the $ sign, you can store arrays of WSL by supplying multiple [value] tags. (See Example)"
 
         literal:
             description: "same as [value], but variables will not be substituted, [literal] and [value] can not be used in the same [set_variables] tag, i.e. you can not create arrays by piling a mix of [value] and [literal] tags"

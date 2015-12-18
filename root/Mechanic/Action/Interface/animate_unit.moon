@@ -9,12 +9,12 @@ wsl_action
     scheme:
 
         flag:
-            description: "The key to find the custom animation in the unit description (see the [extra_anim] description in AnimationWML). Standard animations can be triggered with the following keywords: leading recruited standing idling levelout levelin healing healed poisoned movement defend attack death victory pre_teleport post_teleport"
+            description: "The key to find the custom animation in the unit description (see the [extra_anim] description in AnimationWSL). Standard animations can be triggered with the following keywords: leading recruited standing idling levelout levelin healing healed poisoned movement defend attack death victory pre_teleport post_teleport"
         filter:
-            description: "with a StandardUnitFilter as argument, see FilterWML. By default, the unit at the event location will be animated. You can use this tag to choose any other unit to animate."
+            description: "with a StandardUnitFilter as argument, see FilterWSL. By default, the unit at the event location will be animated. You can use this tag to choose any other unit to animate."
 
         primary_attack:
-            description: "If this tag is not present, the filter for animation will be triggered with no attack. If it is here, all attacks from the unit will be filtered, and a matching one will be used to filter the animation. Takes a weapon filter as argument, see FilterWML."
+            description: "If this tag is not present, the filter for animation will be triggered with no attack. If it is here, all attacks from the unit will be filtered, and a matching one will be used to filter the animation. Takes a weapon filter as argument, see FilterWSL."
 
         secondary_attack:
             description: "Similar to [primary_attack]. May be needed to trigger a defense animation correctly, if there are more than one animations available for the defending unit."

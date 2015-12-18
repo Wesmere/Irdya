@@ -57,6 +57,6 @@ wsl_action
 -- user_team_name: Translated string representing the team's description.
 -- village_gold: The amount of gold given to this side per village it controls per turn.
 -- scroll_to_leader: (boolean) Whether the game view scrolls to the side leader at the start of their turn.
--- flag: Flag animation for villages owned by this side (see [side]). Unless previously specified in [side] or changed with WML (see [modify_side]), this value may be empty for the default flag animation.
--- flag_icon: Flag icon for the status bar for this side (see [side]). Unless previously specified in [side] or changed with WML (see [modify_side]), this value may be empty for the default flag icon.
+-- flag: Flag animation for villages owned by this side (see [side]). Unless previously specified in [side] or changed with WSL (see [modify_side]), this value may be empty for the default flag animation.
+-- flag_icon: Flag icon for the status bar for this side (see [side]). Unless previously specified in [side] or changed with WSL (see [modify_side]), this value may be empty for the default flag icon.
 -- village_support: The number of unit levels this side is able to support (does not pay upkeep on) per village it controls.

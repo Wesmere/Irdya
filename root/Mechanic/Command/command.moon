@@ -28,7 +28,7 @@
 -- [fire_event]: a specific event was raised. This is mainly used for right-click menu items. ([set_menu_item])
 -- raise: the name of the event
 -- [source]: the location of the event
--- [set_variable] (deprecated): set WML variable(s) before firing.
+-- [set_variable] (deprecated): set WSL variable(s) before firing.
 -- name: the name of the variable
 -- value: a string value (literal)
 -- [lua_ai]
@@ -45,6 +45,6 @@
 -- The following tags are recognized for dependent=true:
 -- [choose]: the player was given an option by the scenario or for an advancement path.
 -- value: the index number of the option chosen. Index numbers are given by the scenario designer.
--- [input]: if a lua code used LuaWML:Misc#wesnoth.synchronize_choice this tag contains the returned table.
--- [global_variable] a WML code used with [get_global_variable]
+-- [input]: if a lua code used LuaWSL:Misc#wesmere.synchronize_choice this tag contains the returned table.
+-- [global_variable] a WSL code used with [get_global_variable]
 -- [random_seed] A user actions uses the rng and thus new random seed is needed.

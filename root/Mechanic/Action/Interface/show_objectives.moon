@@ -2,7 +2,7 @@ wsl_action
     id: "show_objectives"
     description: [[refreshes the objectives defined by [objectives] and its [show_if] tags, and displays them. (It is also called whenever the user explicitly asks for the objectives; this matters only if the tag was overridden by a Lua script.)]]
 
-    action: (cfg, wesnoth) ->
+    action: (cfg, wesmere) ->
         cfg0 = scenario_objectives[0]
         local_show_objectives = (sides) ->
             objectives0 = cfg0 and generate_objectives(cfg0)
@@ -12,9 +12,9 @@ wsl_action
                 if objectives then side.objectives = objectives
                 side.objectives_changed = true
 
-        sides = wesnoth.get_sides(cfg)
+        sides = wesmere.get_sides(cfg)
         if #sides == 0
-            local_show_objectives(wesnoth.sides)
+            local_show_objectives(wesmere.sides)
         else
             local_show_objectives(sides)
 

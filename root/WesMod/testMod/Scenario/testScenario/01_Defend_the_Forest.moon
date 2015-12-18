@@ -283,11 +283,11 @@ scenario
             message: [[That cloud of dust on the horizon... flee! There’s more of the abominations heading this way! Fall back before we’re outnumbered and crushed.]]
         message
             speaker: "narrator"
-            image: "wesnoth-icon"
+            image: "wesmere-icon"
             message: [[Lord Erlornas didn’t drive the orcs back, although he and his warriors tried their absolute best. When another war band arrived, elvish resistance crumbled.]]
         message
             speaker: "narrator"
-            image: "wesnoth-icon"
+            image: "wesmere-icon"
             message: [[Of the ensuing events little is known, since much was lost in the chaos and confusion, but one thing is painfully sure. Elves lost the campaign.]]
 
     LastBreath:
@@ -310,7 +310,7 @@ scenario
                 message: [[Take... command... Drive them... away.]]
             message
                 speaker: "narrator"
-                image: "wesnoth-icon"
+                image: "wesmere-icon"
                 message: [[Lord Erlornas died the day he first fought the orcs and never saw the end of the war. Given its final outcome, this was perhaps for the best.]]
 
     LastBreath:

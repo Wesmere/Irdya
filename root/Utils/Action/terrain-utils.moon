@@ -14,12 +14,12 @@ MODIFY_TERRAIN = (TERRAIN, X_SPAN, Y_SPAN) ->
         y: Y_SPAN
 
 --     # Changes the terrain for a given area
-MODIFY_TERRAIN_MASK = (X, Y, MASK_VALUE, RULES_WML) ->
-    with RULES_WML
+MODIFY_TERRAIN_MASK = (X, Y, MASK_VALUE, RULES_WSL) ->
+    with RULES_WSL
         .x = X
         .y = Y
         .mask = MASK_VALUE
-    terrain_mask RULES_WML
+    terrain_mask RULES_WSL
 
 shuffleTable = ( t ) ->
     math.randomseed(os.time!)

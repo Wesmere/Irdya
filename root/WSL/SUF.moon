@@ -2,15 +2,15 @@ wsl_table
 
     id: "SUF"
 
-    description: [[From FilterWML, this is the standard way of filtering units.
+    description: [[From FilterWSL, this is the standard way of filtering units.
 When a unit filter is applied to a map, first it applies to all units on the field, based on their coordinates. Next it applies to units in the recall list. This is important to remember as it means, for example, that the tag [kill] can be used to kill units in the recall list.
-You can access the filtered unit within the filter as the $this_unit variable, see SingleUnitWML for the possible content of these variables
+You can access the filtered unit within the filter as the $this_unit variable, see SingleUnitWSL for the possible content of these variables
 The term StandardUnitFilter means that the set of such keys and tags (see below) can appear at that point. Often a StandardUnitFilter needs to be included in a [filter] tag. But many tags take the StandardUnitFilter directly as an argument, like [kill] and [have_unit]. See Special:WhatLinksHere/StandardUnitFilter for tags which can contain a StandardUnitFilter.]]
 
     scheme:
 
         id:
-            description: [[unit matches the given id. This is the same as id in the [unit] tag. Note that it is independent of a unit's user-visible name, which can be internationalized independent of this (see SingleUnitWML). id= can be a comma-separated list, every unit with one of these ids matches.]]
+            description: [[unit matches the given id. This is the same as id in the [unit] tag. Note that it is independent of a unit's user-visible name, which can be internationalized independent of this (see SingleUnitWSL). id= can be a comma-separated list, every unit with one of these ids matches.]]
 
         speaker:
             description: [[alias for id (no comma-separated list supported)]]
@@ -23,7 +23,7 @@ The term StandardUnitFilter means that the set of such keys and tags (see below)
     Mainline races are listed in data/core/units.cfg]]
 
         ability:
-            description: [[unit has an ability with the given id; see AbilitiesWML]]
+            description: [[unit has an ability with the given id; see AbilitiesWSL]]
 
         status:
             description: [[matches if the unit has the specified status active. This can be a comma-separated list, in which case the unit will match as long as it has one of the listed statuses active]]
@@ -39,7 +39,7 @@ The term StandardUnitFilter means that the set of such keys and tags (see below)
 
         gender:
             description: [[female if the unit is female rather than the default of male
-    role: the unit has been assigned the given role; see [role], InternalActionsWML]]
+    role: the unit has been assigned the given role; see [role], InternalActionsWSL]]
 
         level:
             description: [[the level of the unit]]
@@ -59,8 +59,8 @@ The term StandardUnitFilter means that the set of such keys and tags (see below)
     visible: yes or no, default yes. When "yes", this matches units that are not obscured by fog or shroud, and that are not hiding (via the [hides] ability). When "no", this matches units that are obscured by fog or shroud, or that are hiding.
     StandardSideFilter tags and keys. Filter for who may be able to see (or not see) the unit. If there is *at least one* matching side which can see the unit then the filter matches, and otherwise it fails to match.]]
 
-        filter_wml:
-            description: [[this is WML level filter for the unit. In it, you can filter on anything that is in the WML description of a unit. This description can be found in any savegame also in SingleUnitWML. If the filter encounters a nested [not] tag, the attributes and containers inside the tag should not match for the upper filter to match. Note: [filter_wml] is especially slow, unless it contains only a child [variables], which is used for matching variables stored inside the unit.]]
+        filter_wsl:
+            description: [[this is WSL level filter for the unit. In it, you can filter on anything that is in the WSL description of a unit. This description can be found in any savegame also in SingleUnitWSL. If the filter encounters a nested [not] tag, the attributes and containers inside the tag should not match for the upper filter to match. Note: [filter_wsl] is especially slow, unless it contains only a child [variables], which is used for matching variables stored inside the unit.]]
 
         and:
             description: [[an extra unit filter. Unless the unit also matches the [and] filter, then it will not count as a match. Note: [and],[or], and [not] filters are considered after the containing filter; they are then processed in the order encountered.]]

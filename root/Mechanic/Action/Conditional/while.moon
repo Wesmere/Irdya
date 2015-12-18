@@ -1,10 +1,10 @@
 
 
 
--- wml_actions["while"] = function( cfg )
+-- wsl_actions["while"] = function( cfg )
 --     -- execute [do] up to 65536 times
 --     for i = 1, 65536 do
---         if wesnoth.eval_conditional( cfg ) then
+--         if wesmere.eval_conditional( cfg ) then
 --             for do_child in helper.child_range( cfg, "do" ) do
 --                 local action = utils.handle_event_commands(do_child, "loop")
 --                 if action == "break" then

@@ -17,7 +17,7 @@ A list of initial scenarios, and how to access them:
 All [multiplayer] scenarios (without allow_new_game=no) are initial scenarios listed in the multiplayer scenario selector screen (accessed by the "multiplayer" button).
 The [test] scenario with the attribute id=test is an initial scenario. This test scenario can be accessed by running the game in test mode. (note: this is NOT the same as debug mode. It can be accessed using -t or --test)
 The [tutorial] scenario with the attribute id=tutorial is an initial scenario. The tutorial is accessed by clicking on the "tutorial" button.
-Any [scenario] scenario with an id listed in the value of first_scenario in a campaign tag (see CampaignWML) is an initial scenario accessed by selecting that campaign after clicking on the "campaign" button.]]
+Any [scenario] scenario with an id listed in the value of first_scenario in a campaign tag (see CampaignWSL) is an initial scenario accessed by selecting that campaign after clicking on the "campaign" button.]]
     schema:
         id:
             type: "String"
@@ -32,7 +32,7 @@ Any [scenario] scenario with an id listed in the value of first_scenario in a ca
             --- @TODO mandatory?
         map_data:
             type: "String"
-            description: [[inputs valid Wesmere map data. See 'BuildingMaps' for a description of the Wesnoth map syntax.]]
+            description: [[inputs valid Wesmere map data. See 'BuildingMaps' for a description of the Wesmere map syntax.]]
         turns:
             type: "Integer"
             description: [[sets an event on turn _turns_ causing the player to lose. Use -1 to have no turn limit (default). See also EventWSL]]
@@ -46,12 +46,12 @@ Any [scenario] scenario with an id listed in the value of first_scenario in a ca
             list: true
         defeat_music:
             type: "String"
-            description: [[specifies a comma-separated list of music tracks which may be chosen to play on defeat. If not provided, the default in GameConfigWML is used instead. May be overridden by endlevel clauses.]]
+            description: [[specifies a comma-separated list of music tracks which may be chosen to play on defeat. If not provided, the default in GameConfigWSL is used instead. May be overridden by endlevel clauses.]]
             -- default: Config.defeat_music
             list: true
         victory_music:
             type: "String"
-            description: [[specifies a comma-separated list of music tracks which may be chosen to play on victory. If not provided, the default in GameConfigWML is used instead. May be overridden by endlevel clauses.]]
+            description: [[specifies a comma-separated list of music tracks which may be chosen to play on victory. If not provided, the default in GameConfigWSL is used instead. May be overridden by endlevel clauses.]]
             list: true
             -- default: Config.victory_music
         theme:

@@ -15,7 +15,7 @@ UNREACHABLE = 99
 -- # Those that begin with NAMED_ additionally take ID_STRING NAME_STRING
 -- # The LOYAL_ macros set the loyalty trait.
 
--- Place a unit with embedded WML specified.
+-- Place a unit with embedded WSL specified.
 --
 UNIT = (SIDE, TYPE, X, Y, WSL) ->
     with WSL
@@ -68,19 +68,19 @@ LOYAL_UNIT = (SIDE, TYPE, X, Y) ->
         modifications: TRAIT_LOYAL
         overlays: "misc/loyal-icon.png"
 
--- Place a named unit with embedded WML specified.
+-- Place a named unit with embedded WSL specified.
 -- 
-NAMED_UNIT = (SIDE, TYPE, X, Y, ID_STRING, NAME_STRING, WML) ->
-    unless WML
-        WML = {}
-    with WML
+NAMED_UNIT = (SIDE, TYPE, X, Y, ID_STRING, NAME_STRING, WSL) ->
+    unless WSL
+        WSL = {}
+    with WSL
         .side = SIDE
         .type = TYPE
         .x = X
         .y = Y
         .id = ID_STRING
         .name = NAME_STRING
-    unit WML
+    unit WSL
 
 -- Creates a unit with the Loyal trait.
 -- 

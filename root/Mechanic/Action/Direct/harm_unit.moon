@@ -7,13 +7,13 @@ wsl_action
         second_unit = kernel\get_unit(cfg.filter_second)
         amount = cfg.amount
 
--- function wml_actions.harm_unit(cfg)
---     local filter = helper.get_child(cfg, "filter") or helper.wml_error("[harm_unit] missing required [filter] tag")
+-- function wsl_actions.harm_unit(cfg)
+--     local filter = helper.get_child(cfg, "filter") or helper.wsl_error("[harm_unit] missing required [filter] tag")
 --     -- we need to use shallow_literal field, to avoid raising an error if $this_unit (not yet assigned) is used
---     if not cfg.__shallow_literal.amount then helper.wml_error("[harm_unit] has missing required amount= attribute") end
+--     if not cfg.__shallow_literal.amount then helper.wsl_error("[harm_unit] has missing required amount= attribute") end
 --     local variable = cfg.variable -- kept out of the way to avoid problems
---     local _ = wesnoth.textdomain "wesnoth"
---     -- #textdomain wesnoth
+--     local _ = wesmere.textdomain "wesmere"
+--     -- #textdomain wesmere
 --     local harmer
 
 --     local function toboolean( value ) -- helper for animate fields
@@ -25,11 +25,11 @@ wsl_action
 
 --     local this_unit = utils.start_var_scope("this_unit")
 
---     for index, unit_to_harm in ipairs(wesnoth.get_units(filter)) do
+--     for index, unit_to_harm in ipairs(wesmere.get_units(filter)) do
 --         if unit_to_harm.valid then
 --             -- block to support $this_unit
---             wesnoth.set_variable ( "this_unit" ) -- clearing this_unit
---             wesnoth.set_variable("this_unit", unit_to_harm.__cfg) -- cfg field needed
+--             wesmere.set_variable ( "this_unit" ) -- clearing this_unit
+--             wesmere.set_variable("this_unit", unit_to_harm.__cfg) -- cfg field needed
 --             local amount = tonumber(cfg.amount)
 --             local animate = cfg.animate -- attacker and defender are special values
 --             local delay = cfg.delay or 500
@@ -40,18 +40,18 @@ wsl_action
 --             local harmer_filter = helper.get_child(cfg, "filter_second")
 --             local experience = cfg.experience
 --             local resistance_multiplier = tonumber(cfg.resistance_multiplier) or 1
---             if harmer_filter then harmer = wesnoth.get_units(harmer_filter)[1] end
+--             if harmer_filter then harmer = wesmere.get_units(harmer_filter)[1] end
 --             -- end of block to support $this_unit
 
 --             if animate then
 --                 if animate ~= "defender" and harmer and harmer.valid then
---                     wesnoth.scroll_to_tile(harmer.x, harmer.y, true)
---                     wesnoth.animate_unit({ flag = "attack", hits = true, { "filter", { id = harmer.id } },
+--                     wesmere.scroll_to_tile(harmer.x, harmer.y, true)
+--                     wesmere.animate_unit({ flag = "attack", hits = true, { "filter", { id = harmer.id } },
 --                         { "primary_attack", primary_attack },
 --                         { "secondary_attack", secondary_attack }, with_bars = true,
 --                         { "facing", { x = unit_to_harm.x, y = unit_to_harm.y } } })
 --                 end
---                 wesnoth.scroll_to_tile(unit_to_harm.x, unit_to_harm.y, true)
+--                 wesmere.scroll_to_tile(unit_to_harm.x, unit_to_harm.y, true)
 --             end
 
 --             -- the two functions below are taken straight from the C++ engine, utils.cpp and actions.cpp, with a few unuseful parts removed
@@ -87,8 +87,8 @@ wsl_action
 
 --             local damage = calculate_damage( amount,
 --                              ( cfg.alignment or "neutral" ),
---                              wesnoth.get_time_of_day( { unit_to_harm.x, unit_to_harm.y, true } ).lawful_bonus,
---                              wesnoth.unit_resistance( unit_to_harm, cfg.damage_type or "dummy" ),
+--                              wesmere.get_time_of_day( { unit_to_harm.x, unit_to_harm.y, true } ).lawful_bonus,
+--                              wesmere.unit_resistance( unit_to_harm, cfg.damage_type or "dummy" ),
 --                              resistance_multiplier
 --                                )
 
@@ -115,7 +115,7 @@ wsl_action
 --                 add_tab = true
 
 --                 if animate and sound then -- for unhealable, that has no sound
---                     wesnoth.play_sound (sound)
+--                     wesmere.play_sound (sound)
 --                 end
 --             end
 
@@ -127,8 +127,8 @@ wsl_action
 --             set_status("unhealable", _"unhealable", _"female^unhealable")
 
 --             -- Extract unit and put it back to update animation if status was changed
---             wesnoth.extract_unit(unit_to_harm)
---             wesnoth.put_unit(unit_to_harm)
+--             wesmere.extract_unit(unit_to_harm)
+--             wesmere.put_unit(unit_to_harm)
 
 --             if add_tab then
 --                 text = string.format("%s%s", "\t", text)
@@ -136,25 +136,25 @@ wsl_action
 
 --             if animate and animate ~= "attacker" then
 --                 if harmer and harmer.valid then
---                     wesnoth.animate_unit({ flag = "defend", hits = true, { "filter", { id = unit_to_harm.id } },
+--                     wesmere.animate_unit({ flag = "defend", hits = true, { "filter", { id = unit_to_harm.id } },
 --                         { "primary_attack", primary_attack },
 --                         { "secondary_attack", secondary_attack }, with_bars = true },
 --                         { "facing", { x = harmer.x, y = harmer.y } })
 --                 else
---                     wesnoth.animate_unit({ flag = "defend", hits = true, { "filter", { id = unit_to_harm.id } },
+--                     wesmere.animate_unit({ flag = "defend", hits = true, { "filter", { id = unit_to_harm.id } },
 --                         { "primary_attack", primary_attack },
 --                         { "secondary_attack", secondary_attack }, with_bars = true })
 --                 end
 --             end
 
---             wesnoth.float_label( unit_to_harm.x, unit_to_harm.y, string.format( "<span foreground='red'>%s</span>", text ) )
+--             wesmere.float_label( unit_to_harm.x, unit_to_harm.y, string.format( "<span foreground='red'>%s</span>", text ) )
 
 --             local function calc_xp( level ) -- to calculate the experience in case of kill
 --                 if level == 0 then return 4
 --                 else return level * 8 end
 --             end
 
---             if experience ~= false and harmer and harmer.valid and wesnoth.is_enemy( unit_to_harm.side, harmer.side ) then -- no XP earned for harming friendly units
+--             if experience ~= false and harmer and harmer.valid and wesmere.is_enemy( unit_to_harm.side, harmer.side ) then -- no XP earned for harming friendly units
 --                 if kill ~= false and unit_to_harm.hitpoints <= 0 then
 --                     harmer.experience = harmer.experience + calc_xp( unit_to_harm.__cfg.level )
 --                 else
@@ -164,45 +164,45 @@ wsl_action
 --             end
 
 --             if kill ~= false and unit_to_harm.hitpoints <= 0 then
---                 wml_actions.kill({ id = unit_to_harm.id, animate = toboolean( animate ), fire_event = fire_event })
+--                 wsl_actions.kill({ id = unit_to_harm.id, animate = toboolean( animate ), fire_event = fire_event })
 --             end
 
 --             if animate then
---                 wesnoth.delay(delay)
+--                 wesmere.delay(delay)
 --             end
 
 --             if variable then
---                 wesnoth.set_variable(string.format("%s[%d]", variable, index - 1), { harm_amount = damage })
+--                 wesmere.set_variable(string.format("%s[%d]", variable, index - 1), { harm_amount = damage })
 --             end
 
 --             -- both may no longer be alive at this point, so double check
 --             -- this blocks handles the harmed units advancing
 --             if experience ~= false and harmer and unit_to_harm.valid and unit_to_harm.experience >= unit_to_harm.max_experience then
---                 wml_actions.store_unit { { "filter", { id = unit_to_harm.id } }, variable = "Lua_store_unit", kill = true }
---                 wml_actions.unstore_unit { variable = "Lua_store_unit",
+--                 wsl_actions.store_unit { { "filter", { id = unit_to_harm.id } }, variable = "Lua_store_unit", kill = true }
+--                 wsl_actions.unstore_unit { variable = "Lua_store_unit",
 --                                 find_vacant = false,
 --                                 advance = true,
 --                                 animate = toboolean( animate ),
 --                                 fire_event = fire_event }
---                 wesnoth.set_variable ( "Lua_store_unit", nil )
+--                 wesmere.set_variable ( "Lua_store_unit", nil )
 --             end
 
 --             -- this block handles the harmer advancing
 --             if experience ~= false and harmer and harmer.valid and harmer.experience >= harmer.max_experience then
---                 wml_actions.store_unit { { "filter", { id = harmer.id } }, variable = "Lua_store_unit", kill = true }
---                 wml_actions.unstore_unit { variable = "Lua_store_unit",
+--                 wsl_actions.store_unit { { "filter", { id = harmer.id } }, variable = "Lua_store_unit", kill = true }
+--                 wsl_actions.unstore_unit { variable = "Lua_store_unit",
 --                                 find_vacant = false,
 --                                 advance = true,
 --                                 animate = toboolean( animate ),
 --                                 fire_event = fire_event }
---                 wesnoth.set_variable ( "Lua_store_unit", nil )
+--                 wesmere.set_variable ( "Lua_store_unit", nil )
 --             end
 --         end
 
---         wml_actions.redraw {}
+--         wsl_actions.redraw {}
 --     end
 
---     wesnoth.set_variable ( "this_unit" ) -- clearing this_unit
+--     wesmere.set_variable ( "this_unit" ) -- clearing this_unit
 --     utils.end_var_scope("this_unit", this_unit)
 -- end
 
@@ -256,7 +256,7 @@ wsl_action
         delay:
             description: [[if animate=yes, sets the delay (in milliseconds, default 500) between each unit harming.]]
         variable:
-            description: [[if present, the damage caused to the unit, altered by resistances, will be stored in a WML array with the given name, under the "harm_amount" key.]]
+            description: [[if present, the damage caused to the unit, altered by resistances, will be stored in a WSL array with the given name, under the "harm_amount" key.]]
 
         poisoned:
             default: false

@@ -1,7 +1,7 @@
 wsl_action
     id: "do_command"
     description: [[(Version 1.13.0 and later only)
-Executes a command, specified using the same syntax as a [command] tag in ReplayWML. Not all [command]'s are valid: only these are accepted
+Executes a command, specified using the same syntax as a [command] tag in ReplayWSL. Not all [command]'s are valid: only these are accepted
 [attack]
 [move]
 [recruit]

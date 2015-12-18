@@ -6,7 +6,7 @@ wsl_action
         StandardUnitFilter:
             description: "Only the matching units will be unhidden"
 
-    action: (cfg, wesnoth) ->
-        for u in *wesnoth.get_units(cfg)
+    action: (cfg, wesmere) ->
+        for u in *wesmere.get_units(cfg)
             u.hidden = false
-        wml_actions.redraw {}
+        wsl_actions.redraw {}

@@ -10,7 +10,7 @@ SUF = (cfg) ->
 SAF = (cfg) ->
     return cfg
 
-ConditionWML = (cfg) ->
+ConditionWSL = (cfg) ->
     return cfg
 
 SSF = (cfg) ->
@@ -21,9 +21,9 @@ wsl_action
 
     action: (cfg, kernel) ->
         if cfg.remove
-            wml_actions.remove_event(cfg)
+            wsl_actions.remove_event(cfg)
         else
-            wesnoth.add_event_handler(cfg)
+            wesmere.add_event_handler(cfg)
 
     scheme:
         name:
@@ -60,14 +60,14 @@ Note: (Version 1.13.0 and later only) You can now use [remove_event] instead (th
     special: filter on the attack's special power.]]
         filter_second_attack: SAF
             description: [[Like [filter_attack], but for the weapon used by the secondary unit.]]
-        filter_condition: ConditionWML
+        filter_condition: ConditionWSL
             description: [[This tag makes sense inside any sort of event - even those that don't have units, or custom events,... The event will only trigger if this condition evaluates to true.
     Condition Tags
     note: This tag is meant to be used when the firing of an event shall be based on variables/conditions which cannot be retrieved from the filtered units.]]
         filter_side: SSF
             description: [[The current side (usually the side $side_number) must match the passed StandardSideFilter for the event to fire.
     SSF tags and keys as arguments as described in StandardSideFilter.
-    note: This tag makes most sense in side turn and turn refresh events. However, all wml events have a current side so one could also prevent e.g. a moveto event from firing if you put a [filter_side] tag there and the moving unit's side doesn't match.]]
+    note: This tag makes most sense in side turn and turn refresh events. However, all wsl events have a current side so one could also prevent e.g. a moveto event from firing if you put a [filter_side] tag there and the moving unit's side doesn't match.]]
         delayed_variable_substitution:
             type: "bool"
             description: [[This key is only relevant inside of a nested event and controls when variable substitution will occur in those special case actions.]]

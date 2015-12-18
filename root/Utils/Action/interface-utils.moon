@@ -1,4 +1,4 @@
--- #textdomain wesnoth
+-- #textdomain wesmere
 -- # Interface shortcut macros.
 
 -- # These don't depend on any other macros.  Please don't change this.
@@ -116,7 +116,7 @@ SET_LABEL = (X, Y, STRING) ->
 REMOVE_LABEL = (X, Y) ->
     SET_LABEL(X, Y, "")
 
--- #define FAKE_UNIT_MOVE FROM_X TO_X FROM_Y TO_Y SIDE TYPE MODIFIER_WML
+-- #define FAKE_UNIT_MOVE FROM_X TO_X FROM_Y TO_Y SIDE TYPE MODIFIER_WSL
 --     # Moves a fake unit using TYPE's animations, from (FROM_X, FROM_Y)
 --     # to (TO_X, TO_Y).  You can also specify modifiers that change the
 --     # baseframe displayed by unit's gender or variation, or none at
@@ -132,7 +132,7 @@ REMOVE_LABEL = (X, Y) ->
 --         side={SIDE}
 --         x={FROM_X},{TO_X}
 --         y={FROM_Y},{TO_Y}
---         {MODIFIER_WML}
+--         {MODIFIER_WSL}
 --     [/move_unit_fake]
 -- #enddef
 
@@ -184,8 +184,8 @@ SCROLL = (X, Y) ->
 --     [/scroll]
 -- #enddef
 
--- #define EARTHQUAKE ACTION_WML
---     # Creates an earthquake-effect while performing ACTION_WML
+-- #define EARTHQUAKE ACTION_WSL
+--     # Creates an earthquake-effect while performing ACTION_WSL
 --     # For example we could kill all non-leader units in the earthquake:
 --     #! {EARTHQUAKE (
 --     #!   [kill]
@@ -199,7 +199,7 @@ SCROLL = (X, Y) ->
 --     {SCROLL 2 1}
 --     {SCROLL -1 -3}
 --     {SCROLL -3 1}
---     {ACTION_WML}
+--     {ACTION_WSL}
 --     {SCROLL 1 3}
 --     {SCROLL 1 -2}
 -- #enddef
@@ -215,7 +215,7 @@ SCROLL = (X, Y) ->
 --     [/color_adjust]
 -- #enddef
 
--- # Flashes the screen with a given color performing ACTION_WML
+-- # Flashes the screen with a given color performing ACTION_WSL
 -- # These macros come in WHITE, RED, GREEN and BLUE and can
 -- # easily be expanded for ORANGE, PURPLE etc.
 -- #
@@ -225,44 +225,44 @@ SCROLL = (X, Y) ->
 -- #! {FLASH_BLUE ()}
 -- #! {FLASH_WHITE ()}
 
--- #define FLASH_WHITE ACTION_WML
+-- #define FLASH_WHITE ACTION_WSL
 --     # Flash the screen momentarily white.
 --     {COLOR_ADJUST 67 67 67}
 --     {COLOR_ADJUST 100 100 100}
---     {ACTION_WML}
+--     {ACTION_WSL}
 --     {COLOR_ADJUST 33 33 33}
 --     {COLOR_ADJUST 0 0 0}
 -- #enddef
 
--- #define FLASH_RED ACTION_WML
+-- #define FLASH_RED ACTION_WSL
 --     # Flash the screen momentarily red.
 --     {COLOR_ADJUST 67 0 0}
 --     {COLOR_ADJUST 100 0 0}
---     {ACTION_WML}
+--     {ACTION_WSL}
 --     {COLOR_ADJUST 33 0 0}
 --     {COLOR_ADJUST 0 0 0}
 -- #enddef
 
--- #define FLASH_GREEN ACTION_WML
+-- #define FLASH_GREEN ACTION_WSL
 --     # Flash the screen momentarily green.
 --     {COLOR_ADJUST 0 67 0}
 --     {COLOR_ADJUST 0 100 0}
---     {ACTION_WML}
+--     {ACTION_WSL}
 --     {COLOR_ADJUST 0 33 0}
 --     {COLOR_ADJUST 0 0 0}
 -- #enddef
 
--- #define FLASH_BLUE ACTION_WML
+-- #define FLASH_BLUE ACTION_WSL
 --     # Flash the screen momentarily blue.
 --     {COLOR_ADJUST 0 0 67}
 --     {COLOR_ADJUST 0 0 100}
---     {ACTION_WML}
+--     {ACTION_WSL}
 --     {COLOR_ADJUST 0 0 33}
 --     {COLOR_ADJUST 0 0 0}
 -- #enddef
 
--- #define THUNDER ACTION_WML
---     # Creates a thunder-and-lightning effect while performing ACTION_WML.
+-- #define THUNDER ACTION_WSL
+--     # Creates a thunder-and-lightning effect while performing ACTION_WSL.
 --     # For example, player 3 might disappear in the flash of lightning:
 --     #! {THUNDER (
 --     #!   [store_unit]
@@ -276,7 +276,7 @@ SCROLL = (X, Y) ->
 --     [sound]
 --         name=lightning.ogg
 --     [/sound]
---     {FLASH_WHITE ({ACTION_WML}) }
+--     {FLASH_WHITE ({ACTION_WSL}) }
 -- #enddef
 
 -- #The macro that all the following macros work off

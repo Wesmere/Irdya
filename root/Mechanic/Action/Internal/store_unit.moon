@@ -1,25 +1,25 @@
 
 wsl_action
     id: "store_unit"
-    description: "Stores details about units into a container variable. When a unit is stored, all keys and tags in the unit definition may be manipulated, including some others, with [set_variable]. A sample list of these tags and keys can be found at InternalActionsWMLUnitTags.
+    description: "Stores details about units into a container variable. When a unit is stored, all keys and tags in the unit definition may be manipulated, including some others, with [set_variable]. A sample list of these tags and keys can be found at InternalActionsWSLUnitTags.
 If you have a doubt about what keys are valid or what the valid value range is for each key, code a [store_unit] event, save the game, and examine what keys are in the file (or just examine the [unit] tag(s) in any save file). One can also use the :inspect command or the [inspect] tag to open a game-state inspector dialog, which can be used to view unit properties.
 Common usage is to manipulate a unit by using [store_unit] to store it into a variable, followed by manipulation of the variable, and then [unstore_unit] to re-create the unit with the modified variables.
 Note: stored units also exist on the field, and modifying the stored variable will not automatically change the stats of the units. You need to use [unstore_unit]. See also [unstore_unit] and FOREACH."
 
     action: (cfg, kernel) ->
         filter = helper.get_child(cfg, "filter") or
-		helper.wml_error "[store_unit] missing required [filter] tag"
+		helper.wsl_error "[store_unit] missing required [filter] tag"
         kill_units = cfg.kill
 
         --cache the needed units here, since the filter might reference the to-be-cleared variable(s)
-        units = wesnoth.get_units(filter)
-        recall_units = wesnoth.get_recall_units(filter)
+        units = wesmere.get_units(filter)
+        recall_units = wesmere.get_recall_units(filter)
 
         writer = utils.vwriter.init(cfg, "unit")
 
         for u in *units
             utils.vwriter.write(writer, u.__cfg)
-            if kill_units then wesnoth.erase_unit(u)
+            if kill_units then wesmere.erase_unit(u)
 
         if (not filter.x or filter.x == "recall") and (not filter.y or filter.y == "recall")
             for u in *recall_units
@@ -27,7 +27,7 @@ Note: stored units also exist on the field, and modifying the stored variable wi
                 ucfg.x = "recall"
                 ucfg.y = "recall"
                 utils.vwriter.write(writer, ucfg)
-                if kill_units then wesnoth.erase_unit(u)
+                if kill_units then wesmere.erase_unit(u)
 
         -- units = kernel\get_units(cfg.filter)
         -- if cfg.kill

@@ -9,7 +9,7 @@ wsl_handler
 
     scheme:
         id:
-            description: [[ID for this race. Units with the attribute race=id will be assigned this race. In older versions of WML, the value of the name key was used as id if the id field was missing, but this is no longer the case.]]
+            description: [[ID for this race. Units with the attribute race=id will be assigned this race. In older versions of WSL, the value of the name key was used as id if the id field was missing, but this is no longer the case.]]
         plural_name:
             description: [[user-visible name for its people (e.g. "Merfolk" or "Elves"). Currently only used in the in-game help.]]
 

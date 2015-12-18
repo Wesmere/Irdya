@@ -19,7 +19,7 @@ wsl_table
             type: "Integer"
         income:
             default: 0
-            description: [[the base income for this side, default 0. This is added to base_income, [game_config] to determine the side's base income. (see GameConfigWML).]]
+            description: [[the base income for this side, default 0. This is added to base_income, [game_config] to determine the side's base income. (see GameConfigWSL).]]
         hidden:
             default: false
             type: "Bool"
@@ -56,12 +56,12 @@ wsl_table
         flag_icon:
             description: [[a custom flag icon to indicate the side playing in the statusbar (a size of 24x16 is recommended). An automatic side-coloring is applied.]]
         village_gold:
-            description: [[the amount of gold given to this side per village it controls per turn. Default specified in village_income, [game_config] (GameConfigWML).]]
+            description: [[the amount of gold given to this side per village it controls per turn. Default specified in village_income, [game_config] (GameConfigWSL).]]
         village_support:
-            description: [[the number of unit levels this side is able to support (does not pay upkeep on) per village it controls. Default specified in village_support, [game_config] (GameConfigWML).]]
+            description: [[the number of unit levels this side is able to support (does not pay upkeep on) per village it controls. Default specified in village_support, [game_config] (GameConfigWSL).]]
         -- default: Config.village_support
         recall_cost:
-            description: [[the amount of gold it costs to recall a unit. Default specified in recall_cost, [game_config] (GameConfigWML).]]
+            description: [[the amount of gold it costs to recall a unit. Default specified in recall_cost, [game_config] (GameConfigWSL).]]
         -- default: Config.recall_cost
     -- share_maps:
     -- share_view:

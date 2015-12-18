@@ -4,7 +4,7 @@ wsl_action
 This is useful if you want to choose a non-major character to say some things during the game. Once a role is assigned, you can use role= in a unit filter to identify the unit with that role (See FilterWSL).
 However, there is no guarantee that roles will ever be assigned. You can use [have_unit] (see Condition Tags) to see whether a role was assigned. This tag uses a StandardUnitFilter (without [filter]) with the modification to order the search by type, mark only the first unit found with the role, and the role attribute is not used in the search. If for some reason you want to search for units that have or don't have existing roles, you can use one or more [not] filters. The will check recall lists in addition to units on the map. In normal use, you will probably want to include a side attribute to force the unit to be on a particular side.]]
 
-    action: (cfg, wesnoth) ->
+    action: (cfg, wesmere) ->
 
         -- role= and type= are handled differently than in other tags,
         -- so we need to remove them from the filter
@@ -24,7 +24,7 @@ However, there is no guarantee that roles will ever be assigned. You can use [ha
         -- repeat
         --     -- give precedence based on the order specified in type=
         --     if #types > 0 then filter.type = types[i]
-        --     unit = wesnoth.get_units(filter)[1]
+        --     unit = wesmere.get_units(filter)[1]
         --     if unit
         --         unit.role = role
         --         return
@@ -36,7 +36,7 @@ However, there is no guarantee that roles will ever be assigned. You can use [ha
         -- i = 1
         -- repeat
         --     if #types > 0 then filter.type = types[i]
-        --     unit = wesnoth.get_recall_units(filter)[1]
+        --     unit = wesmere.get_recall_units(filter)[1]
         --     if unit
         --         unit.role = role
         --         return
@@ -44,7 +44,7 @@ However, there is no guarantee that roles will ever be assigned. You can use [ha
         -- until #types == 0 or i > #types
 
         -- no matching unit found, issue a warning
-        wesnoth.message("WSL", "No matching units found in 'role'")
+        wesmere.message("WSL", "No matching units found in 'role'")
 
 
             -- role = cfg.role

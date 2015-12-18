@@ -2,17 +2,17 @@ wsl_action
     id: "store_locations"
     description: [[Stores a series of locations that pass certain criteria into an array. Each member of the array has members 'x' and 'y' (the position) and 'terrain' (the terrain type) and 'owner_side' (villages only). The array will include any unreachable border hexes, if applicable.]]
 
-    action: (cfg, wesnoth) ->
-        locs = wesnoth.get_locations(cfg)
+    action: (cfg, wesmere) ->
+        locs = wesmere.get_locations(cfg)
         result = for loc in *locs
             X = loc.x
             Y = loc.y
             {
                 x: X
                 y: Y
-                terrain: wesnoth.get_terrain(X, Y)
-                owner_side: wesnoth.get_village_owner(X, Y) or 0
-                unit: wesnoth.get_unit(X, Y)
+                terrain: wesmere.get_terrain(X, Y)
+                owner_side: wesmere.get_village_owner(X, Y) or 0
+                unit: wesmere.get_unit(X, Y)
             }
         if variable = cfg.variable
             _G[variable] = result

@@ -1,4 +1,4 @@
--- #textdomain wesnoth
+-- #textdomain wesmere
 -- # Conditionals for MP scenarios.
 
 -- # These don't depend on any other macros.  Please don't change this.
@@ -14,7 +14,7 @@ OWN_VILLAGE = (X, Y, SIDE) ->
 
 
 
--- #define IF_VAR VAR OP_NAME VALUE CONTENTS_WML
+-- #define IF_VAR VAR OP_NAME VALUE CONTENTS_WSL
 --     # Shortcut for IF statements testing the value of a variable.
 --     # Need to write [then] and [else] tags manually.
 --     # Use like this:
@@ -29,7 +29,7 @@ OWN_VILLAGE = (X, Y, SIDE) ->
 --             {OP_NAME}={VALUE}
 --         [/variable]
 
---         {CONTENTS_WML}
+--         {CONTENTS_WSL}
 --     [/if]
 -- #enddef
 
@@ -40,8 +40,8 @@ IS_ALIVE = (SIDE) ->
 IF_ALIVE = (SIDE, ACTION_WSL) ->
     if IS_ALIVE(SIDE)
         return ACTION_WSL!
--- #define IF_ALIVE SIDE ACTION_WML
---     # Condition triggering of ACTION_WML on whether SIDE has at least one unit left.
+-- #define IF_ALIVE SIDE ACTION_WSL
+--     # Condition triggering of ACTION_WSL on whether SIDE has at least one unit left.
 --     # For example, if the player 2 is still alive, kill all his units.
 --     #! {IF_ALIVE 2 (
 --     #!   [kill]
@@ -53,7 +53,7 @@ IF_ALIVE = (SIDE, ACTION_WSL) ->
 --             side={SIDE}
 --         [/have_unit]
 --         [then]
---             {ACTION_WML}
+--             {ACTION_WSL}
 --         [/then]
 --     [/if]
 -- #enddef
@@ -61,11 +61,11 @@ IF_ALIVE = (SIDE, ACTION_WSL) ->
 
 IS_DEAD = (SIDE) ->
     return not have_unit({ side: SIDE })
-IF_DEAD = (SIDE, ACTION_WML) ->
+IF_DEAD = (SIDE, ACTION_WSL) ->
     if IS_DEAD(SIDE)
-        return ACTION_WML!
--- #define IF_DEAD SIDE ACTION_WML
---     # Condition triggering of ACTION_WML on whether SIDE has no units left.
+        return ACTION_WSL!
+-- #define IF_DEAD SIDE ACTION_WSL
+--     # Condition triggering of ACTION_WSL on whether SIDE has no units left.
 --     # For example, give player 2 gold if player 1 is dead
 --     #! {IF_DEAD 1 (
 --     #!   [gold]
@@ -80,7 +80,7 @@ IF_DEAD = (SIDE, ACTION_WML) ->
 --             [/have_unit]
 --         [/not]
 --         [then]
---             {ACTION_WML}
+--             {ACTION_WSL}
 --         [/then]
 --     [/if]
 -- #enddef
@@ -92,7 +92,7 @@ IF_ALLIED = (PLAYER1_SIDE, PLAYER2_SIDE, ACTION_WSL) ->
         return ACTION_WSL!
 
 
--- #define IF_ALLIED PLAYER1_SIDE PLAYER2_SIDE ACTION_WML
+-- #define IF_ALLIED PLAYER1_SIDE PLAYER2_SIDE ACTION_WSL
 --     # Condition that triggers if PLAYER1_SIDE and PLAYER2_SIDE belong
 --     # to the same team.
 --     # NOTE: only works if leaders are alive, are the same leader as the game
@@ -126,7 +126,7 @@ IF_ALLIED = (PLAYER1_SIDE, PLAYER2_SIDE, ACTION_WSL) ->
 --             equals=$player2_side.team_name
 --         [/variable]
 --         [then]
---             {ACTION_WML}
+--             {ACTION_WSL}
 --         [/then]
 --     [/if]
 --     [clear_variable]

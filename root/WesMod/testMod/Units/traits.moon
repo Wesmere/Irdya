@@ -1,5 +1,5 @@
 
--- Traits for the modifications clause of SingleWML descriptions
+-- Traits for the modifications clause of SingleWSL descriptions
 
 -- TRAIT_LOYAL
 --     Units with trait Loyal have no upkeep.

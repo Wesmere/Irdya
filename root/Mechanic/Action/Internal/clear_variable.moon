@@ -7,7 +7,7 @@ This action is good to use to clean up the set of variables; for example, a well
 
     action: (cfg) ->
         for name in *cfg.name
-            wesnoth.set_variable(name)
+            wesmere.set_variable(name)
 
     scheme:
         name:

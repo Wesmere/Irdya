@@ -3,8 +3,8 @@ wsl_action
     description: "Prevents a leader from recruiting units it could previously recruit."
 
     action: (cfg, kernel) ->
-        recruits = cfg.extra_recruit or helper.wml_error("[disallow_extra_recruit] missing required extra_recruit= attribute")
-        for unit in *wesnoth.get_units(cfg)
+        recruits = cfg.extra_recruit or helper.wsl_error("[disallow_extra_recruit] missing required extra_recruit= attribute")
+        for unit in *wesmere.get_units(cfg)
             v = unit.extra_recruit
             for w in *recruits
                 for i, r in ipairs(v)

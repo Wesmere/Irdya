@@ -1,7 +1,7 @@
 
 wsl_action
     id: "modify_ai"
-    description: "Changes AI objects (aspects, goals, candidate actions or stages) for a specified side. See AiWML for full description."
+    description: "Changes AI objects (aspects, goals, candidate actions or stages) for a specified side. See AiWSL for full description."
 
     scheme:
         action:

@@ -6,16 +6,16 @@ wsl_action
     action: (cfg, kernel) ->
 
 
-        helper = wesnoth.require "lua/helper.lua"
-        utils = wesnoth.require "lua/wml-utils.lua"
-        T = helper.set_wml_tag_metatable {}
-        wml_actions = wesnoth.wml_actions
+        helper = wesmere.require "lua/helper.lua"
+        utils = wesmere.require "lua/wsl-utils.lua"
+        T = helper.set_wsl_tag_metatable {}
+        wsl_actions = wesmere.wsl_actions
 
         used_items = {}
 
         -----
 
-        context = wesnoth.current.event_context
+        context = wesmere.current.event_context
 
         -- If this item has already been used
         obj_id = utils.check_key(cfg.id, "id", "object", true)
@@ -25,9 +25,9 @@ wsl_action
 
         filter = helper.get_child(cfg, "filter")
         if filter
-            unit = wesnoth.get_units(filter)[1]
+            unit = wesmere.get_units(filter)[1]
         else
-            unit = wesnoth.get_unit(context.x1, context.y1)
+            unit = wesmere.get_unit(context.x1, context.y1)
 
         -- If a unit matches the filter, proceed
         if unit
@@ -37,11 +37,11 @@ wsl_action
             dvs = cfg.delayed_variable_substitution
             add = cfg.no_write ~= true
             if dvs
-                wesnoth.add_modification(unit, "object", helper.literal(cfg), add)
+                wesmere.add_modification(unit, "object", helper.literal(cfg), add)
             else
-                wesnoth.add_modification(unit, "object", helper.parsed(cfg), add)
+                wesmere.add_modification(unit, "object", helper.parsed(cfg), add)
 
-            wesnoth.select_hex(unit.x, unit.y, false)
+            wesmere.select_hex(unit.x, unit.y, false)
 
             -- Mark this item as used up
             if obj_id then used_items[obj_id] = true
@@ -54,16 +54,16 @@ wsl_action
         if silent == nil then silent = (text:len() == 0)
 
         if not silent
-            wml_actions.redraw{}
+            wsl_actions.redraw{}
             name = tostring(cfg.name or "")
-            wesnoth.show_popup_dialog(name, text, cfg.image)
+            wesmere.show_popup_dialog(name, text, cfg.image)
 
         for cmd in *cfg.command_type
             action = utils.handle_event_commands(cmd, "conditional")
             break if action ~= "none"
 
-        -- old_on_load = wesnoth.game_events.on_load
-        -- function wesnoth.game_events.on_load(cfg)
+        -- old_on_load = wesmere.game_events.on_load
+        -- function wesmere.game_events.on_load(cfg)
         --     for i = 1,#cfg do
         --         if cfg[i][1] == "used_items" then
         --             -- Not quite sure if this will work
@@ -76,14 +76,14 @@ wsl_action
         --     old_on_load(cfg)
         -- end
 
-        -- local old_on_save = wesnoth.game_events.on_save
-        -- function wesnoth.game_events.on_save()
+        -- local old_on_save = wesmere.game_events.on_save
+        -- function wesmere.game_events.on_save()
         --     local cfg = old_on_save()
         --     table.insert(cfg, T.used_items(used_items) )
         --     return cfg
         -- end
 
-        -- function wesnoth.wml_conditionals.found_item(cfg)
+        -- function wesmere.wsl_conditionals.found_item(cfg)
         --     return used_items[utils.check_key(cfg.id, "id", "found_item", true)]
         -- end
 
@@ -95,9 +95,9 @@ wsl_action
         id:
             description: [[(Optional) when the object is picked up, a flag is set for id. The object cannot be picked up if a flag for id has been set. This means that any object with an id can only be used once, even if first_time_only=no is set for the event. This restriction is per level. In a campaign objects with the same id can be assigned once per level. For filtering objects, custom key can be used, such as item_id.]]
         delayed_variable_substitution:
-            description: [[(boolean yes|no, default no): If set to "yes", the wml block contained in this [object] is not variable-substituted at execution time of the event where this [object] is within. You need this to work around a bug when adding ABILITY_TELEPORT via an [object] or when using [object][effect][filter]with a $this_unit (see http://gna.org/bugs/index.php?18893).]]
+            description: [[(boolean yes|no, default no): If set to "yes", the wsl block contained in this [object] is not variable-substituted at execution time of the event where this [object] is within. You need this to work around a bug when adding ABILITY_TELEPORT via an [object] or when using [object][effect][filter]with a $this_unit (see http://gna.org/bugs/index.php?18893).]]
         effect:
-            description: [[one or more effect elements may be listed. See EffectWML for a description of [effect].]]
+            description: [[one or more effect elements may be listed. See EffectWSL for a description of [effect].]]
         duration:
             description: [[if 'scenario', effects only last until the end of the level (note : 'level' is the scenario, so this doesn't mean it last until the unit levels-up).
         -- if 'forever' or not set, effects never wear off.

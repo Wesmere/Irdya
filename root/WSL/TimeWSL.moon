@@ -22,12 +22,12 @@ In underground, use a special time of day. It works like night; that is it gives
 {UNDERGROUND}
 See Also
 
-ScenarioWML
-ReferenceWML]]
+ScenarioWSL
+ReferenceWSL]]
 
     scheme:
         id:
-            description: [[the id by which you can reference this time, e.g. in the time_of_day tag of AiWML.]]
+            description: [[the id by which you can reference this time, e.g. in the time_of_day tag of AiWSL.]]
         name:
             description: [[(translatable) the name displayed when the cursor is over the day/night image.]]
         image:

@@ -1,6 +1,6 @@
 wsl_action
     id: "find_path"
-    description: [[A WML interface to the pathfinder. Calculates the path between a unit and a location and returns the result in a WML variable, that contains also an array for every step of the path.
+    description: [[A WSL interface to the pathfinder. Calculates the path between a unit and a location and returns the result in a WSL variable, that contains also an array for every step of the path.
 
 This is the structure of the variable returned by [find_path]:
 [path]
@@ -22,14 +22,14 @@ This is the structure of the variable returned by [find_path]:
         filter_unit = cfg.traveler
 
         -- only the first unit matching
-        unit = wesnoth.get_units(filter_unit)[1] or helper.wml_error("[find_path]'s filter didn't match any unit")
+        unit = wesmere.get_units(filter_unit)[1] or helper.wsl_error("[find_path]'s filter didn't match any unit")
         filter_location = cfg.destination
 
         -- support for $this_unit
         this_unit = utils.start_var_scope("this_unit")
 
-        wesnoth.set_variable( "this_unit" ) -- clearing this_unit
-        wesnoth.set_variable("this_unit", unit.__cfg) -- cfg field needed
+        wesmere.set_variable( "this_unit" ) -- clearing this_unit
+        wesmere.set_variable("this_unit", unit.__cfg) -- cfg field needed
 
         variable = cfg.variable or "path"
         ignore_units = false
@@ -46,13 +46,13 @@ This is the structure of the variable returned by [find_path]:
 
         unless cfg.check_visibility then viewing_side = 0 -- if check_visiblity then shroud is taken in account
 
-        locations = wesnoth.get_locations(filter_location) -- only the location with the lowest distance and lowest movement cost will match. If there will still be more than 1, only the 1st maching one.
+        locations = wesmere.get_locations(filter_location) -- only the location with the lowest distance and lowest movement cost will match. If there will still be more than 1, only the 1st maching one.
         max_cost = nil
         unless allow_multiple_turns then max_cost = unit.moves --to avoid wrong calculation on already moved units
         current_distance, current_cost = math.huge, math.huge
         current_location = {}
 
-        width, heigth, border = wesnoth.get_map_size! -- data for test below
+        width, heigth, border = wesmere.get_map_size! -- data for test below
 
         -- for index, location in ipairs(locations)
         --     -- we test if location passed to pathfinder is invalid (border); if is, do nothing, do not return and continue the cycle
@@ -60,7 +60,7 @@ This is the structure of the variable returned by [find_path]:
         --     else
         --         distance = helper.distance_between ( unit.x, unit.y, location[1], location[2] )
         --         -- if we pass an unreachable locations an high value will be returned
-        --         path, cost = wesnoth.find_path( unit, location[1], location[2], { max_cost = max_cost, ignore_units = ignore_units, ignore_teleport = ignore_teleport, viewing_side = viewing_side } )
+        --         path, cost = wesmere.find_path( unit, location[1], location[2], { max_cost = max_cost, ignore_units = ignore_units, ignore_teleport = ignore_teleport, viewing_side = viewing_side } )
 
         --         if ( distance < current_distance and cost <= current_cost ) or ( cost < current_cost and distance <= current_distance ) -- to avoid changing the hex with one with less distance and more cost, or vice versa
         --             current_distance = distance
@@ -68,9 +68,9 @@ This is the structure of the variable returned by [find_path]:
         --             current_location = location
 
         -- if #current_location == 0
-        --     wesnoth.message("WML warning","[find_path]'s filter didn't match any location")
+        --     wesmere.message("WSL warning","[find_path]'s filter didn't match any location")
         -- else
-        --     path, cost = wesnoth.find_path( unit, current_location[1], current_location[2], { max_cost: max_cost, ignore_units: ignore_units, ignore_teleport: ignore_teleport, viewing_side: viewing_side } )
+        --     path, cost = wesmere.find_path( unit, current_location[1], current_location[2], { max_cost: max_cost, ignore_units: ignore_units, ignore_teleport: ignore_teleport, viewing_side: viewing_side } )
         --     local turns
 
         --     if cost == 0 -- if location is the same, of course it doesn't cost any MP
@@ -80,23 +80,23 @@ This is the structure of the variable returned by [find_path]:
 
 
         --     if cost >= 42424242 -- it's the high value returned for unwalkable or busy terrains
-        --         wesnoth.set_variable( string.format("%s", variable), { hexes: 0 } ) -- set only length, nil all other values
+        --         wesmere.set_variable( string.format("%s", variable), { hexes: 0 } ) -- set only length, nil all other values
         --         -- support for $this_unit
-        --         wesnoth.set_variable ( "this_unit" ) -- clearing this_unit
+        --         wesmere.set_variable ( "this_unit" ) -- clearing this_unit
         --         utils.end_var_scope("this_unit", this_unit)
         --     return
 
         --     unless allow_multiple_turns and turns > 1 then -- location cannot be reached in one turn
-        --         wesnoth.set_variable( string.format("%s", variable), { hexes: 0 } )
+        --         wesmere.set_variable( string.format("%s", variable), { hexes: 0 } )
         --         -- support for $this_unit
-        --         wesnoth.set_variable ( "this_unit" ) -- clearing this_unit
+        --         wesmere.set_variable ( "this_unit" ) -- clearing this_unit
         --         utils.end_var_scope("this_unit", this_unit)
         --     return -- skip the cycles below
 
-        --     wesnoth.set_variable( string.format( "%s", variable ), { hexes: current_distance, from_x: unit.x, from_y:  unit.y, to_x: current_location[1], to_y: current_location[2], movement_cost: cost, required_turns: turns } )
+        --     wesmere.set_variable( string.format( "%s", variable ), { hexes: current_distance, from_x: unit.x, from_y:  unit.y, to_x: current_location[1], to_y: current_location[2], movement_cost: cost, required_turns: turns } )
 
         --     for index, path_loc in ipairs(path)
-        --         sub_path, sub_cost = wesnoth.find_path( unit, path_loc[1], path_loc[2], { max_cost: max_cost, ignore_units: ignore_units, ignore_teleport: ignore_teleport, viewing_side: viewing_side } )
+        --         sub_path, sub_cost = wesmere.find_path( unit, path_loc[1], path_loc[2], { max_cost: max_cost, ignore_units: ignore_units, ignore_teleport: ignore_teleport, viewing_side: viewing_side } )
         --         local sub_turns
 
         --         if sub_cost == 0
@@ -104,10 +104,10 @@ This is the structure of the variable returned by [find_path]:
         --         else
         --             sub_turns = math.ceil( ( ( sub_cost - unit.moves ) / unit.max_moves ) + 1 )
 
-        --         wesnoth.set_variable( string.format( "%s.step[%d]", variable, index - 1 ), { x: path_loc[1], y: path_loc[2], terrain: wesnoth.get_terrain( path_loc[1], path_loc[2] ), movement_cost: sub_cost, required_turns: sub_turns } ) -- this structure takes less space in the inspection window
+        --         wesmere.set_variable( string.format( "%s.step[%d]", variable, index - 1 ), { x: path_loc[1], y: path_loc[2], terrain: wesmere.get_terrain( path_loc[1], path_loc[2] ), movement_cost: sub_cost, required_turns: sub_turns } ) -- this structure takes less space in the inspection window
 
         -- support for $this_unit
-        wesnoth.set_variable ( "this_unit" ) -- clearing this_unit
+        wesmere.set_variable ( "this_unit" ) -- clearing this_unit
         utils.end_var_scope("this_unit", this_unit)
 
     scheme:

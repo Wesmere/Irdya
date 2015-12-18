@@ -2,7 +2,7 @@
 wsl_action
     id: "teleport"
     description: "Teleports a unit on map. (Hint: Use the TELEPORT_UNIT macro)
-(Note: There is also a ability named teleport, see AbilitiesWML.)"
+(Note: There is also a ability named teleport, see AbilitiesWSL.)"
 
     action: (cfg, kernel) ->
         kernel\print("'teleport' is not implemented yet.")

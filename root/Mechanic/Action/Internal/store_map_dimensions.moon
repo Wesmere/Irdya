@@ -2,12 +2,12 @@ wsl_action
     id: "store_map_dimensions"
     description: [[Stores the map dimensions in a variable.]]
 
-    action: (cfg, wesnoth) ->
+    action: (cfg, wesmere) ->
         var = cfg.variable or "map_size"
-        width, height, border_size = wesnoth.get_map_size()
+        width, height, border_size = wesmere.get_map_size()
         dimensions =
             :width, :height, :border_size
-        wesnoth.set_variable(var, dimensions)
+        wesmere.set_variable(var, dimensions)
         return dimensions
 
     scheme:

@@ -4,7 +4,7 @@ wsl_action
 Puts a unit to the recall list of its side.]]
 
     action: (cfg, kernel) ->
-        units = wesnoth.get_units(cfg)
+        units = wesmere.get_units(cfg)
         for unit in *units
             if cfg.heal
                 with unit
@@ -13,8 +13,8 @@ Puts a unit to the recall list of its side.]]
                     .attacks_left = unit.max_attacks
                     .status.poisoned = false
                     .status.slowed = false
-            wesnoth.put_recall_unit(unit, unit.side)
-            wesnoth.erase_unit(unit)
+            wesmere.put_recall_unit(unit, unit.side)
+            wesmere.erase_unit(unit)
 
     scheme:
         StandardUnitFilter:

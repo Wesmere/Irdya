@@ -1,8 +1,8 @@
 wsl_action
     id: "clear_menu_item"
-    description: "Removes a menu item from the scenario. Normally menu items are, including all their defining wml, automatically carried over between scenarios. This tag prevents this. (The behavior is comparable to set_variable/clear_variable)."
+    description: "Removes a menu item from the scenario. Normally menu items are, including all their defining wsl, automatically carried over between scenarios. This tag prevents this. (The behavior is comparable to set_variable/clear_variable)."
 
-    action: (cfg, wesnoth) ->
+    action: (cfg, wesmere) ->
 
     scheme:
         id:

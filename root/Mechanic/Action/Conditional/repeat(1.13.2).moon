@@ -1,6 +1,6 @@
 
 
--- wml_actions["repeat"] = function(cfg)
+-- wsl_actions["repeat"] = function(cfg)
 --     local times = cfg.times or 1
 --     for i = 1, times do
 --         for do_child in helper.child_range( cfg, "do" ) do

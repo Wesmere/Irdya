@@ -3,10 +3,10 @@ wsl_action
     description: "Sets the units a leader can recruit."
 
     action: (cfg, kernel) ->
-        recruits = cfg.extra_recruit or helper.wml_error("[set_extra_recruit] missing required extra_recruit= attribute")
+        recruits = cfg.extra_recruit or helper.wsl_error("[set_extra_recruit] missing required extra_recruit= attribute")
         v = for w in utils.split(recruits)
             w
-        for unit in *wesnoth.get_units(cfg)
+        for unit in *wesmere.get_units(cfg)
             unit.extra_recruit = v
 
     scheme:
