@@ -1,5 +1,5 @@
 ----
--- @module wesmere
+-- @submodule wesmere
 
 -- LuaWML:Events
 -- This page describes the LuaWML functions and helpers for interacting with events and action handlers.

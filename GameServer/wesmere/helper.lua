@@ -397,28 +397,7 @@ function helper.deprecate(msg, f)
 	end
 end
 
-function helper.round( number )
-	-- code converted from util.hpp, round_portable function
-	-- round half away from zero method
-	if number >= 0 then
-		number = math.floor( number + 0.5 )
-	else
-		number = math.ceil ( number - 0.5 )
-	end
 
-	return number
-end
 
-function helper.shuffle( t, random_func)
-	random_func = random_func or wesnoth.random
-	-- since tables are passed by reference, this is an in-place shuffle
-	-- it uses the Fisher-Yates algorithm, also known as Knuth shuffle
-	assert( type( t ) == "table", string.format( "helper.shuffle expects a table as parameter, got %s instead", type( t ) ) )
-	local length = #t
-	for index = length, 2, -1 do
-		local random = random_func( 1, index )
-		t[index], t[random] = t[random], t[index]
-	end
-end
 
 return helper
