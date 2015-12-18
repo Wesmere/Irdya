@@ -275,16 +275,20 @@ wesmere.unit_ability = (unit, ability_tag) ->
 -- __cfg: WML table (dump)
 -- The metatable of these proxy tables appears as "unit type".
 -- local lich_cost = wesmere.unit_types["Ancient Lich"].cost
--- wesmere.races
+
+----
 -- This is not a function but a table indexed by race ids. Its elements are proxy tables for all races the engine knows about. known fields of each element:
--- id: string
--- description, name, plural_name (translatable strings)
--- num_traits (integer)
--- ignore_global_traits (boolean)
--- undead_variation (string)
+-- @table wesmere.races
+-- @string id string
+-- @tparam tstring description
+-- @tparam tstring name
+-- @tparam tstring plural_name (translatable strings)
+-- @number num_traits (integer)
+-- @bool ignore_global_traits (boolean)
+-- @string undead_variation (string)
 -- (all read only)
 -- __cfg: WML table (dump)
--- wesmere.message(tostring(wesmere.races["lizard"].name))
+-- @usage wesmere.message(tostring(wesmere.races["lizard"].name))
 
 ----
 -- Returns a table with named fields (trait id strings) holding the wml tables defining the traits. arguments: none. All global traits the engine knows about, race-specific traits are not included. Known fields and subtags of each element are the ones which were given in the wml definition of the trait.
