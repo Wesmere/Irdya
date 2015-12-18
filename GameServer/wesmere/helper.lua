@@ -1,18 +1,18 @@
---! #textdomain wesnoth
+--! #textdomain wesmere
 
 local helper = {}
 
-local wml_actions = wesnoth.wml_actions
+local wml_actions = wesmere.wml_actions
 
 --! Returns an iterator over all the sides matching a given filter that can be used in a for-in loop.
 function helper.get_sides(cfg)
 	local function f(s)
 		local i = s.i
-		while i < #wesnoth.sides do
+		while i < #wesmere.sides do
 			i = i + 1
-			if wesnoth.match_side(i, cfg) then
+			if wesmere.match_side(i, cfg) then
 				s.i = i
-				return wesnoth.sides[i], i
+				return wesmere.sides[i], i
 			end
 		end
 	end
@@ -28,7 +28,7 @@ end
 function helper.all_teams()
 	local function f(s)
 		local i = s.i
-		local team = wesnoth.sides[i]
+		local team = wesmere.sides[i]
 		s.i = i + 1
 		return team
 	end
@@ -102,17 +102,17 @@ function helper.modify_unit(filter, vars)
 		variable = "LUA_modify_unit",
 		kill = true
 	})
-	for i = 0, wesnoth.get_variable("LUA_modify_unit.length") - 1 do
+	for i = 0, wesmere.get_variable("LUA_modify_unit.length") - 1 do
 		local u = "LUA_modify_unit[" .. i .. "]"
 		for k, v in pairs(vars) do
-			wesnoth.set_variable(u .. '.' .. k, v)
+			wesmere.set_variable(u .. '.' .. k, v)
 		end
 		wml_actions.unstore_unit({
 			variable = u,
 			find_vacant = false
 		})
 	end
-	wesnoth.set_variable("LUA_modify_unit")
+	wesmere.set_variable("LUA_modify_unit")
 end
 
 --! Fakes the move of a unit satisfying the given @a filter to position @a x, @a y.
@@ -123,18 +123,18 @@ function helper.move_unit_fake(filter, to_x, to_y)
 		variable = "LUA_move_unit",
 		kill = false
 	})
-	local from_x = wesnoth.get_variable("LUA_move_unit.x")
-	local from_y = wesnoth.get_variable("LUA_move_unit.y")
+	local from_x = wesmere.get_variable("LUA_move_unit.x")
+	local from_y = wesmere.get_variable("LUA_move_unit.y")
 
 	wml_actions.scroll_to({ x=from_x, y=from_y })
 
 	if to_x < from_x then
-		wesnoth.set_variable("LUA_move_unit.facing", "sw")
+		wesmere.set_variable("LUA_move_unit.facing", "sw")
 	elseif to_x > from_x then
-		wesnoth.set_variable("LUA_move_unit.facing", "se")
+		wesmere.set_variable("LUA_move_unit.facing", "se")
 	end
-	wesnoth.set_variable("LUA_move_unit.x", to_x)
-	wesnoth.set_variable("LUA_move_unit.y", to_y)
+	wesmere.set_variable("LUA_move_unit.x", to_x)
+	wesmere.set_variable("LUA_move_unit.y", to_y)
 
 	wml_actions.kill({
 		x = from_x,
@@ -154,13 +154,13 @@ function helper.move_unit_fake(filter, to_x, to_y)
 
 	wml_actions.unstore_unit({ variable="LUA_move_unit", find_vacant=true })
 	wml_actions.redraw({})
-	wesnoth.set_variable("LUA_move_unit")
+	wesmere.set_variable("LUA_move_unit")
 end
 
 local variable_mt = {}
 
 local function get_variable_proxy(k)
-	local v = wesnoth.get_variable(k, true)
+	local v = wesmere.get_variable(k, true)
 	if type(v) == "table" then
 		v = setmetatable({ __varname = k }, variable_mt)
 	end
@@ -169,9 +169,9 @@ end
 
 local function set_variable_proxy(k, v)
 	if getmetatable(v) == variable_mt then
-		v = wesnoth.get_variable(v.__varname)
+		v = wesmere.get_variable(v.__varname)
 	end
-	wesnoth.set_variable(k, v)
+	wesmere.set_variable(k, v)
 end
 
 function variable_mt.__index(t, k)
@@ -219,7 +219,7 @@ end
 
 local fire_action_mt = {
 	__index = function(t, n)
-		return function(cfg) wesnoth.fire(n, cfg) end
+		return function(cfg) wesmere.fire(n, cfg) end
 	end
 }
 
@@ -253,17 +253,17 @@ end
 --! @returns a table containing all the variables (starting at index 1).
 function helper.get_variable_array(var)
 	local result = {}
-	for i = 1, wesnoth.get_variable(var .. ".length") do
-		result[i] = wesnoth.get_variable(string.format("%s[%d]", var, i - 1))
+	for i = 1, wesmere.get_variable(var .. ".length") do
+		result[i] = wesmere.get_variable(string.format("%s[%d]", var, i - 1))
 	end
 	return result
 end
 
 --! Puts all the elements of table @a t inside a WML container with name @a var.
 function helper.set_variable_array(var, t)
-	wesnoth.set_variable(var)
+	wesmere.set_variable(var)
 	for i, v in ipairs(t) do
-		wesnoth.set_variable(string.format("%s[%d]", var, i - 1), v)
+		wesmere.set_variable(string.format("%s[%d]", var, i - 1), v)
 	end
 end
 
@@ -273,7 +273,7 @@ end
 --! @returns a table containing all the variable proxies (starting at index 1).
 function helper.get_variable_proxy_array(var)
 	local result = {}
-	for i = 1, wesnoth.get_variable(var .. ".length") do
+	for i = 1, wesmere.get_variable(var .. ".length") do
 		result[i] = get_variable_proxy(string.format("%s[%d]", var, i - 1))
 	end
 	return result
@@ -288,7 +288,7 @@ end
 --! @endcode
 function helper.get_user_choice(attr, options)
 	local result = 0
-	function wesnoth.__user_choice_helper(i)
+	function wesmere.__user_choice_helper(i)
 		result = i
 	end
 	local msg = {}
@@ -298,11 +298,11 @@ function helper.get_user_choice(attr, options)
 	for k,v in ipairs(options) do
 		table.insert(msg, { "option", { message = v,
 			{ "command", { { "lua", {
-				code = string.format("wesnoth.__user_choice_helper(%d)", k)
+				code = string.format("wesmere.__user_choice_helper(%d)", k)
 			}}}}}})
 	end
 	wml_actions.message(msg)
-	wesnoth.__user_choice_helper = nil
+	wesmere.__user_choice_helper = nil
 	return result
 end
 
@@ -325,7 +325,7 @@ local adjacent_offset = {
 
 --! Returns an iterator over adjacent locations that can be used in a for-in loop.
 function helper.adjacent_tiles(x, y, with_borders)
-	local x1,y1,x2,y2,b = 1,1,wesnoth.get_map_size()
+	local x1,y1,x2,y2,b = 1,1,wesmere.get_map_size()
 	if with_borders then
 		x1 = x1 - b
 		y1 = y1 - b
@@ -381,15 +381,15 @@ end
 
 function helper.rand (possible_values)
 	wml_actions.set_variable({ name = "LUA_rand", rand = possible_values })
-	local result = wesnoth.get_variable("LUA_rand")
-	wesnoth.set_variable("LUA_rand")
+	local result = wesmere.get_variable("LUA_rand")
+	wesmere.set_variable("LUA_rand")
 	return result
 end
 
 function helper.deprecate(msg, f)
 	return function(...)
 		if msg then
-			wesnoth.message("warning", msg)
+			wesmere.message("warning", msg)
 			-- trigger the message only once
 			msg = nil
 		end

@@ -8,30 +8,30 @@
 -- Loads a WML variable with the given qualified name (argument 1) and converts it into a Lua object. Returns nil if the name does not point to anything, a scalar for a WML attribute, and a table for a WML object. The format of the table is described in LuaWML#Encoding WML objects into Lua tables.
 -- Argument 2, if true, prevents the recursive conversion when the name points to an object; a fresh empty table is returned in this case. This is mainly used for writing proxy objects, e.g. in #helper.set_wml_var_metatable.
 -- Note that, if the variable name happens to designate a sequence of WML objects, only the first one (index 0) is fetched. If all the WML objects with this name should have been returned, use #helper.get_variable_array instead.
--- @function wesnoth.get_variable
--- @usage wesnoth.fire("store_unit", { variable="my_unit", { "filter", { id="hero" } } })
--- heros_hp = wesnoth.get_variable("my_unit[0].hitpoints")
--- wesnoth.message(string.format("The 'hero' unit has %d hitpoints.", heros_hp))
-wesnoth.get_variable = (var_name) ->
+-- @function wesmere.get_variable
+-- @usage wesmere.fire("store_unit", { variable="my_unit", { "filter", { id="hero" } } })
+-- heros_hp = wesmere.get_variable("my_unit[0].hitpoints")
+-- wesmere.message(string.format("The 'hero' unit has %d hitpoints.", heros_hp))
+wesmere.get_variable = (var_name) ->
 
 
 ----
 -- Converts and stores a Lua object (argument 2) to a WML variable (argument 1). A WML object is created for a table, an attribute otherwise.
 -- Setting a WML variable to nil erases it.
--- @function wesnoth.set_variable
--- @usage wesnoth.set_variable("my_unit.hitpoints", heros_hp + 10)
-wesnoth.set_variable = (var_name, value) ->
+-- @function wesmere.set_variable
+-- @usage wesmere.set_variable("my_unit.hitpoints", heros_hp + 10)
+wesmere.set_variable = (var_name, value) ->
 
 ----
 -- Returns all the WML variables currently set in form of a WML table.
--- @function wesnoth.get_all_vars
--- @usage wesnoth.get_all_vars = () ->
--- for key, value in pairs( wesnoth.get_all_vars! )
+-- @function wesmere.get_all_vars
+-- @usage wesmere.get_all_vars = () ->
+-- for key, value in pairs( wesmere.get_all_vars! )
 --     if type( value ) == "table"
 --         print( key, value[1], value[2] )
 --     else
 --         print( key, value )
-wesnoth.get_all_vars = () ->
+wesmere.get_all_vars = () ->
 
 
 ----
@@ -42,15 +42,15 @@ wesnoth.get_all_vars = () ->
 -- c = { a= 9}
 -- d = c
 -- c.a = 8
--- wesnoth.message(d.a) -- normaly prints 8 but prints 9 with helper.set_wml_var_metatable(_G)
+-- wesmere.message(d.a) -- normaly prints 8 but prints 9 with helper.set_wml_var_metatable(_G)
 -- local lla = { {"a", {}}}
 -- lla[1][2] = lla
--- la = lla -- crashes wesnoth with helper.set_wml_var_metatable(_G)
--- helper = wesnoth.require("lua/helper.lua")
+-- la = lla -- crashes wesmere with helper.set_wml_var_metatable(_G)
+-- helper = wesmere.require("lua/helper.lua")
 -- helper.set_wml_var_metatable(_G)
 -- -- some code later (maybe in another addon)
--- H = wesnoth.require("lua/helper.lua") -- fails because wesnoth.require("lua/helper.lua") doesn' return a valid wmltable..
--- helper = wesnoth.require("lua/helper.lua")
+-- H = wesmere.require("lua/helper.lua") -- fails because wesmere.require("lua/helper.lua") doesn' return a valid wmltable..
+-- helper = wesmere.require("lua/helper.lua")
 -- helper.set_wml_var_metatable(_G)
 -- -- some code later (maybe in another addon)
 -- T = helper.set_wml_tag_metatable {}  -- doesn't work
@@ -66,9 +66,9 @@ helper.set_wml_var_metatable = () ->
 -- Returns the first sub-tag of a WML object with the given name.
 -- If a third parameter is passed, only children having a id attribute equal to it are considered.
 -- @function helper.get_child
--- @usage u = wesnoth.get_units({ id = "Delfador" })[1]
+-- @usage u = wesmere.get_units({ id = "Delfador" })[1]
 -- costs = helper.get_child(u.__cfg, "movement_costs")
--- wesnoth.message(string.format("Delfador needs %d points to move through a forest.", costs.forest))
+-- wesmere.message(string.format("Delfador needs %d points to move through a forest.", costs.forest))
 helper.get_child = (config, child_tag_name) ->
 
 ----
@@ -88,9 +88,9 @@ helper.child_count = (config, child_tag_name) ->
 -- @function helper.child_range
 helper.child_range = (config, child_tag_name) ->
 Returns an iterator over all the sub-tags of a WML object with the given name.
-u = wesnoth.get_units({ id = "Delfador" })[1]
+u = wesmere.get_units({ id = "Delfador" })[1]
 for att in helper.child_range(u.__cfg, "attack")
-    wesnoth.message(tostring(att.description))
+    wesmere.message(tostring(att.description))
 
 ----
 -- @function helper.child_array
@@ -101,9 +101,9 @@ Like helper.child_range, but returns an array instead of an iterator. Useful if 
 -- Fetches all the WML container variables with given name and returns a table containing them (starting at index 1).
 -- @function helper.get_variable_array
 -- @usage get_recall_list = (side) ->
---     wesnoth.fire("store_unit", { x: "recall", variable: "LUA_recall_list })
+--     wesmere.fire("store_unit", { x: "recall", variable: "LUA_recall_list })
 --     l = get_variable_array "LUA_recall_list"
---     wesnoth.set_variable "LUA_recall_list"
+--     wesmere.set_variable "LUA_recall_list"
 --     return l
 helper.get_variable_array = (var_name) ->
 

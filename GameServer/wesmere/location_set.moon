@@ -6,11 +6,11 @@
 -- Objects of this class store a set of locations, with some data (boolean true, by default) attached to each of them. It is not possible to associate nil or false to a location.
 --
 -- There is one main constructor #location_set.create and two auxiliary helper constructors #location_set.of_pairs and #location_set.of_wml_var. They are provided by the lua/location_set.lua file. All the other functions are methods from the class and they are available through the ':' operator only.
--- @usage local location_set = wesnoth.require "lua/location_set.lua"
+-- @usage local location_set = wesmere.require "lua/location_set.lua"
 -- a_set = location_set.create()
 -- a_set\insert(17, 42, "something")
 -- assert(a_set\get(17, 42) == "something")
--- b_set = location_set.of_pairs(wesnoth.get_locations { { "filter_adjacent", { x=17, y=42 } } })
+-- b_set = location_set.of_pairs(wesmere.get_locations { { "filter_adjacent", { x=17, y=42 } } })
 -- a_set\union(b_set)
 -- a_set\to_wml_var "locations"
 class Location_set
@@ -135,7 +135,7 @@ class Location_set
   -- @usage new_set = old_set:filter(function(x, y, v)
   -- d = helper.distance_between(a, b, x, y)
   -- return d <= 5 and v == "not found" )
-  -- wesnoth.message(string.format("%d traps in the neighborhood of (%d,%d)", new_set:size(), a, b))
+  -- wesmere.message(string.format("%d traps in the neighborhood of (%d,%d)", new_set:size(), a, b))
   filter: (f) =>
 	nvalues = {}
 	for p,v in pairs(@values)
@@ -145,7 +145,7 @@ class Location_set
 
   ----
   -- Calls the given function on all the locations of the set. Iteration order is not deterministic. If the order actually matters, the #location_set:stable_iter method should be used instead.
-  -- @usage some_set\iter( (x, y, data) -> wesnoth.message(string.format("[%d,%d] = %s", x, y, type(data))) )
+  -- @usage some_set\iter( (x, y, data) -> wesmere.message(string.format("[%d,%d] = %s", x, y, type(data))) )
   iter: (f) =>
 	for p,v in pairs(@values)
       x, y = revindex(p)
@@ -153,7 +153,7 @@ class Location_set
 
   ----
   -- Calls the given function on all the locations of the set. Contrarily to #location_set:iter, the iteration is deterministic and hence safe for networks and replays.
-  -- @usage some_set:stable_iter(function(x, y, data) wesnoth.message(string.format("[%d,%d] = %s", x, y, type(data))) end)
+  -- @usage some_set:stable_iter(function(x, y, data) wesmere.message(string.format("[%d,%d] = %s", x, y, type(data))) end)
   stable_iter: (f) =>
 	indices = {}
 	for p,v in pairs(@values)
@@ -165,7 +165,7 @@ class Location_set
 
   ----
   -- Inserts all the locations from an array containing pairs (arrays with two elements). Previous content of the set is kept, unless overwritten by the content of the array.
-  -- @usage some_set\of_pairs(wesnoth.get_locations { { "filter_adjacent", { x:17, y:42 } } })
+  -- @usage some_set\of_pairs(wesmere.get_locations { { "filter_adjacent", { x:17, y:42 } } })
   -- @usage Can also read in tables with location tables of the form {x: some_number, y: some_number} like what is returned by ai.get_avoid().
   -- some_set\of_pairs(ai.get_avoid())
   -- If any extra data is included in the table for an individual location in the input, it will be put into a table and associated with that location's index in the location_set. Otherwise the data associated with a location's index is "true".
@@ -194,11 +194,11 @@ class Location_set
   ----
   -- location_set:of_wml_var
   -- Inserts all the locations from a WML array. If a container has more than just x and y attributes, the remaining attributes and children are associated to the location as a WML table. Previous content of the set is kept, unless overwritten by the content of the WML array.
-  -- @usage wesnoth.wml_actions.store_locations { variable="target", { "filter_adjacent", { x=17, y=42 } } }
+  -- @usage wesmere.wml_actions.store_locations { variable="target", { "filter_adjacent", { x=17, y=42 } } }
   of_wml_var: (name) =>
 	values = @values
-	for i = 0, wesnoth.get_variable(name .. ".length") - 1
-      t = wesnoth.get_variable(string.format("%s[%d]", name, i))
+	for i = 0, wesmere.get_variable(name .. ".length") - 1
+      t = wesmere.get_variable(string.format("%s[%d]", name, i))
       x, y = t.x, t.y
       t.x, t.y = nil, nil
       values[index(x, y)] = next(t) and t or true
@@ -221,17 +221,17 @@ class Location_set
   ----
   -- location_set:to_wml_var
   -- Fills a WML array with the content of the set. The order of the elements is safe.
-  -- @usage some_set = location_set.of_pairs(wesnoth.get_locations { { "filter_adjacent", { x=17, y=42 } } })
+  -- @usage some_set = location_set.of_pairs(wesmere.get_locations { { "filter_adjacent", { x=17, y=42 } } })
   -- some_set\to_wml_var "locations"
   to_wml_var: (name) =>
 	i = 0
-	wesnoth.set_variable(name)
+	wesmere.set_variable(name)
 	@stable_iter( (x, y, v) ->
       if type(v) == 'table' then
-        wesnoth.set_variable(string.format("%s[%d]", name, i), v)
+        wesmere.set_variable(string.format("%s[%d]", name, i), v)
 
-      wesnoth.set_variable(string.format("%s[%d].x", name, i), x)
-      wesnoth.set_variable(string.format("%s[%d].y", name, i), y)
+      wesmere.set_variable(string.format("%s[%d].x", name, i), x)
+      wesmere.set_variable(string.format("%s[%d].y", name, i), y)
       i = i + 1
 	)
 
@@ -240,7 +240,7 @@ class Location_set
   -- Returns an empty location set.
   -- @treturn Location_set
   create: () ->
-    w,h,b = wesnoth.get_map_size()
+    w,h,b = wesmere.get_map_size()
     assert(h + 2 * b < 9000)
     return setmetatable({ values: {} }, locset_meta)
 

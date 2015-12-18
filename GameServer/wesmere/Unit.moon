@@ -123,7 +123,7 @@ class Unit
     -- @tparam StandardUnitFilter filter
     -- @tparam[opt] Unit other_unit
     -- @treturn bool iff this unit matches the filter
-    -- @usage assert(unit.canrecruit == wesnoth.match_unit(unit, { can_recruit: true }))
+    -- @usage assert(unit.canrecruit == wesmere.match_unit(unit, { can_recruit: true }))
     matches: (filter, other_unit) =>
         if or_table = f["or"]
             return true if @filter(or_table)
@@ -157,16 +157,16 @@ class Unit
     return true
 
     ----
-    -- Places a unit on the map. This unit is described either by a WML table or by a proxy unit. Coordinates can be passed as the first two arguments, otherwise the table is expected to have two fields x and y, which indicate where the unit will be placed. If the function is called with coordinates only, the unit on the map at the given coordinates is removed instead. (Version 1.13.2 and later only) This use is now deprecated; use wesnoth.erase_unit instead.
+    -- Places a unit on the map. This unit is described either by a WML table or by a proxy unit. Coordinates can be passed as the first two arguments, otherwise the table is expected to have two fields x and y, which indicate where the unit will be placed. If the function is called with coordinates only, the unit on the map at the given coordinates is removed instead. (Version 1.13.2 and later only) This use is now deprecated; use wesmere.erase_unit instead.
     -- @tparam Unit self
     -- @number[opt] x
     -- @number[opt] y
     -- @usage -- create a unit with random traits, then erase it
-    -- wesnoth.put_unit(17, 42, { type: "Elvish Lady" })
-    -- wesnoth.put_unit(17, 42)
-    -- When the argument is a proxy unit, no duplicate is created. In particular, if the unit was private or on a recall list, it no longer is; and if the unit was on the map, it has been moved to the new location. Note: passing a WML table is just a shortcut for calling #wesnoth.create_unit and then putting the resulting unit on the map.
+    -- wesmere.put_unit(17, 42, { type: "Elvish Lady" })
+    -- wesmere.put_unit(17, 42)
+    -- When the argument is a proxy unit, no duplicate is created. In particular, if the unit was private or on a recall list, it no longer is; and if the unit was on the map, it has been moved to the new location. Note: passing a WML table is just a shortcut for calling #wesmere.create_unit and then putting the resulting unit on the map.
     -- -- move the leader back to the top-left corner
-    -- wesnoth.put_unit(1, 1, wesnoth.get_units({ can_recruit: true })[1])
+    -- wesmere.put_unit(1, 1, wesmere.get_units({ can_recruit: true })[1])
     to_map: (x, y) =>
 
     ----
@@ -182,7 +182,7 @@ class Unit
     to_recall: (side) =>
 
     ----
-    -- Advances the unit (and shows the advance unit dialog if needed) if the unit has enough xp. This function should be called after modifying the units experience directly. A similar function is called by wesnoth internally after unit combat. The second argument is a boodean value that specifies whether the advancement should be animated. The third agrument is a boodean value that specifies whether advancement related events should be fired.
+    -- Advances the unit (and shows the advance unit dialog if needed) if the unit has enough xp. This function should be called after modifying the units experience directly. A similar function is called by wesmere internally after unit combat. The second argument is a boodean value that specifies whether the advancement should be animated. The third agrument is a boodean value that specifies whether advancement related events should be fired.
     -- @tparam Unit self
     -- @bool animate whether the advancement should be animated.
     -- @bool fire_events whether advancement related events should be fired.
