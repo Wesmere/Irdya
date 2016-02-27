@@ -91,10 +91,10 @@ scenario
             message: _ "Under the letter of the treaty, it is so. But this country is too cold and barren for us. I wonder, what manner of human would choose to live here, far from its kind? Hmmm..."
         message
             role:"Advisor"
-            message:" _It trespasses, and should be driven out!"
+            message: _ "It trespasses, and should be driven out!"
         message
             speaker:"Erlornas"
-            message:" _Hold. It is only one human, or a few of them at most. Time enough to speak of driving it out when we have no enemies in common."
+            message: _ "Hold. It is only one human, or a few of them at most. Time enough to speak of driving it out when we have no enemies in common."
         message
             speaker:"Erlornas"
             message: _ "Tell me: I see no bridge over the chasm around that keep. Is there any sign that one has been withdrawn by the defenders?"
@@ -112,21 +112,19 @@ scenario
             message: _ "Do it. We’ll have a guest soon."
         message
             speaker:"narrator"
-            image:"wesnoth"-icon.png
-            --po:" Faerie" in this paragraph is a rare, poetic word in
-            --po:" English". It is the proper name of a magical otherworld
-            --po:" associated with elves "- actually, originally with
-            --po:" fairies", but before Tolkien the boundary between elves
-            --po:" and fairies was extremely blurry". In Wesnoth it is
-            --po:" deliberately unclear whether Faerie is a place that is"
-            --po:" the source of magical power or a label for the inner"
-            --po:" nonhuman"/magical nature of the Elves.  Translate freely.
+            --po: Faerie in this paragraph is a rare, poetic word in
+            --po: English. It is the proper name of a magical otherworld
+            --po: associated with elves - actually, originally with
+            --po: fairies, but before Tolkien the boundary between elves
+            --po: and fairies was extremely blurry. In Wesnoth it is
+            --po: deliberately unclear whether Faerie is a place that is
+            --po: the source of magical power or a label for the inner
+            --po: nonhuman/magical nature of the Elves.  Translate freely.
             message: _ "Erlornas closed his eyes and brought his hands forward, joined palms forming a cup open to the sky. Soon they began to glow, then to flare like a brazier with the fire of Faerie, casting a cold, blue light all around the elf-lord. A wisp of light emerged from the eerie flames, and at a few murmured words from the elf-lord flew away towards the tower below. Then the light around Erlornas faded and all was seemingly as before."
         delay
             time:500
         message
             speaker:"narrator"
-            image:"wesnoth"-icon.png
             message: _ "Some time later..."
         teleport
             filter:
