@@ -27,7 +27,8 @@ wsl_action
             utils.vwriter.write(writer, container)
 
     scheme:
-        StandardSideFilter:
+        filter_side:
+            -- StandardSideFilter:
             description: [[All matching sides are stored. (An array is created if several sides match - access it with side[2].team_name and so on.)]]
 
         variable:
