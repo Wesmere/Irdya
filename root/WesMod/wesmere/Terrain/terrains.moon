@@ -778,7 +778,7 @@ terrain_type
     submerge: 0
     unit_height_adjust: 22
     editor_group: "cave"
-    hide_help: "yes"
+    hide_help: true
 
 
 terrain_type
@@ -790,7 +790,7 @@ terrain_type
     submerge: 0
     unit_height_adjust: 22
     editor_group: "cave"
-    hide_help: "yes"
+    hide_help: true
 
 
 terrain_type
@@ -952,7 +952,7 @@ terrain_type
     aliasof: "_bas,Xt"
     mvt_alias: "Xt"
     editor_group: "obstacle, special"
-    hide_help: "yes"
+    hide_help: true
 
 
 terrain_type
@@ -963,7 +963,7 @@ terrain_type
     aliasof: "_bas,Qt"
     mvt_alias: "Qt"
     editor_group: "obstacle, special"
-    hide_help: "yes"
+    hide_help: true
 
 
 terrain_type
@@ -973,7 +973,7 @@ terrain_type
     string: "Xv"
     aliasof: "Xt"
     editor_group: "obstacle, special"
-    hide_help: "yes"
+    hide_help: true
 
 
 terrain_type
@@ -1326,7 +1326,7 @@ terrain_type
     heals: 8
     gives_income: "true"
     editor_group: "village, special"
-    hide_help: "yes"
+    hide_help: true
 
 
 terrain_type
@@ -1649,7 +1649,7 @@ terrain_type
     aliasof: "_bas"
     recruit_onto: "true"
     editor_group: "castle, special"
-    hide_help: "yes"
+    hide_help: true
 
 
 terrain_type
@@ -1662,7 +1662,7 @@ terrain_type
     recruit_from: "true"
     recruit_onto: "true"
     editor_group: "castle, special"
-    hide_help: "yes"
+    hide_help: true
 
 
 terrain_type
@@ -1688,7 +1688,7 @@ terrain_type
     editor_group: "bridge, water"
     submerge: 0
     unit_height_adjust: 22
-    hide_help: "yes"
+    hide_help: true
 
 
 terrain_type
@@ -1700,7 +1700,7 @@ terrain_type
     editor_group: "bridge, water"
     submerge: 0
     unit_height_adjust: 22
-    hide_help: "yes"
+    hide_help: true
 
 
 terrain_type
@@ -1723,7 +1723,7 @@ terrain_type
     editor_group: "bridge, water"
     submerge: 0
     unit_height_adjust: 22
-    hide_help: "yes"
+    hide_help: true
 
 
 terrain_type
@@ -1735,7 +1735,7 @@ terrain_type
     editor_group: "bridge, water"
     submerge: 0
     unit_height_adjust: 22
-    hide_help: "yes"
+    hide_help: true
 
 
 terrain_type
@@ -1758,7 +1758,7 @@ terrain_type
     submerge: 0
     unit_height_adjust: 22
     editor_group: "bridge,water"
-    hide_help: "yes"
+    hide_help: true
 
 
 terrain_type
@@ -1770,7 +1770,7 @@ terrain_type
     submerge: 0
     unit_height_adjust: 22
     editor_group: "bridge,water"
-    hide_help: "yes"
+    hide_help: true
 
 
 terrain_type
@@ -1792,7 +1792,7 @@ terrain_type
     aliasof: "Ut,_bas"
     default_base: "Qxu"
     editor_group: "bridge, cave"
-    hide_help: "yes"
+    hide_help: true
 
 
 terrain_type
@@ -1804,7 +1804,7 @@ terrain_type
     aliasof: "Ut,_bas"
     default_base: "Qxu"
     editor_group: "bridge, cave"
-    hide_help: "yes"
+    hide_help: true
 
 
 terrain_type
@@ -1815,7 +1815,7 @@ terrain_type
     default_base: "Qxu"
     unit_height_adjust: 20
     editor_group: "bridge, cave"
-    hide_help: "yes"
+    hide_help: true
 
 
 terrain_type
@@ -1826,7 +1826,7 @@ terrain_type
     default_base: "Qxu"
     unit_height_adjust: 20
     editor_group: "bridge, cave"
-    hide_help: "yes"
+    hide_help: true
 
 
 terrain_type
@@ -1846,7 +1846,7 @@ terrain_type
     default_base: "Qxu"
     aliasof: "_bas, Gt"
     editor_group: "bridge, cave"
-    hide_help: "yes"
+    hide_help: true
 
 
 terrain_type
@@ -1856,7 +1856,7 @@ terrain_type
     default_base: "Qxu"
     aliasof: "_bas, Gt"
     editor_group: "bridge, cave"
-    hide_help: "yes"
+    hide_help: true
 
 
 terrain_type
@@ -1875,7 +1875,7 @@ terrain_type
     default_base: "Qxu"
     aliasof: "_bas, Gt"
     editor_group: "bridge, cave"
-    hide_help: "yes"
+    hide_help: true
 
 
 terrain_type
@@ -1885,7 +1885,7 @@ terrain_type
     default_base: "Qxu"
     aliasof: "_bas, Gt"
     editor_group: "bridge, cave"
-    hide_help: "yes"
+    hide_help: true
 
 
 terrain_type
@@ -1904,7 +1904,7 @@ terrain_type
     editor_name: _ "Off Map"
     string: "_off^_usr"
     editor_group: "special, obstacle"
-    hide_help: "yes"
+    hide_help: true
 
 
 terrain_type
@@ -1914,7 +1914,7 @@ terrain_type
     editor_name: _ "Experimental Fake Map Edge"
     string: "^_fme"
     editor_group: "special, obstacle"
-    hide_help: "yes"
+    hide_help: true
 
 
 terrain_type
@@ -1923,7 +1923,7 @@ terrain_type
     name: _ "Shroud"
     string: "_s"
     editor_group: "special"
-    hide_help: "yes"
+    hide_help: true
 
 
 terrain_type
@@ -1932,7 +1932,7 @@ terrain_type
     name: _ "Fog"
     string: "_f"
     editor_group: "special"
-    hide_help: "yes"
+    hide_help: true
 
 
 terrain_type
@@ -1941,7 +1941,7 @@ terrain_type
     name: _ "Fungus"
     editor_name: _ "Fungus"
     string: "Uft"
-    hidden: "yes"
+    hidden: true
     help_topic_text: _ [[<italic>text='Mushroom groves'</italic> are vast underground forests of giant mushrooms,
 which thrive in the damp darkness. Most units have trouble negotiating the spongy floor of smaller fungi, but they have plenty of cover behind the larger stalks. Mounted units, however, become completely mired and lack proper freedom of movement in combat. Undead units have a natural affinity for decay and function quite well in mushroom forests.
 
@@ -1960,7 +1960,7 @@ Most units are wholly unfamiliar with the terrain, and thus are both slowed down
 Rare patches of the underground world are illuminated by light from the surface shining down into the gloomy darkness. This provides an attack bonus for lawful units and removes the attack bonus from chaotic units. In all other regards this terrain is functionally identical to normal cave terrains.
 
 Most units receive 20 to 40% defense in caves, whereas dwarves have 50%.]]
-    hidden: "yes"
+    hidden: true
 
 
 terrain_type
@@ -1973,7 +1973,7 @@ terrain_type
     help_topic_text: _ [[The instability of <italic>text='sand'</italic> makes it harder for most units to cross, and leaves them wide open to attack. In contrast, the wide feet or snakelike bodies of the reptilian races make sand much easier for them to navigate.
 
 Most units receive 20 to 40% defense in sand.]]
-    hidden: "yes"
+    hidden: true
 
 
 terrain_type
@@ -1988,7 +1988,7 @@ terrain_type
 This provides most land units with a more steady footing and defensive positions than wading in shallow water normally would and also grants most water-dwelling races an exceptionally high defense.
 
 Mermen and Naga both receive 70% defense on coastal reefs.]]
-    hidden: "yes"
+    hidden: true
 
 
 terrain_type
@@ -2002,7 +2002,7 @@ terrain_type
 with enough dips and rises in the ground to provide some cover. Hills are difficult for most troops to navigate. Dwarves, trolls, and orcs have enough familiarity with the terrain that they can pass through it without being slowed down. Cavalry have enough trouble navigating the terrain that any defensive aid lent by cover is negated.
 
 Most units have about 50% defense in hills, whereas cavalry are limited to 40%. Dwarves enjoy 60% defense in hills.]]
-    hidden: "yes"
+    hidden: true
 
 
 terrain_type
@@ -2017,7 +2017,7 @@ terrain_type
 Swamps slow down nearly everyone, and inhibit their ability to defend themselves. An exception to this is any race bodily skilled in navigating water; these receive both full movement and a defensive bonus. Those that make their living in the wetlands are also adept at using this terrain for cover.
 
 Most units make do with 30% defense in swamps. Mermen, naga, and saurians all generally enjoy 60%.]]
-    hidden: "yes"
+    hidden: true
 
 
 terrain_type
@@ -2029,7 +2029,7 @@ terrain_type
     help_topic_text: _ [[<italic>text='Shallow water'</italic> represents any body of water deep enough to come up to roughly a man’s waist. This is enough to slow down nearly anyone and leave them wide open to attack. Dwarves, given that the water reaches up almost to their heads, have an extremely hard time of this. The exception is any race whose bodies naturally lend themselves to swimming, for which they receive a considerable defensive bonus and full movement.
 
 Most units make do with 20 to 30% defense in shallow water, whereas both naga and mermen enjoy 60%.]]
-    hidden: "yes"
+    hidden: true
 
 
 terrain_type
@@ -2045,7 +2045,7 @@ terrain_type
 Nearly all units receive a considerable bonus to their defense by being stationed in a castle, and most units receive full movement in a castle. Stationing units in a castle represents its defensive capability. Without a unit in each wall hex, an enemy can simply sneak into the castle unchallenged, gaining the same defensive bonus as everyone inside.
 
 Most units have about 60% defense in a castle.]]
-    hidden: "yes"
+    hidden: true
 
 
 terrain_type
@@ -2059,7 +2059,7 @@ terrain_type
 By this nature, they provide a considerable defensive bonus for most troops, but they also severely impede any passage through them. Most cavalry simply cannot enter mountainous terrain; however, elvish cavalry is an exception to this, as are the goblin wolf riders. Both dwarves and trolls are native to mountainous terrain, and have a very easy time getting around.
 
 Most units receive about 60% defense in mountains, whereas Dwarves enjoy 70%.]]
-    hidden: "yes"
+    hidden: true
 
 
 terrain_type
@@ -2072,7 +2072,7 @@ Most units cannot enter deep water: it is the domain of units which can either f
 
 Mermen and naga both receive 50% defense in deep water, with full movement.]]
     string: "Wdt"
-    hidden: "yes"
+    hidden: true
 
 
 terrain_type
@@ -2085,7 +2085,7 @@ Being open ground, grassland is both very easy to move across, but is also diffi
 
 Most units have defense of 30 to 40% on grassland.]]
     string: "Gt"
-    hidden: "yes"
+    hidden: true
 
 
 terrain_type
@@ -2097,7 +2097,7 @@ terrain_type
 
 Most units have 50% defense in forests, but cavalry are limited to 30%. Elves, on the other hand, enjoy 60 to 70% defense, even their mounted units. Dwarves generally receive only 30% defense in forests.]]
     string: "Ft"
-    hidden: "yes"
+    hidden: true
 
 
 terrain_type
@@ -2110,7 +2110,7 @@ terrain_type
 Most units are slowed down on it, and have a harder time defending themselves. Note that swimming units, even those who can breathe underwater, cannot swim underneath ice.
 
 Most units have 20 to 40% defense in frozen terrain.]]
-    hidden: "yes"
+    hidden: true
 
 
 terrain_type
@@ -2123,7 +2123,7 @@ terrain_type
 Almost all units, even cavalry, have an easy time navigating villages, and most units gain a defensive bonus from being stationed in a village. Villages allow units the resources to clean and tend to their wounds, which allows any unit stationed therein to heal eight hitpoints each turn, or to be cured of poison.
 
 Most units have 50 to 60% defense in villages, whereas cavalry receive only 40%.]]
-    hidden: "yes"
+    hidden: true
 
 
 terrain_type
@@ -2133,7 +2133,7 @@ terrain_type
     editor_name: _ "Impassable"
     string: "Xt"
     help_topic_text: _ "Obstacles that not even the most determined traveler may overcome include solid walls of stone and mountains so tall and steep that they are constantly wreathed in cloud. Even flying creatures cannot navigate the jagged peaks at such rarefied heights, and not even the fiercest troll can smash through thick walls of stone."
-    hidden: "yes"
+    hidden: true
 
 
 terrain_type
@@ -2143,7 +2143,7 @@ terrain_type
     editor_name: _ "Unwalkable"
     string: "Qt"
     help_topic_text: _ "<italic>text='Unwalkable terrain'</italic> covers any chasm or gorge which, as the name implies, cannot be crossed simply by walking. Chasms are noted for sheer walls which would take days to traverse. As far as gameplay is concerned, only units capable of flying can cross this terrain."
-    hidden: "yes"
+    hidden: true
 
 
 terrain_type
@@ -2153,5 +2153,5 @@ terrain_type
     editor_name: _ "Rails"
     string: "Rt"
     help_topic_text: _ "<italic>text='Rails'</italic> are used to transport ore. By Dwarfs. Mostly."
-    hidden: "yes"
+    hidden: true
 
