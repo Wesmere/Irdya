@@ -2,7 +2,7 @@
 -- This is the default parent scenario.
 -- It implements all the gameplay.
 --
-      
+
 scenario
 
     id: "parent"
@@ -26,11 +26,11 @@ scenario
 
     _Start:
         id: "last start"
-        command ->
+        command: ->
             wesmere.fire_event("NewTurn")
 
 ---------- Turns -----------------------
-    
+
     NewTurn:
         id: "todo"
 
@@ -39,8 +39,8 @@ scenario
     SideTurn:
         id: "todo"
 
-    TurnRefresh: 
+    TurnRefresh:
         id: "healing"
 
-    TurnRefresh: 
+    TurnRefresh:
         id: "income"

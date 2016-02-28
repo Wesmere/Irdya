@@ -23,7 +23,7 @@ If the previous unit type makes use of [male] and/or [female] tags, then the cur
             description: "When this unit has experience greater than or equal to experience, it is replaced by a unit of the type that the value of advances_to refers to. All modifications that have been done to the unit are applied to the unit it is replaced by. The special value 'null' says that the unit does not advance but gets an AMLA instead. Can be a comma-separated list of units that can be chosen from upon advancing."
 
         alignment:
-            description: "one of lawful/neutral/chaotic/liminal (See TimeWML). Default is "neutral"."
+            description: "one of lawful/neutral/chaotic/liminal (See TimeWML). Default is 'neutral'."
             default: "neutral"
         attacks:
             description: "the number of times that this unit can attack each turn."
@@ -42,7 +42,7 @@ If the previous unit type makes use of [male] and/or [female] tags, then the cur
             type: "boolean"
             default: false
         ellipse:
-            description: "the ellipse image to display under the unit, which is normally team-colored. Default is "misc/ellipse"; "-nozoc" and "-leader" are automatically appended for units without zone of control and with canrecruit=yes respectively. The IS_HERO/MAKE_HERO/UNMAKE_HERO macros change the ellipse to/back from "misc/ellipse-hero". Finally, setting this to "none" will cause the unit to not have any ellipses displayed under it regardless of the user's preferences."
+            description: [[the ellipse image to display under the unit, which is normally team-colored. Default is "misc/ellipse"; "-nozoc" and "-leader" are automatically appended for units without zone of control and with canrecruit=yes respectively. The IS_HERO/MAKE_HERO/UNMAKE_HERO macros change the ellipse to/back from "misc/ellipse-hero". Finally, setting this to "none" will cause the unit to not have any ellipses displayed under it regardless of the user's preferences.]]
         experience:
             description: "When this unit has experience greater than or equal to experience, it is replaced by a unit with 0 experience of the type that the value of advances_to refers to. All modifications that have been done to the unit are applied to the unit it is replaced by."
             type: "number"
@@ -62,8 +62,8 @@ If the previous unit type makes use of [male] and/or [female] tags, then the cur
             description: "the maximum HP that the unit has, and the HP it has when it is created."
             type: "number"
         id:
-            description: "the value of the type key for units of this type. This is required and must be unique among all [unit_type] tags. An id should consist only of alphanumerics and spaces (or underscores). type keys are found in SingleUnitWML and FilterWML. For example, id=Drake Flare
-        WARNING : characters "$", "&", "*", "-", "(" and ")" are illegal for use in the unit type id and must be avoided because they might lead to corrupted saved games"
+            description: [["the value of the type key for units of this type. This is required and must be unique among all [unit_type] tags. An id should consist only of alphanumerics and spaces (or underscores). type keys are found in SingleUnitWML and FilterWML. For example, id=Drake Flare
+        WARNING : characters "$", "&", "*", "-", "(" and ")" are illegal for use in the unit type id and must be avoided because they might lead to corrupted saved games]]
             type: "string"
             mandatory: true
         ignore_race_traits:
@@ -100,7 +100,7 @@ If the previous unit type makes use of [male] and/or [female] tags, then the cur
             description: "See [race]. Also used in standard unit filter (see FilterWML). Mainline Wesnoth features following values: bats, drake, dwarf, elf, falcon, goblin, gryphon, human, khalifate, lizard, mechanical, merman, monster, naga, ogre, orc, troll, undead, wolf, wose. They are defined in /data/core/units.cfg."
             type: "string"
         undead_variation:
-            description: "When a unit of this type is killed by a weapon with the plague special, this variation is applied to the new plague unit that is created, whatever its type. For example, if the plague special creates Walking Corpses and undead_variation is set to "troll", you'll get a troll Walking Corpse. Defaults to the undead_variation set in this unit type's race."
+            description: [[When a unit of this type is killed by a weapon with the plague special, this variation is applied to the new plague unit that is created, whatever its type. For example, if the plague special creates Walking Corpses and undead_variation is set to "troll", you'll get a troll Walking Corpse. Defaults to the undead_variation set in this unit type's race.]]
         usage:
             description: "the way that the AI should recruit this unit, as determined by the scenario designer. (See recruitment_pattern, AiWML). The following are conventions on usage:
         ** scout: Fast, mobile unit meant for exploration and village grabbing.
@@ -168,7 +168,7 @@ If the previous unit type makes use of [male] and/or [female] tags, then the cur
                 icon:
                     description: "the image to use as an icon for the attack in the attack choice menu, as a path relative to the images directory."
                 range:
-                    description: "the range of the attack. Used to determine the enemy's retaliation, which will be of the same type. Also displayed on the status table in parentheses; 'melee'(default) displays "melee", while 'ranged' displays "ranged". Range can be anything. Standard values are now "melee" and "ranged". From now on, short and long will be treated as totally different ranges. You can create any number of ranges now (with any name), and units can only retaliate against attacks for which they have a corresponding attack of the same range. This value is translatable."
+                    description: [[the range of the attack. Used to determine the enemy's retaliation, which will be of the same type. Also displayed on the status table in parentheses; 'melee'(default) displays "melee", while 'ranged' displays "ranged". Range can be anything. Standard values are now "melee" and "ranged". From now on, short and long will be treated as totally different ranges. You can create any number of ranges now (with any name), and units can only retaliate against attacks for which they have a corresponding attack of the same range. This value is translatable.]]
                 damage:
                     description: "the damage of this attack"
                 number:

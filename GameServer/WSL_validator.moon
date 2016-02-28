@@ -36,23 +36,24 @@ validate = (cfg, scheme, name) ->
     if config.is_list
       value = wrapInArray(value)
     elseif isArray(value)
-      error("The #{key} key in the #{name} table doesn't likes lists'")
+      error("The #{key} key in the #{name} table doesn't likes lists")
 
     --validate_array = () ->
 
-    switch config.type
-      when "table"
-        key_scheme = config.scheme
-        for i, val in ipairs value
-          validate(value, key_scheme, key)
-      when "String"
-        for i, val in ipairs value
-          unless type(val) == "String"
-      when "iString"
-        for i, val in ipairs value
-          unless type(val) == "String"
-      when "Integer"
-        for i, val in ipairs value
-          unless type(val) == "String"
-      else
-        error("key with unknown type: #{key} in #{name} table")
+    -- type = onfig.types
+    -- switch type
+    --     when "table"
+    --         key_scheme = config.scheme
+    --         for i, val in ipairs value
+    --             validate(value, key_scheme, key)
+    --     when "String"
+    --         for i, val in ipairs value
+    --             unless type(val) == "String"
+    --     when "iString"
+    --         for i, val in ipairs value
+    --             unless type(val) == "String"
+    --     when "Integer"
+    --         for i, val in ipairs value
+    --             unless type(val) == "String"
+    --     else
+    --         error("key with unknown type: #{key} in #{name} table")
