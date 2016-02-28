@@ -4,9 +4,9 @@ unit_type
     race:"khalifate"
     hitpoints:39
     movement_type:"khalifatefoot"
-    abilities:
+    abilities: {
         ABILITY_CURES
-        ABILITY_REGENERATES
+        ABILITY_REGENERATES }
     movement:5
     experience:100
     level:2

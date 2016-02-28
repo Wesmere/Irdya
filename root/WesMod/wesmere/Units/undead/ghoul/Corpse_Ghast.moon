@@ -2,7 +2,7 @@ unit_type
     id:"Ghast"
     name: _ "Ghast"
     race:"undead"
-    TRAIT_FEARLESS_MUSTHAVE
+    trait:TRAIT_FEARLESS_MUSTHAVE
     hitpoints:65
     movement_type:"gruefoot"
     movement:5

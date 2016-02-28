@@ -18,9 +18,8 @@ unit_type
     cost:100
     usage:"mixed fighter"
     description: _ "A being of this order is a revenant of ages long past. Anyone who encounters an Ancient Lich likely has far worse things to worry about than death." .. SPECIAL_NOTES .. SPECIAL_NOTES_MAGICAL .. SPECIAL_NOTES_DRAIN .. SPECIAL_NOTES_ARCANE .. SPECIAL_NOTES_SUBMERGE
-    [movement_costs]
+    movement_costs:
         shallow_water:3
-    [/movement_costs]
     abilities:
         ABILITY_SUBMERGE
     attack:
@@ -50,21 +49,3 @@ unit_type
         range:"ranged"
         damage:9
         number:5
-    [recruiting_anim]
-        [filter_second]
-            race:"undead"
-        [/filter_second]
-        start_time:-300
-        [frame]
-        [/frame]
-        [frame]
-        [/frame]
-        sound_start_time:-75
-        [sound_frame]
-            sound:"magic"-dark-big.ogg
-        [/sound_frame]
-        [frame]
-        [/frame]
-        [frame]
-        [/frame]
-    [/recruiting_anim]

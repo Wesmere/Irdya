@@ -3,7 +3,7 @@ unit_type
     name: _ "Mudcrawler"
     -- wmllint:" general spelling mudcrawler mudcrawlers"
     race:"monster"
-    TRAIT_ELEMENTAL
+    trait: TRAIT_ELEMENTAL
     hitpoints:20
     movement_type:"scuttlefoot"
     movement:3

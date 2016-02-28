@@ -2,7 +2,7 @@ unit_type
     id:"Ghoul"
     name: _ "Ghoul"
     race:"undead"
-    TRAIT_FEARLESS_MUSTHAVE
+    trait:TRAIT_FEARLESS_MUSTHAVE
     hitpoints:33
     movement_type:"gruefoot"
     movement:5

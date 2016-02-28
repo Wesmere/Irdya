@@ -3,9 +3,8 @@ unit_type
     name: _ "Elvish Marshal"
     race:"elf"
     hitpoints:62
-    movement_type:"woodland"
+    movement_type:"woodland_less_nimble"
     movement:5
-    LESS_NIMBLE_ELF
     experience:150
     level:3
     alignment:"neutral"

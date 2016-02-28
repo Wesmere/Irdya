@@ -2,7 +2,7 @@ unit_type
     id:"Falcon"
     name: _ "Falcon"
     race:"falcon"
-    TRAIT_FERAL_MUSTHAVE
+    trait:TRAIT_FERAL_MUSTHAVE
     hitpoints:18
     movement_type:"lightfly"
     movement:8

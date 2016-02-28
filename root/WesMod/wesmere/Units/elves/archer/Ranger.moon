@@ -2,7 +2,7 @@ unit_type
     name: _ "Elvish Ranger"
     id:"Elvish Ranger"
     race:"elf"
-    gender:"male",female
+    gender:{"male","female"}
     hitpoints:42
     movement_type:"woodland"
     movement:6

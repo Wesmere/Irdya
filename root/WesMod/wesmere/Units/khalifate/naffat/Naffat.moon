@@ -3,9 +3,9 @@ unit_type
     name: _ "Naffat"
     race:"khalifate"
     ignore_race_traits:"yes"
-    TRAIT_QUICK
-    TRAIT_INTELLIGENT
-    TRAIT_RESILIENT
+    trait:{ TRAIT_QUICK
+        TRAIT_INTELLIGENT
+        TRAIT_RESILIENT }
     hitpoints:31
     movement_type:"khalifatefoot"
     movement:5

@@ -2,7 +2,7 @@ unit_type
     id:"Giant Mudcrawler"
     name: _ "Giant Mudcrawler"
     race:"monster"
-    TRAIT_ELEMENTAL
+    trait: TRAIT_ELEMENTAL
     hitpoints:36
     movement_type:"scuttlefoot"
     movement:4

@@ -2,7 +2,7 @@ unit_type
     id:"Elvish Marksman"
     name: _ "Elvish Marksman"
     race:"elf"
-    gender:"male",female
+    gender:{"male","female"}
     hitpoints:37
     movement_type:"woodland"
     movement:6

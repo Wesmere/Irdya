@@ -28,6 +28,3 @@ unit_type
         type:"pierce"
         damage:5
         number:2
-
-    DEATH_ANIM_DIRECTIONAL_4_FRAME "units/saurians/ambusher/ambusher"
-

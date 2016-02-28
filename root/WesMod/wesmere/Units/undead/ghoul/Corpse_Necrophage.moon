@@ -2,7 +2,7 @@ unit_type
     id:"Necrophage"
     name: _ "Necrophage"
     race:"undead"
-    TRAIT_FEARLESS_MUSTHAVE
+    trait:TRAIT_FEARLESS_MUSTHAVE
     hitpoints:47
     movement_type:"gruefoot"
     movement:5

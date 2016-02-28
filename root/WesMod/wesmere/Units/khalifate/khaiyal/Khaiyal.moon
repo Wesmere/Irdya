@@ -15,7 +15,7 @@ unit_type
     experience:48
     level:1
     alignment:"lawful"
-    advances_to:"Faris",Qanas
+    advances_to:{"Faris","Qanas"}
     cost:21
     usage:"fighter"
     undead_variation:"mounted"
@@ -34,4 +34,3 @@ unit_type
         range:"melee"
         damage:6
         number:3
-

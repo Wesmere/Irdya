@@ -2,7 +2,7 @@ unit_type
     id:"Elder Falcon"
     name: _ "Elder Falcon"
     race:"falcon"
-    TRAIT_FERAL_MUSTHAVE
+    trait:TRAIT_FERAL_MUSTHAVE
     hitpoints:27
     movement_type:"lightfly"
     movement:9

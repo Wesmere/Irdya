@@ -22,9 +22,9 @@ unit_type
     cost:45
     usage:"fighter"
     description: _ "Tales are told of the mightiest warriors and generals, who, cursed with hate and stung by betrayal, have come back to this world as Death Knights. Wielding the same weapons as in life, they command the Undead in their quest for revenge." .. SPECIAL_NOTES .. SPECIAL_NOTES_LEADERSHIP .. SPECIAL_NOTES_SUBMERGE
-    abilities:
+    abilities: {
         ABILITY_LEADERSHIP
-        ABILITY_SUBMERGE
+        ABILITY_SUBMERGE }
     attack:
         name:"battle axe"
         description:"_battle axe"

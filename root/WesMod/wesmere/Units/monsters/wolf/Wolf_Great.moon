@@ -23,17 +23,12 @@ unit_type
         village:50
     attack:
         name:"fangs"
-        description:"_fangs"
+        description: _ "fangs"
         type:"blade"
         range:"melee"
         damage:5
         number:4
-
-    [variation]
+    variation:
         variation_id:"red"
         inherit:"yes"
         hide_help:"yes"
-
-
-
-    [/variation]

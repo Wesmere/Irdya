@@ -29,5 +29,3 @@ unit_type
         type:"pierce"
         damage:7
         number:2
-    DEATH_ANIM_DIRECTIONAL_4_FRAME "units/saurians/flanker/flanker"
-

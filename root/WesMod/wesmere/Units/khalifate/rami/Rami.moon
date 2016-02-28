@@ -8,7 +8,7 @@ unit_type
     experience:39
     level:1
     alignment:"liminal"
-    advances_to:"Qanas",Saree
+    advances_to:{"Qanas","Saree"}
     cost:16
     usage:"archer"
     undead_variation:"mounted"

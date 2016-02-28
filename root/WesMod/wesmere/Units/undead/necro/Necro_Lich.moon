@@ -18,9 +18,8 @@ unit_type
     description: _ "A lich is the physical embodiment of black magic’s first goal: the quest to achieve immortality. Though a great deal is sacrificed in the rebirth, in becoming a lich one cheats death of that which truly gives it terror. For it is the mind that is retained, and the spirit which follows, though the body may wither away.
 
 It is not known, save perhaps by the inner circles of necromancy, whether life is prolonged indefinitely or simply extended. But the fact that this question can be raised at all, testifies to the magnitude of what their order has achieved." .. SPECIAL_NOTES .. SPECIAL_NOTES_MAGICAL .. SPECIAL_NOTES_DRAIN .. SPECIAL_NOTES_ARCANE .. SPECIAL_NOTES_SUBMERGE
-    [movement_costs]
+    movement_costs:
         shallow_water:3
-    [/movement_costs]
     abilities:
         ABILITY_SUBMERGE
     attack:
@@ -50,23 +49,3 @@ It is not known, save perhaps by the inner circles of necromancy, whether life i
         range:"ranged"
         damage:9
         number:3
-
-
-    [recruiting_anim]
-        [filter_second]
-            race:"undead"
-        [/filter_second]
-        start_time:-300
-        [frame]
-        [/frame]
-        [frame]
-        [/frame]
-        sound_start_time:-75
-        [sound_frame]
-            sound:"magic"-dark-big.ogg
-        [/sound_frame]
-        [frame]
-        [/frame]
-        [frame]
-        [/frame]
-    [/recruiting_anim]

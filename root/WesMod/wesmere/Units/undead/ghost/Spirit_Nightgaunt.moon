@@ -13,9 +13,9 @@ unit_type
     cost:52
     usage:"scout"
     description: _ "The purpose of the masks that these creatures wear is unknown, as is the countenance that they obscure. These terrible forms are rarely seen by the living, and those who live to speak of them had no leisure to study their foe." .. SPECIAL_NOTES .. SPECIAL_NOTES_BACKSTAB .. SPECIAL_NOTES_SPIRIT .. SPECIAL_NOTES_NIGHTSTALK .. SPECIAL_NOTES_SKIRMISHER
-    abilities:
+    abilities: {
         ABILITY_NIGHTSTALK
-        ABILITY_SKIRMISHER
+        ABILITY_SKIRMISHER }
     attack:
         name:"claws"
         description:"_claws"

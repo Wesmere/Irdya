@@ -2,7 +2,7 @@ unit_type
     id:"Elvish Sharpshooter"
     name: _ "Elvish Sharpshooter"
     race:"elf"
-    gender:"male","female"
+    gender:{"male","female"}
 
     hitpoints:47
     movement_type:"woodland"

@@ -1,7 +1,7 @@
 unit_type
     id:"Necromancer"
     name: _ "Necromancer"
-    gender:"male",female
+    gender:{"male","female"}
     race:"human"
     hitpoints:70
     movement_type:"smallfoot"
@@ -43,37 +43,6 @@ This ability, in all aspects, is the first step towards cheating death of its ul
         range:"ranged"
         damage:12
         number:2
-    [recruiting_anim]
-        [filter_second]
-            race:"undead"
-        [/filter_second]
-        start_time:-300
-        [frame]
-        [/frame]
-        [frame]
-        [/frame]
-        sound_start_time:-75
-        [sound_frame]
-            sound:"magic"-dark.ogg
-        [/sound_frame]
-        [frame]
-        [/frame]
-        [frame]
-        [/frame]
-    [/recruiting_anim]
     female:
         name: _ "female^Necromancer"
         gender:"female"
-        [recruiting_anim]
-            [filter_second]
-                race:"undead"
-            [/filter_second]
-            [frame]
-            [/frame]
-            [frame]
-            [/frame]
-            [frame]
-            [/frame]
-            [frame]
-            [/frame]
-        [/recruiting_anim]

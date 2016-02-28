@@ -30,6 +30,3 @@ Spears are their preferred weapon, as their powerful hind legs can drive a spear
         type:"pierce"
         damage:4
         number:2
-
-    DEATH_ANIM_DIRECTIONAL_4_FRAME "units/saurians/skirmisher/skirmisher"
-

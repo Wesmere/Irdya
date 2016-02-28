@@ -8,7 +8,7 @@ unit_type
     experience:28
     level:1
     alignment:"chaotic"
-    advances_to:"Saurian Oracle",Saurian Soothsayer
+    advances_to:{"Saurian Oracle","Saurian Soothsayer"}
     cost:16
     usage:"healer"
     description: _ "Saurians have some knowledge of what men call sorcery, but their practice of it reeks of augury and black magic. It is little understood, but rightly regarded with fear by those against whom it is used." .. SPECIAL_NOTES .. SPECIAL_NOTES_MAGICAL .. SPECIAL_NOTES_HEALS
@@ -30,8 +30,3 @@ unit_type
         range:"ranged"
         damage:5
         number:3
-
-    DEATH_ANIM_DIRECTIONAL_4_FRAME "units/saurians/augur/augur"
-
-
-

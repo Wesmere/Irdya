@@ -10,8 +10,10 @@ unit_type
     alignment:"lawful"
     advances_to:nil
     advance_from: if ENABLE_ARMAGEDDON_DRAKE
-        unit:"Inferno Drake"
-        experience:220
+        {
+            unit:"Inferno Drake"
+            experience:220
+        }
     -- AMLA_DEFAULT
     cost:100
     usage:"archer"

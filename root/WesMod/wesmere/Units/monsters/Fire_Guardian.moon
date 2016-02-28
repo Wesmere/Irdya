@@ -2,7 +2,7 @@ unit_type
     id:"Fire Guardian"
     name: _ "Fire Guardian"
     race:"monster"
-    TRAIT_ELEMENTAL
+    trait: TRAIT_ELEMENTAL
     hitpoints:23
     movement_type:"drakefly"
     resistance:

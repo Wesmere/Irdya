@@ -31,8 +31,3 @@ unit_type
         range:"ranged"
         damage:6
         number:3
-
-    DEATH_ANIM_DIRECTIONAL_4_FRAME "units/saurians/soothsayer/soothsayer"
-
-
-

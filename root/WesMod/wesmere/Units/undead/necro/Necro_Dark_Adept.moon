@@ -1,12 +1,12 @@
 unit_type
     id:"Dark Adept"
     name: _ "Dark Adept"
-    gender:"male",female
+    gender:{"male","female"}
     race:"human"
     ignore_race_traits:"yes"
-    TRAIT_QUICK
-    TRAIT_INTELLIGENT
-    TRAIT_RESILIENT
+    trait: { TRAIT_QUICK
+        TRAIT_INTELLIGENT
+        TRAIT_RESILIENT }
     hitpoints:28
     movement_type:"smallfoot"
     movement:5
@@ -37,43 +37,6 @@ In such condition, their only weapon is the craft they have so committed themsel
         range:"ranged"
         damage:7
         number:2
-
-    [recruiting_anim]
-        [filter_second]
-            race:"undead"
-        [/filter_second]
-        start_time:-450
-        [frame]
-        [/frame]
-        [frame]
-        [/frame]
-        [frame]
-            halo_x,halo_y:0,-12
-        [/frame]
-        sound_start_time:-40
-        [sound_frame]
-            sound:"magic"-dark.ogg
-        [/sound_frame]
-        [frame]
-        [/frame]
-        [frame]
-        [/frame]
-    [/recruiting_anim]
     female:
         gender:"female"
         name: _ "female^Dark Adept"
-        [recruiting_anim]
-            [filter_second]
-                race:"undead"
-            [/filter_second]
-            [frame]
-            [/frame]
-            [frame]
-            [/frame]
-            [frame]
-            [/frame]
-            [frame]
-            [/frame]
-            [frame]
-            [/frame]
-        [/recruiting_anim]
