@@ -77,7 +77,7 @@ wesmere.load_wesmod = (id) ->
   -- load WesMod by path
   -- @tparam Game self
   -- @string wesmod_path
-  load_wesmod_by_path: (wesmod_path) =>
+load_wesmod_by_path = (wesmod_path) ->
     log.info("Loading WesMod at: " .. wesmod_path)
     -- Note: order matters
     found = ""

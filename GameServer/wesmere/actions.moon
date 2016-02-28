@@ -95,7 +95,8 @@ wesmere.game_events = {}
 -- @number[optchain] second_weapon
 -- @treturn bool The function returns a boolean indicating whether the game state was modified.
 -- @usage wesmere.fire_event("explosion", 17, 42, { damage: "fire" })
-wesmere.fire_event = (event_name, [x1, y1, [x2, y2]], [first_weapon, [second_weapon]]) ->
+-- @usage wesmere.fire_event = (event_name, [x1, y1, [x2, y2]], [first_weapon, [second_weapon]]) ->
+wesmere.fire_event = (event_name, x1, y1, x2, y2, first_weapon, second_weapon) ->
     handlers = wesmere.event_handlers[event_name]
     return false unless handlers
 
@@ -103,9 +104,12 @@ wesmere.fire_event = (event_name, [x1, y1, [x2, y2]], [first_weapon, [second_wea
     -- setfenv implementation
     setfenv = (fn, env) ->
         i = 1
-        while name = debug.getupvalue(fn, i)
+        while true
+            name = debug.getupvalue(fn, i)
             if name == "_ENV"
                 debug.upvaluejoin(fn, i, () -> return env, 1)
+                break
+            elseif not name
                 break
             i += 1
         return fn
@@ -114,9 +118,12 @@ wesmere.fire_event = (event_name, [x1, y1, [x2, y2]], [first_weapon, [second_wea
     -- getfenv implementation
     getfenv = (fn) ->
         i = 1
-        while name, val = debug.getupvalue(fn, i)
+        while true
+            name, val = debug.getupvalue(fn, i)
             if name == "_ENV"
                 return val
+            elseif not name
+                break
             i += 1
 
     ----
@@ -131,8 +138,8 @@ wesmere.fire_event = (event_name, [x1, y1, [x2, y2]], [first_weapon, [second_wea
     -- @tab _ENV Using the pragma of how Lua handles the global namespace to sandbox all event wml execution.
     execute_event_handler = (handler, primary, second, first_weapon, second_weapon, _ENV) ->
         return false if handler.remove
-        return false if filter = handler.filter_side and not wesmere.match_side(side_number, filter)
-        return false if filter = handler.filter_condition and not wesmere.eval_conditional(filter)
+        return false if handler.filter_side and not wesmere.match_side(side_number, handler.filter_side)
+        return false if handler.filter_condition and not wesmere.eval_conditional(handler.filter_condition)
         if filter = handler.filter
             return false unless unit
             return false unless unit\matches(filter)
@@ -156,17 +163,22 @@ wesmere.fire_event = (event_name, [x1, y1, [x2, y2]], [first_weapon, [second_wea
 
     with wesmere.current.event_context
         .name = event_name
-        .x1 = x1; .y1 = y1
-        .x2 = x2; .y2 = y2
+        .x1 = x1
+        .y1 = y1
+        .x2 = x2
+        .y2 = y2
         -- @todo
         -- .weapon =; -- .second_weapon =
         -- .unit_x = ; .unit_y =
 
     with ENV = wesmere.current.event_env
         .side_number = wesmere.current.side
-        .x1 = x1; .y1 = y1 -- position of primary unit
-        .x2 = x2; .y2 = y2 -- position of secondary unit
-        .unit = unit; .second_unit = second_unit -- primary unit; secondary_unit
+        .x1 = x1
+        .y1 = y1 -- position of primary unit
+        .x2 = x2
+        .y2 = y2 -- position of secondary unit
+        .unit = unit
+        .second_unit = second_unit -- primary unit; secondary_unit
         -- .damage_inflicted = 0 -- @todo
 
     if primary
@@ -176,8 +188,8 @@ wesmere.fire_event = (event_name, [x1, y1, [x2, y2]], [first_weapon, [second_wea
     if events = @game.events[name]
         modified = false
         for event in *@game.events[name]
-            modified or= execute_event_handler(event, primary_unit, secondary_unit,
-                first_weapon, second_weapon, ENV)
+            modified or execute_event_handler event, primary_unit,
+                secondary_unit, first_weapon, second_weapon, ENV
 
     return modified
 

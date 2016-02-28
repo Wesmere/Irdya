@@ -76,7 +76,8 @@ wesmere.deselect_hex = () ->
 -- @bool[optchain=false] instant
 -- @usage u = wesmere.get_unit { id: "hero" }
 -- wesmere.scroll_to_tile(u.x, u.y)
-wesmere.scroll_to_tile = (x, y, [only_if_visible=false, [instant=false]]) ->
+-- @usage wesmere.scroll_to_tile = (x, y, [only_if_visible=false, [instant=false]]) ->
+wesmere.scroll_to_tile = (x, y, only_if_visible=false, instant=false) ->
 
 ----
 -- Locks or unlocks gamemap view scrolling for human players.

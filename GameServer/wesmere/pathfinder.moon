@@ -8,6 +8,7 @@
 
 ----
 -- Returns the shortest path from one location to another.
+-- The source location is given either by coordinates as two arguments x and y; there must be a unit at the source location when using the standard path calculator. The source location can also be given by a unit as a single argument (as returned by the functions from LuaWSL:Units). The second location is given by its coordinates.
 -- @function wesmere.find_path
 -- @number x1
 -- @number y1
@@ -38,10 +39,9 @@
 --         return current_cost + 3
 --     )
 -- wesmere.message(string.format("It would take %d turns.", math.ceil(cost / 3)))
+-- @usage wesmere.find_path = (x1, y1, x2, y2, [path_options | cost_function]) ->
+wesmere.find_path = (x1, y1, x2, y2, path_options_or_cost_function) ->
 
-wesmere.find_path = (x1, y1, x2, y2, [path_options | cost_function]) ->
-
-The source location is given either by coordinates as two arguments x and y; there must be a unit at the source location when using the standard path calculator. The source location can also be given by a unit as a single argument (as returned by the functions from LuaWSL:Units). The second location is given by its coordinates.
 
 
 ----
@@ -74,20 +74,13 @@ wesmere.find_vacant_tile = (x, y, unit) ->
 --    wesmere.fire("label", { x: l[1], y: l[2], text: math.ceil(9 - l[3]/m) })
 wesmere.find_reach = (unit, path_options) ->
 
-
-
-
-
-
-
-
 ----
 -- Builds a cost map for one, multiple units or unit types.
 --
 -- In a cost map each hex is mapped to two values: a) The summed cost to reach this hex for all input units b) A value which indicates how many units can reach this hex The caller can divide a) with b) to get a average cost to reach this hex for the input units. The costs will consider movement lost during turn changes. (So with simple calculus it is possible to get the turns to reach a hex)
 -- wesmere.find_cost_map
 --
-Input arguments:
+-- Input arguments:
 -- @tparam Unit|Location|StandardUnitFilter unit
 -- @tparam Location|{thing,...} another_unit unit location|(optional) A array of triples (coordinates + unit type as string)
 -- @tab options
@@ -99,15 +92,15 @@ Input arguments:
 -- @tparam StandardLocationFilter
 
 -- @return A array of quadruples (coordinates + a summed cost + reach count)
-1 + 2. A units location
-OR 1. A unit
-OR 1. A unit filter
-2.
-3. (optional) A table with options:
-4. (optional) A Standard Location Filter.
-If the array of unit types is given the units will be added to the first parameter. Use a empty filter or a invalid location to only add unit types.
+-- 1 + 2. A units location
+-- OR 1. A unit
+-- OR 1. A unit filter
+-- 2.
+-- 3. (optional) A table with options:
+-- 4. (optional) A Standard Location Filter.
+-- If the array of unit types is given the units will be added to the first parameter. Use a empty filter or a invalid location to only add unit types.
 
-A location set can be build by calling location.set.of_pairs(retval).
+-- A location set can be build by calling location.set.of_pairs(retval).
 
 ----
 -- Returns the distance between two tiles given by their coordinates.

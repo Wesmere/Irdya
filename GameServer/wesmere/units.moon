@@ -161,10 +161,11 @@ wesmere.get_recall_units = (filter) ->
 -- @number[opt] side
 -- @usage -- put the unit at location 17,42 on the recall list for side 2
 -- wesmere.put_recall_unit(wesmere.get_units({ x: 17, y: 42 })[1], 2)
-wesmere.put_recall_unit = (unit, [side]) ->
+-- @usage wesmere.put_recall_unit = (unit, [side]) ->
+wesmere.put_recall_unit = (unit, side) ->
     if moon.type(unit) != Unit
-      u = Unit(unit)
-      u\to_recall(side)
+        u = Unit(unit)
+        u\to_recall(side)
     else unit\to_recall(side)
 
 ----
@@ -333,7 +334,8 @@ wesmere.get_traits = () ->
 --     "The attack %s should be countered with %s, which does %d damage, has %d%% chance to hit and forces %d attack rounds due to its berserk ability.",
 --     att_weapon.name, def_weapon.name or "no weapon", def_weapon.damage, def_weapon.chance_to_hit, def_weapon.rounds))
 -- @function wesmere.simulate_combat
-wesmere.simulate_combat = (attacker, [attacker_weapon_index], defender, [defender_weapon_index]) ->
+-- @usage wesmere.simulate_combat = (attacker, [attacker_weapon_index], defender, [defender_weapon_index]) ->
+wesmere.simulate_combat = (attacker, attacker_weapon_index, defender, defender_weapon_index) ->
 
 ----
 -- Changes the type of a unit and adjust attributes accordingly. Note that hit points are only changed if necessary to accommodate the new maximum hit points. Poison is automatically removed if the transformed unit is immune.

@@ -33,7 +33,8 @@
 --      max_length: 16
 --  })
 -- -- (You don't have to format it like that, of course.)
-wesmere.show_message_dialog = (attributes, [options, [text_input_attributes]]) ->
+-- @usage wesmere.show_message_dialog = (attributes, [options, [text_input_attributes]]) ->
+wesmere.show_message_dialog = (attributes, options, text_input_attributes) ->
 
 
 ----
@@ -104,7 +105,8 @@ wesmere.show_popup_dialog = (title, message, image) ->
 --
 -- r = wesmere.show_dialog(dialog, preshow, postshow)
 -- wesmere.message(string.format("Button %d pressed. Item %d selected.", r, li))
-wesmere.show_dialog = (wsl_dialog_table, [pre_show_function, [post_show_function]]) ->
+-- @usage wesmere.show_dialog = (wsl_dialog_table, [pre_show_function, [post_show_function]]) ->
+wesmere.show_dialog = (wsl_dialog_table, pre_show_function, post_show_function) ->
 
 ----
 -- Sets the value of a widget on the current dialog. The value is given by the first argument; its semantic depends on the type of widget it is applied to. The last argument is the id of the widget. If it does not point to a unique widget in the dialog, some discriminating parents should be given on its left, making a path that is read from left to right by the engine. The row of a list is specified by giving the id' of the list as a first argument and the 1-based row number as the next argument.

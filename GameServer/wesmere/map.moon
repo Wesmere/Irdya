@@ -61,15 +61,16 @@ set_terrain = (x, y, terrain_code, layer="both", replace_if_failed=false) ->
 -- @usage is_keep = wesmere.get_terrain_info(wesmere.get_terrain(12, 15)).keep
 -- @treturn {id=string,name=tstring,description=tstring,editor_name=tstring,castle=bool,keep=bool,village=bool,healing=number} Terrain info is a plain table.
 get_terrain_info = (terrain_code) ->
-    return
-        id:
-        name:
-        description:
-        editor_name:
-        castle:
-        keep:
-        village:
-        healing:
+    -- return {
+    --     id:
+    --     name:
+    --     description:
+    --     editor_name:
+    --     castle:
+    --     keep:
+    --     village:
+    --     healing:
+    -- }
 
 
 ----

@@ -85,17 +85,17 @@ helper.get_child = (config, child_tag_name, n) ->
 helper.child_count = (config, child_tag_name) ->
 
 ----
+-- Returns an iterator over all the sub-tags of a WSL object with the given name.
 -- @function helper.child_range
 helper.child_range = (config, child_tag_name) ->
-Returns an iterator over all the sub-tags of a WSL object with the given name.
-u = wesmere.get_units({ id = "Delfador" })[1]
-for att in helper.child_range(u.__cfg, "attack")
-    wesmere.message(tostring(att.description))
+    u = wesmere.get_units({ id: "Delfador" })[1]
+    for att in helper.child_range(u.__cfg, "attack")
+        wesmere.message(tostring(att.description))
 
 ----
+-- Like helper.child_range, but returns an array instead of an iterator. Useful if you need random access to the children.
 -- @function helper.child_array
 helper.child_array = (config, child_tag_name) ->
-Like helper.child_range, but returns an array instead of an iterator. Useful if you need random access to the children.
 
 ----
 -- Fetches all the WSL container variables with given name and returns a table containing them (starting at index 1).
@@ -109,17 +109,18 @@ helper.get_variable_array = (var_name) ->
 
 
 ----
+-- Creates proxies for all the WSL container variables with given name and returns a table containing them (starting at index 1).
+-- This function is similar to #helper.get_variable_array, except that the proxies can be used for modifying WSL containers.
 -- @function helper.get_variable_proxy_array
-helper.get_variable_proxy_array(var_name)
-Creates proxies for all the WSL container variables with given name and returns a table containing them (starting at index 1). This function is similar to #helper.get_variable_array, except that the proxies can be used for modifying WSL containers.
+helper.get_variable_proxy_array = (var_name) ->
 
 
-
-helper.set_variable_array
-helper.set_variable_array(varname, array)
-Creates WSL container variables with given name from given table.
-helper.set_variable_array("target", { t1, t2, t3 })
--- target[0] <- t1; target[1] <- t2; target[2] <- t3
+----
+-- Creates WSL container variables with given name from given table.
+-- @function helper.set_variable_array
+helper.set_variable_array = (varname, array) ->
+    helper.set_variable_array("target", { t1, t2, t3 })
+    -- target[0] <- t1; target[1] <- t2; target[2] <- t3
 
 
 {
