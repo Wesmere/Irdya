@@ -9,7 +9,7 @@
 -- @function wesmere.fire
 -- @string wsl_action_name the name of the action.
 -- @tab wsl_action_table the WSL table describing the action. Note: WSL variables are substituted.
--- @usage wesmere.fire("message", { speaker="narrator", message=_ "Hello World!" })
+-- @usage wesmere.fire("message", { speaker: "narrator", message: _ "Hello World!" })
 wesmere.fire = (wsl_action_name, wsl_action_table) ->
     return wesmere.wsl_actions[wsl_action_name](wsl_action_table)
 
@@ -17,17 +17,16 @@ wesmere.fire = (wsl_action_name, wsl_action_table) ->
 -- This is not a function but an associative table indexed by WSL action names. It contains functions performing the corresponding actions. Using these functions is similar to calling #wesmere.fire, while setting entries of the table is similar to calling #wesmere.register_wsl_action.
 -- Note: When calling an action handler directly through its function stored in wesmere.wsl_actions, the engine is not involved. As a consequence, whether variable substitution will happen is up to the handler. In particular, if the argument is a plain table, the caller should have substituted WSL variables beforehand to be on the safe side. Moreover, table arguments might be modified by the action handler, so they should usually not be reused for consecutive calls. If variable substitution should happen and/or table content should be preserved, one can call #wesmere.tovconfig and pass its result to the handler. Calling #wesmere.fire is another possibility.
 -- @table wesmere.wsl_actions
--- @usage function wesmere.wsl_actions.freeze_unit(cfg)
---     local unit_id = cfg.id or helper.wsl_error "[freeze_unit] expects an id= attribute."
---     helper.modify_unit({ id = unit_id }, { moves = 0 })
--- -- The new tag can now be used in plain WSL code.
--- [freeze_unit]
---    id=Delfador
--- [/freeze_unit]
--- @usage You can override functions already assigned to the table. This is useful if you need to extend functionality of core tags. For instance, the following script overrides the [print] tag so that messages are displayed with a bigger font.
--- function wesmere.wsl_actions.print(cfg)
---   cfg.size = (cfg.size or 12) + 10
---   wsl_actions.print(cfg)
+-- @usage wesmere.wsl_actions.freeze_unit = (cfg) ->
+--     unit_id = cfg.id or helper.wsl_error "'freeze_unit' expects an id key."
+--     helper.modify_unit({ id: unit_id }, { moves: 0 })
+-- -- The new tag can now be used in plain WSL code:
+-- freeze_unit
+--     id: "Delfador"
+-- @usage -- You can override functions already assigned to the table. This is useful if you need to extend functionality of core tags. For instance, the following script overrides the [print] tag so that messages are displayed with a bigger font.
+-- wesmere.wsl_actions.print = (cfg) ->
+--     cfg.size = (cfg.size or 12) + 10
+--     wsl_actions.print(cfg)
 wesmere.wsl_actions = {}
 
 ----
@@ -88,17 +87,48 @@ wesmere.game_events = {}
 -- Fires all the WSL events with the given name. Optional parameters allow passing two locations and two tables. These parameters will be matched against the [filter], [filter_second], [filter_attack], and [filter_second_attack] of any event handler, and are used to fill the WSL variables "unit", "second_unit", "weapon", and "second_weapon". These parameters can also be read through current.event_context.
 -- @function wesmere.fire_event
 -- @string event_name
--- @number x1
--- @number y1
--- @number x2
--- @number y2
+-- @number[opt] x1
+-- @number[optchain] y1
+-- @number[opt] x2
+-- @number[optchain] y2
 -- @number[opt] first_weapon
 -- @number[optchain] second_weapon
 -- @treturn bool The function returns a boolean indicating whether the game state was modified.
--- @usage wesmere.fire_event("explosion", 17, 42, { damage = "fire" })
+-- @usage wesmere.fire_event("explosion", 17, 42, { damage: "fire" })
 wesmere.fire_event = (event_name, [x1, y1, [x2, y2]], [first_weapon, [second_weapon]]) ->
-    return false unless wesmere.game_events[event_name]
+    handlers = wesmere.event_handlers[event_name]
+    return false unless handlers
 
+    ----
+    -- setfenv implementation
+    setfenv = (fn, env) ->
+        i = 1
+        while name = debug.getupvalue(fn, i)
+            if name == "_ENV"
+                debug.upvaluejoin(fn, i, () -> return env, 1)
+                break
+            i += 1
+        return fn
+
+    ----
+    -- getfenv implementation
+    getfenv = (fn) ->
+        i = 1
+        while name, val = debug.getupvalue(fn, i)
+            if name == "_ENV"
+                return val
+            i += 1
+
+    ----
+    -- execute a single event handler
+    -- see Lua Manual http://somewhere
+    -- @function execute_event_handler
+    -- @tab handler
+    -- @param primary
+    -- @param second
+    -- @param first_weapon
+    -- @param second_weapon
+    -- @tab _ENV Using the pragma of how Lua handles the global namespace to sandbox all event wml execution.
     execute_event_handler = (handler, primary, second, first_weapon, second_weapon, _ENV) ->
         return false if handler.remove
         return false if filter = handler.filter_side and not wesmere.match_side(side_number, filter)
@@ -113,7 +143,7 @@ wesmere.fire_event = (event_name, [x1, y1, [x2, y2]], [first_weapon, [second_wea
         -- @todo filter_second_attack
 
         -- @todo delayed_variable_substitution ?
-        log.debug("Executing " .. handler.name)
+        log.trace("Executing " .. handler.name)
 
         if handler.first_time_only
             handler.remove = true
@@ -132,7 +162,7 @@ wesmere.fire_event = (event_name, [x1, y1, [x2, y2]], [first_weapon, [second_wea
         -- .weapon =; -- .second_weapon =
         -- .unit_x = ; .unit_y =
 
-    with ENV = {}
+    with ENV = wesmere.current.event_env
         .side_number = wesmere.current.side
         .x1 = x1; .y1 = y1 -- position of primary unit
         .x2 = x2; .y2 = y2 -- position of secondary unit
@@ -152,17 +182,19 @@ wesmere.fire_event = (event_name, [x1, y1, [x2, y2]], [first_weapon, [second_wea
     return modified
 
 ----
--- Registers a new event handler. This takes a WSL table containing the same information normally used by the [event] tag.
+-- Registers a new event handler.
 -- @function wesmere.add_event_handler
+-- @tab cfg This takes a WSL table containing the same information normally used by the [event] table.
 wesmere.add_event_handler = (cfg) ->
     -- @todo handle id
     -- @todo handle remove
     assert(cfg.name)
     assert(cfg.command)
-    -- utils.setfenv(cfg.command, @game.action)
-    unless wesmere.game_events[cfg.name]
-        wesmere.game_events[cfg.name] = {}
-    table.insert(wesmere.game_events[cfg.name], cfg)
+
+    if wesmere.game_events[cfg.name]
+        table.insert(wesmere.game_events[cfg.name], cfg)
+    else
+        wesmere.game_events[cfg.name] = { cfg }
     return true -- @todo
 
 ----
@@ -177,7 +209,7 @@ wesmere.remove_event_handler = (id) ->
 
 ----
 -- Returns true if the conditional described by the WSL table passes. Note: WSL variables are substituted.
--- @functionwesmere.eval_conditional
+-- @function wesmere.eval_conditional
 -- @tab conditional_table
 -- @usage result = wesmere.eval_conditional {
 --   { "have_unit", { id: "hero" } }
@@ -204,8 +236,9 @@ helper.set_wsl_action_metatable = () ->
 ----
 -- Interrupts the current execution and displays a chat message that looks like a WSL error.
 -- @function helper.wsl_error
--- @usage names = cfg.name or helper.wsl_error("[clear_variable] missing required name= attribute.")
+-- @usage names = cfg.name or helper.wsl_error("clear_variable() missing required name: key.")
 helper.wsl_error = (message) ->
+    error(message)
 
 ----
 -- Returns the __literal field of its argument if it is a userdata, the argument itself otherwise. This function is meant to be called when a WSL action handler can be called indifferently from WSL (hence receiving a userdata) or from Lua (hence possibly receiving a table).
@@ -230,3 +263,25 @@ helper.shallow_literal = (config) ->
 -- Returns the __shallow_parsed field of its argument if it is a userdata, the argument itself otherwise. See also #helper.literal.
 -- @function helper.shallow_parsed
 helper.shallow_parsed = (config) ->
+
+
+{
+    :fire
+    :wml_actions
+    :wml_conditionals -- (Version 1.13.0 and later only)
+    :game_events
+    :fire_event
+    :add_event_handler -- (Version 1.13.0 and later only)
+    :remove_event_handler -- (Version 1.13.0 and later only)
+    :eval_conditional
+    :tovconfig
+-- helper.set_wml_action_metatable
+-- helper.wml_error
+-- helper.literal
+-- helper.parsed
+-- helper.shallow_literal
+-- helper.shallow_parsed
+}
+
+
+

@@ -7,45 +7,45 @@
 ----
 -- Contrarily to the other values of the wesmere table, game_config is simply a proxy table. Its fields offer an interface to the global settings of Wesmere:
 -- @table wesmere.game_config
--- @string version: string (read only)
--- @number base_income: integer (read/write)
--- @number village_income: integer (read/write)
--- @number poison_amount: integer (read/write)
--- @number rest_heal_amount: integer (read/write)
--- @number recall_cost: integer (read/write)
--- @number kill_experience: integer (read/write)
--- @number last_turn: integer (read/write) turn limit, maximum number of turns
--- @bool debug: boolean (read only)
--- @bool mp_debug: boolean (read only)
--- @string campaign_type: string (read only) Indicates what type of game this is, e.g. "multiplayer"
--- @tab mp_settings: table. In a multiplayer game, this is a proxy table which gives read only access to all MP-only configuration options which appear as attributes of [multiplayer] tag in a save game file:
--- @string mp_settings.active_mods: string (read only) A list of all active modifications
--- @string hash: string (read only) A hash of mp data
--- @string mp_campaign: string (read only) Name of mp campaign
--- @string mp_scenario: string (read only) ID of this mp scenario
--- @string mp_scenario_name: string (read only) Name of this mp scenario
--- @string scenario: string (read only) MP lobby title
--- @string difficulty_define: string (read only) The campaign difficulty string for an mp campaign
--- @number mp_village_gold: integer (read only)
--- @number mp_village_support: integer (read only)
--- @number mp_num_turns: integer (read only)
--- @string mp_era: string (read only) The id of the chosen era
--- @string mp_eras: string (read only) A list of all era ids
--- @bool mp_fog: boolean (read only)
--- @bool mp_shroud: boolean (read only)
--- @bool mp_random_start_time: boolean (read only)
--- @number experience_modifier: integer (read only)
--- @bool mp_use_map_settings: boolean (read only)
--- @bool mp_countdown: boolean (read only) Whether the timer is enabled
--- @number mp_countdown_action_bonus: integer (read only)
--- @number mp_countdown_init_time: integer (read only)
--- @number mp_countdown_reservoir_time: integer (read only)
--- @number mp_countdown_turn_bonus: integer (read only)
--- @bool observer: boolean (read only)
--- @bool shuffle_sides: boolean (read only)
--- @bool savegame: boolean (read only) Whether this is a reloaded game
--- @string side_users: string (read only) List of how sides are assigned to users (at game start)
--- @tab era: table. A proxy table for the entire era tag corresponding to the current era. Its id will always match wesmere.game_config.mp_settings.mp_era
+-- @string version (read only)
+-- @number base_income integer (read/write)
+-- @number village_income integer (read/write)
+-- @number poison_amount integer (read/write)
+-- @number rest_heal_amount integer (read/write)
+-- @number recall_cost integer (read/write)
+-- @number kill_experience integer (read/write)
+-- @number last_turn integer (read/write) turn limit, maximum number of turns
+-- @bool debug (read only)
+-- @bool mp_debug (read only)
+-- @string campaign_type (read only) Indicates what type of game this is, e.g. "multiplayer"
+-- @tab mp_settings table. In a multiplayer game, this is a proxy table which gives read only access to all MP-only configuration options which appear as attributes of [multiplayer] tag in a save game file:
+-- @string mp_settings.active_mods string (read only) A list of all active modifications
+-- @string hash string (read only) A hash of mp data
+-- @string mp_campaign string (read only) Name of mp campaign
+-- @string mp_scenario string (read only) ID of this mp scenario
+-- @string mp_scenario_name string (read only) Name of this mp scenario
+-- @string scenario string (read only) MP lobby title
+-- @string difficulty_define string (read only) The campaign difficulty string for an mp campaign
+-- @number mp_village_gold integer (read only)
+-- @number mp_village_support integer (read only)
+-- @number mp_num_turns integer (read only)
+-- @string mp_era string (read only) The id of the chosen era
+-- @string mp_eras string (read only) A list of all era ids
+-- @bool mp_fog boolean (read only)
+-- @bool mp_shroud boolean (read only)
+-- @bool mp_random_start_time boolean (read only)
+-- @number experience_modifier integer (read only)
+-- @bool mp_use_map_settings boolean (read only)
+-- @bool mp_countdown boolean (read only) Whether the timer is enabled
+-- @number mp_countdown_action_bonus integer (read only)
+-- @number mp_countdown_init_time integer (read only)
+-- @number mp_countdown_reservoir_time integer (read only)
+-- @number mp_countdown_turn_bonus integer (read only)
+-- @bool observer boolean (read only)
+-- @bool shuffle_sides boolean (read only)
+-- @bool savegame boolean (read only) Whether this is a reloaded game
+-- @string side_users string (read only) List of how sides are assigned to users (at game start)
+-- @tab era table. A proxy table for the entire era tag corresponding to the current era. Its id will always match wesmere.game_config.mp_settings.mp_era
 -- Note: wesmere.game_config.mp_settings, and wesmere.game_config.era, will only exist if wesmere.game_config.campaign_type == "multiplayer"
 -- @usage -- Poison a bit weak? Let's boost it!
 -- wesmere.game_config.poison_amount = 15
@@ -64,11 +64,13 @@
 -- wesmere.set_variable("num_factions", count)
 
 ----
--- A function which takes one argument, an era id, and returns the entire era tag corresponding to that id. For a list of valid era ids, use wesmere.game_config.mp_settings.mp_eras.
+-- A function which takes one argument, an era id, and returns the entire era table corresponding to that id. For a list of valid era ids, use wesmere.game_config.mp_settings.mp_eras.
 -- @function wesmere.get_era
 -- @string id an era id
 -- @treturn tab era
 wesmere.get_era = (id) ->
+    wesmere.wsl_error("wesmere.get_era: missing id argument") unless id
+    return wesmere.eras[id]
 
 ----
 -- As with game_config, current is a proxy table. Its fields are getter for game-related properties:
@@ -82,6 +84,7 @@ wesmere.get_era = (id) ->
 -- local_choice the current code was invoked by wesmere.synchronize_choice and runs only on one local client to calculate the return value for wesmere.synchronize_choice. You cannot enter the synced context with [do_command] now.
 -- preload we are currently running a preload event or an even earlier event, this behaves similar to local_choice
 -- wesmere.message(string.format("Turn %d, side %d is playing.", wesmere.current.turn, wesmere.current.side))
+wesmere.current = {}
 
 ----
 -- (Version 1.13.2 and later only) wesmere.synchronize_choice([description], function, [ai_function], [for_side])
@@ -110,6 +113,8 @@ wesmere.get_era = (id) ->
 -- An optional function: for ai sides (as before).
 -- An optional integer: on which side the function should be evaluated. Defaults to the currently playing side. If the specified side is empty/null controlled the engine will choose another side.
 -- @function wesmere.synchronize_choice
+-- @func function
+-- @func[opt] ai_function
 wesmere.synchronize_choice = (function, [ai_function]) ->
 
 ----
@@ -139,83 +144,153 @@ wesmere.synchronize_choice = (function, [ai_function]) ->
 --   [/lua]
 -- [/event]
 -- @function wesmere.synchronize_choices
+-- @string[opt] description
+-- @func function
+-- @func[opt] default_function
+-- @tparam[opt] {number,...} for_sides
 wesmere.synchronize_choices = ([description], function, [default_function], [for_sides]) ->
 
 ----
 -- Returns the width and height of an image.
--- w, h = wesmere.get_image_size "units/transport/galleon.png"
 -- @function wesmere.get_image_size
+-- @string filename
+-- @treturn number width
+-- @treturn number height
+-- @usage w, h = wesmere.get_image_size "units/transport/galleon.png"
 wesmere.get_image_size = (filename) ->
 
 ----
 -- Takes two versions strings and an operator, returns whether the comparison yields true. Follows the same rules like the #ifver preprocessor statement.
--- local function version_is_sufficient(required)
---  if not wesmere.compare_versions then return false end
---  return wesmere.compare_versions(wesmere.game_config.version, ">=", required)
--- end
--- local required = "1.9.6"
--- if not version_is_sufficient(required) then wesmere.message(string.format(
---  "Your BfW version is insufficient, please get BfW %s or greater!", required)) end
 -- @function wesmere.compare_versions
+-- @string version1
+-- @string operator
+-- @string version2
+-- @treturn bool
+-- @usage version_is_sufficient = (required) ->
+--    return false unless wesmere.compare_versions
+--    return wesmere.compare_versions(wesmere.game_config.version, ">=", required)
+-- required = "1.9.6"
+-- unless version_is_sufficient(required)
+--     wesmere.message(string.format("Your BfW version is insufficient, please get BfW %s or greater!", required))
 wesmere.compare_versions = (version1, operator, version2) ->
-
 
 ----
 -- Checks if the file (not necessarily a Lua file) or the directory passed as argument exists. Returns true if the file exists, false otherwise. Follows the same rules like the #ifhave preprocessor statement.
--- -- Does the user have installed the UMC Music Book 1?
--- local umc_music = wesmere.have_file( "~add-ons/UMC_Music_Book_1/_main.cfg" )
--- -- and if we want to check for the folder?
--- local music_folder = wesmere.have_file( "~add-ons/UMC_Music_Book_1/" )
 -- @function wesmere.have_file
+-- @string filename
+-- @usage -- Does the user have installed the UMC Music Book 1?
+-- umc_music = wesmere.have_file( "~add-ons/UMC_Music_Book_1/_main.cfg" )
+-- @usage -- and if we want to check for the folder?
+-- music_folder = wesmere.have_file( "~add-ons/UMC_Music_Book_1/" )
 wesmere.have_file = (filename) ->
 
 ----
 -- Takes a userdata with metatable wsl object or a wsl table and dumps its content into a pretty string.
--- wesmere.set_variable("number", 100)
--- local vconfig = wesmere.tovconfig({ key = "$number", another_key = true,
---     {"a_subtag", { a_key_in_the_subtag = "foo" }}
+-- @function wesmere.debug
+-- @tab wsl_table
+-- @usage wesmere.set_variable("number", 100)
+-- vconfig = wesmere.tovconfig({ key: "$number", another_key: true,
+--     {"a_subtag", { a_key_in_the_subtag: "foo" }}
 -- })
 -- wesmere.message(wesmere.debug(vconfig))
 -- wesmere.message(wesmere.debug(vconfig.__literal))
--- @function wesmere.debug
 wesmere.debug = (wsl_table) ->
+-- ilevel = 0
+-- indent = (a, b)->
+--   steps, fn = if b
+--     a, b
+--   else
+--     1, a
+--   ilevel += steps
+--   fn!
+--   ilevel -= steps
+-- writeindent = -> io.write "   "\rep ilevel
+
+-- debug.write = =>
+--   visited = {}
+--   _write = =>
+--     if type(self) == 'table' and not visited[self]
+--       if not (@@ and @@__name and not @__tostring)
+--         visited[self] = true
+--         print "{"
+--         for k, v in pairs self
+--           indent ->
+--             writeindent!
+--             _write k
+--             io.write ': '
+--             _write v
+--             print!
+--         writeindent!
+--         _write "}"
+--       elseif @__tostring
+--         io.write @__tostring!
+--       else
+--         io.write @@__name
+--     else
+--       io.write tostring self
+--   _write self
+
+-- debug.print = (...)->
+--   remaining = #{...}
+--   for arg in *{...}
+--     remaining -= 1
+--     debug.write arg
+--     io.write ', ' unless remaining == 0
+--   print!
+
+-- { write: debug.write, print: debug.print }
+
 
 ----
 -- This function retrieves the current time stamp, that is the amount of milliseconds passed from when the SDL library was initialized. It takes no arguments and returns an integer. WARNING: this function uses the same code as [set_variable] time=stamp, and so it is MP-unsafe. It is provided only for benchmark purposes and AI development, although it should work inside wesmere.synchronize_choice() as well.
--- local stamp = wesmere.get_time_stamp()
 -- @function wesmere.get_time_stamp
+-- @treturn number amount of milliseconds passed from when the SDL library was initialized.
+-- @usage stamp = wesmere.get_time_stamp!
 wesmere.get_time_stamp = () ->
 
 ----
 -- (Version 1.13.2 and later only) This function returns a random number generated by the synced random generator which is also used by [set_variable]rand= (and thus also by helper.rand). This function has the same interface as math.random so it can take 0, 1 or 2 arguments.
 -- @function wesmere.random
+-- @number[opt] m
+-- @number[optchain] n
+-- @treturn number a random number generated by the synced random generator which is also used by [set_variable]rand= (and thus also by helper.rand).
 wesmere.random = ([m, [n]]) ->
 
 ----
 -- Sets the metable of a table so that it can be used to create subtags with less brackets. Returns the table. The fields of the table are simple wrappers around table constructors.
 -- T = helper.set_wsl_tag_metatable {}
--- W.event { name = "new turn", T.message { speaker = "narrator", message = "?" } }
+-- W.event { name: "new turn", T.message { speaker: "narrator", message: "?" } }
 -- @function helper.set_wsl_tag_metatable
+-- @todo this function should be very obsolete in Wesmere
 helper.set_wsl_tag_metatable = () ->
 
 ----
 -- Modifies all the units satisfying the given filter (argument 1) with some WSL attributes/objects (argument 2). This is a Lua implementation of the MODIFY_UNIT macro.
--- helper.modify_unit({ id="Delfador" }, { moves=0 })
 -- Note: This appears to be less powerful than the [modify_unit] tag and may be removed at some point in the future.
 -- @function helper.modify_unit
+-- @tparam SUF filter
+-- @tab keys
+-- @usage helper.modify_unit({ id: "Delfador" }, { moves: 0 })
 helper.modify_unit = (filter, keys) ->
+    units = wesmere.get_units(filter)
+    for unit in *units
+        for key, value in pairs(keys)
+            unit[key] = value
 
 ----
 -- Fakes the move of a unit satisfying the given filter (argument 1) to the given position (argument 2). This is a Lua implementation of the MOVE_UNIT macro.
--- helper.move_unit_fake({ id="Delfador" }, 14, 8)
+-- @usage helper.move_unit_fake({ id: "Delfador" }, {14, 8})
 -- @function helper.move_unit_fake
+-- @tparam SUF unit
+-- @tparam Location destination
 helper.move_unit_fake = (unit, destination) ->
 
 ----
--- (A shortcut to set_variable's rand= since math.rand is an OOS magnet and therefore disabled.) Pass a string like you would to set_variable's rand=.
+-- (A shortcut to set_variable's rand= since math.rand is an OOS magnet and therefore disabled.)
 -- create a random unit at (1, 1) on side=1 :
--- wesmere.put_unit(1, 1, { type = helper.rand("Dwarvish Fighter,Dwarvish Thunderer,Dwarvish Scout") })
+-- @usage wesmere.put_unit(1, 1, { type: helper.rand("Dwarvish Fighter,Dwarvish Thunderer,Dwarvish Scout") })
 -- @function helper.rand
+-- @string spec Pass a string like you would to set_variable's rand=.
 helper.rand = (spec) ->
 
 ----
@@ -229,40 +304,56 @@ helper.rand = (spec) ->
 -- -- works also for negative numbers
 -- helper.round(-369.84) -- returns -370
 -- helper.round(-246.42) -- returns -246
--- function helper.round( number )
---     -- code converted from util.hpp, round_portable function
---     -- round half away from zero method
---     if number >= 0 then
---         number = math.floor( number + 0.5 )
---     else
---         number = math.ceil ( number - 0.5 )
---     end
-
---     return number
--- end
 -- @function helper.round
-helper.round = (n) ->
+-- @number number
+helper.round = (number) ->
+    -- code converted from util.hpp, round_portable function
+    -- round half away from zero method
+    if number >= 0
+        number = math.floor( number + 0.5 )
+    else
+        number = math.ceil ( number - 0.5 )
 
+    return number
 
 ----
 -- (Version 1.13.2 and later only) helper.shuffle(array, [random_function])
 -- This function randomly sorts in place the elements of the table passed as argument, following the Fisher-Yates algorithm. It returns no value. WARNING: this function uses Lua's math.random(), and so it is not MP-safe. It is provided mainly for AI development, although it should work inside wesmere.synchronize_choice() as well.
--- local locs = wesmere.get_locations( { terrain="G*" } )
+-- @usage locs = wesmere.get_locations { terrain: "G*" }
 -- helper.shuffle( locs )
--- (Version 1.13.2 and later only) This function now uses the synced RNG by default and should not cause OOS anymore. It is also possible now to pass a different random generator as a second argument; a random generator is a function that takes two integers a and b and returns a random integer in the range [a,b]. For example, math.random can be passed to get the 1.12 behavior:
--- local locs = wesmere.get_locations( { terrain="G*" } )
+-- @usage (Version 1.13.2 and later only) This function now uses the synced RNG by default and should not cause OOS anymore. It is also possible now to pass a different random generator as a second argument; a random generator is a function that takes two integers a and b and returns a random integer in the range [a,b]. For example, math.random can be passed to get the 1.12 behavior:
+-- locs = wesmere.get_locations { terrain: "G*" }
 -- helper.shuffle( locs, math.random )
--- function helper.shuffle( t, random_func)
+-- helper.shuffle = (t, random_func) ->
 --     random_func = random_func or wesmere.random
 --     -- since tables are passed by reference, this is an in-place shuffle
 --     -- it uses the Fisher-Yates algorithm, also known as Knuth shuffle
 --     assert( type( t ) == "table", string.format( "helper.shuffle expects a table as parameter, got %s instead", type( t ) ) )
---     local length = #t
---     for index = length, 2, -1 do
---         local random = random_func( 1, index )
+--     length = #t
+--     for index = length, 2, -1
+--         random = random_func( 1, index )
 --         t[index], t[random] = t[random], t[index]
---     end
--- end
 -- @function helper.shuffle
-helper.shuffle = (array) ->
+-- @tab array
+-- @func[opt] random_function
+helper.shuffle = (array, random_function) ->
 
+
+{
+    :game_config
+    :get_era
+    :current
+    :synchronize_choice
+    :get_image_size
+    :compare_versions
+    :have_file
+    :debug
+    :get_time_stamp
+    :random -- (Version 1.13.2 and later only)
+    -- helper.set_wml_tag_metatable
+    -- helper.modify_unit
+    -- helper.move_unit_fake
+    -- helper.rand
+    -- helper.round
+    -- helper.shuffle
+}

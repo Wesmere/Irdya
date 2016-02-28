@@ -128,3 +128,12 @@ helper.distance_between = (x1, x2, y1, y2) ->
 --     wesmere.put_unit(x, y)
 helper.adjacent_tiles = (x, y, include_border) ->
 
+
+{
+    :find_path
+    :find_vacant_tile
+    :find_reach
+    :find_cost_map
+    -- helper.distance_between
+    -- helper.adjacent_tiles
+}

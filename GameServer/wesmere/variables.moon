@@ -120,3 +120,20 @@ helper.set_variable_array(varname, array)
 Creates WSL container variables with given name from given table.
 helper.set_variable_array("target", { t1, t2, t3 })
 -- target[0] <- t1; target[1] <- t2; target[2] <- t3
+
+
+{
+    :get_variable
+    :set_variable
+    :get_all_vars -- (Version 1.13.0 and later only)
+-- helper.set_wml_var_metatable
+-- helper.get_child
+-- helper.get_nth_child (Version 1.13.2 and later only)
+-- helper.child_count (Version 1.13.2 and later only)
+-- helper.child_range
+-- helper.child_array (Version 1.13.2 and later only)
+-- helper.get_variable_array
+-- helper.get_variable_proxy_array
+-- helper.set_variable_array
+}
+

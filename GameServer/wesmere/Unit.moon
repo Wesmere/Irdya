@@ -120,24 +120,28 @@ class Unit
     ----
     -- Returns true if the given unit matches the WSL filter passed as the second argument. If other_unit is specified, it is used for the $other_unit auto-stored variable in the filter. Otherwise, this variable is not stored for the filter.
     -- @tparam Unit self
-    -- @tparam StandardUnitFilter filter
+    -- @tparam StandardUnitFilter|func filter
     -- @tparam[opt] Unit other_unit
     -- @treturn bool iff this unit matches the filter
     -- @usage assert(unit.canrecruit == wesmere.match_unit(unit, { can_recruit: true }))
     matches: (filter, other_unit) =>
-        if or_table = f["or"]
-            return true if @filter(or_table)
 
-        if and_table = f["and"]
-            return false unless @filter(and_table)
+        assert(type(f) == "function" or type(f) == "table")
+        return filter(@, other_unit) if type(f) == "function"
 
-        if not_table = f["not"]
-            return false if @filter(not_table)
+        return true if next(filter) == nil -- empty filter matches every unit
 
-        log.warn("filtering the unit with the id: #{@.id}")
+        if or_filter = filter["or"]
+            return true if @filter(or_filter)
 
-    -- assert(type(f) == "function" or type(f) == "table")
-    -- return f(@) if type(f) == "function"
+        if and_filter = filter["and"]
+            return false unless @filter(and_filter)
+
+        if not_filter = filter["not"]
+            return false if @filter(not_filter)
+
+        -- TODO log.warn("filtering the unit with the id: #{@.id}")
+
 --special ones
     -- defense: current defense of the unit on current tile
     -- (chance to hit %, like in movement type definitions)

@@ -1,5 +1,5 @@
 ----
--- @submodule wesmere
+-- @module wesmere
 
 ----
 -- From FilterWSL, this is the standard way of filtering on locations. The term StandardLocationFilter means that the set of such keys and tags (see below) can appear at that point. Sometimes a StandardLocationFilter needs to be included in a [filter_location] tag. There are however many tags which accept the StandardLocationFilter directly as an argument such as [store_locations]. Generally, if the tag [filter_location] is not mentioned to be a possible subtag of the outer tag in question, then don't put it.

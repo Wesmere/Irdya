@@ -1,15 +1,11 @@
----
+----
 -- @submodule wesmere
 
 -- LuaWSL:Units
 -- This page describes the LuaWSL functions for handling units.
 
----
+----
 -- A unit is a proxy table with the following fields:
--- @table unit
---
-
-
 -- x, y: integers (read only, read/write if the unit is not on the map)
 -- side: integer (read/write)
 -- id: string (read only)
@@ -63,6 +59,7 @@
 -- The metatable of these proxy tables appears as "unit".
 -- A unit can be either visible on the map (#wesmere.get_units, #wesmere.put_unit), or on a recall list (#wesmere.get_recall_units, #wesmere.put_recall_unit), or private to the Lua code (#wesmere.create_unit, #wesmere.copy_unit, #wesmere.extract_unit). The Lua code has complete control over the private units; they will not be modified unless accessed through the proxy unit. Units on the map and on the recall lists, however, can be modified by the user, the engine, WSL, independently of the Lua code. In particular, if a unit is killed, any further use of the proxy unit will cause an error. For units on the map, the proxy unit is valid as long as there is a unit on the map that has the same "underlying_id" WSL field as the original one. The behavior is similar for units on the recall lists. The valid field reflects the unit availability by returning "map", "recall", "private", or nil. The latter value is used for units that were removed (e.g. killed). In that case, the valid field is the only one that can be read without causing an error.
 -- The term "proxy", here in particular "proxy unit", means that the variable retrieved in the lua code (with get_units for example) is an accessor (reference) to the C++ object which represents that unit. This is very different from unit variables obtained by [store_unit] in wsl. The fields marked as "writable" above can be modified without the need to use put_unit afterwards. This same reason explains that modifications to the unit from outside the lua code (like [kill] invalidating the proxy unit) have immediate effect on the lua code's proxy unit variable (with the exception of private proxy units).
+-- @table unit
 
 -- Contents [hide]
 -- 1 wesmere.get_units
@@ -98,6 +95,13 @@
 wesmere.get_units = (filter) ->
 
 ----
+-- Returns the unit with the given underlying ID.
+-- @function wesmere.get_unit
+-- @number underlying_id
+-- @treturn Unit with the underlying_id
+-- @usage unit = wesmere.get_unit("kalenz")
+
+----
 -- Returns the unit at the given location
 -- @function wesmere.get_unit
 -- @number x
@@ -105,13 +109,11 @@ wesmere.get_units = (filter) ->
 -- @treturn Unit at the location
 -- @usage args = ...
 -- unit = wesmere.get_unit(args.x1, args.y1)
-
-----
--- Returns the unit with the given underlying ID.
--- @function wesmere.get_unit
--- @number underlying_id
--- @treturn Unit with the underlying_id
 wesmere.get_unit = (x, y) ->
+    unless y
+        return wesmere.units[x]
+
+    return wesmere.units[wesmere.board.units[x][y]]
 
 ----
 -- Returns true if the given unit matches the WSL filter passed as the second argument. If other_unit is specified, it is used for the $other_unit auto-stored variable in the filter. Otherwise, this variable is not stored for the filter.
@@ -131,6 +133,8 @@ wesmere.match_unit = (unit, filter, other_unit) ->
 ----
 -- Erases a unit from the map. After calling this on a unit, the unit is no longer valid.
 -- @function wesmere.erase_unit
+-- @number x
+-- @number y
 -- @see Unit:erase
 wesmere.erase_unit = (x, y) ->
     u = wesmere.get_unit(x, y)
@@ -142,6 +146,12 @@ wesmere.erase_unit = (x, y) ->
 -- @tparam StandardUnitFilter filter
 -- @treturn {Unit,...}
 wesmere.get_recall_units = (filter) ->
+    recall_units = for side in *wesmere.sides
+        for unit in *side.recall
+            if unit\match(filter)
+                unit
+            else continue
+    return recall_units
 
 ----
 -- Places a unit on a recall list. This unit is described either by a WSL table or by a proxy unit. The side of the recall list is given by the second argument, or by the side of the unit if missing.
@@ -164,6 +174,10 @@ wesmere.put_recall_unit = (unit, [side]) ->
 -- @usage u = wesmere.create_unit { type: "White Mage", gender: "female" }
 wesmere.create_unit = (unit_info) ->
 
+
+
+
+
 ----
 -- Creates a private unit from another unit.
 -- @function wesmere.copy_unit
@@ -183,7 +197,7 @@ wesmere.copy_unit = (unit) ->
 -- @see Unit:extract
 -- @usage -- remove all the units from the recall list of side 1 and put them in a WSL container
 -- l = {}
--- for u in *wesmere.get_recall_units { side: 1 })
+-- for u in *wesmere.get_recall_units { side: 1 }
 --     wesmere.extract_unit(u)
 --     table.insert(l, u.__cfg)
 -- helper.set_variable_array("player_recall_list", l)
@@ -208,7 +222,7 @@ wesmere.advance_unit = (unit, animate, fire_events) ->
 -- @tparam Unit It needs to be a proxy unit.
 -- @string type of the modification (one of "trait", "object", or "advancement"). The option "advance" applies effects as if the unit would advance (e.g. AMLA effects).
 -- describing the effect, so mostly containing [effect] children. See EffectWSL for details about effects.
--- @bool[opt] write_to_mods if false, causes it to not write the modification tag to the unit's [modifications] (as would be done with an [object] with no_write=true).
+-- @bool[opt] write_to_mods if false, causes it to not write the modification tag to the unit's [modifications] (as would be done with an [object] with no_write: true).
 -- @see Unit:add_modification
 -- @usage u = wesmere.get_units { canrecruit = true }[1]
 -- wesmere.add_modification(u, "object", { { "effect", { apply_to: "image_mod", replace: "RC(red>blue)" } } })
@@ -274,7 +288,8 @@ wesmere.unit_ability = (unit, ability_tag) ->
 -- max_moves, max_experience, max_hitpoints, level, cost: integers (read only)
 -- __cfg: WSL table (dump)
 -- The metatable of these proxy tables appears as "unit type".
--- local lich_cost = wesmere.unit_types["Ancient Lich"].cost
+-- @usage lich_cost = wesmere.unit_types["Ancient Lich"].cost
+wesmere.unit_types = {}
 
 ----
 -- This is not a function but a table indexed by race ids. Its elements are proxy tables for all races the engine knows about. known fields of each element:
@@ -289,23 +304,27 @@ wesmere.unit_ability = (unit, ability_tag) ->
 -- (all read only)
 -- __cfg: WSL table (dump)
 -- @usage wesmere.message(tostring(wesmere.races["lizard"].name))
+wesmere.races = {}
 
 ----
 -- Returns a table with named fields (trait id strings) holding the wsl tables defining the traits. arguments: none. All global traits the engine knows about, race-specific traits are not included. Known fields and subtags of each element are the ones which were given in the wsl definition of the trait.
 -- @function wesmere.get_traits
--- @usage wesmere.message(tostring(wesmere.get_traits().strong.male_name))
+-- @usage wesmere.message(tostring(wesmere.get_traits!.strong.male_name))
+-- @treturn tab hmmmm
 wesmere.get_traits = () ->
+
+--
+-- @todo traits
+-- wesmere.traits = {}
 
 ----
 -- Computes the hitpoint distribution and status chance after a combat between two units. The first unit is the attacker; it does not have to be on the map, though its location should be meaningful. The second unit is the defender; it has to be on the map.
--- @function wesmere.simulate_combat
-wesmere.simulate_combat = (attacker, [attacker_weapon_index], defender, [defender_weapon_index]) ->
 -- Optional integers can be passed after each unit to select a particular weapon, otherwise the "best" one is selected. When giving the weapon, the parameter is the weapon number (integer, starting at 1) and not an element from the table returned by helper.child_range(att, "attack").
 -- @usage display_stats = (n, t) ->
 --     wesmere.message(string.format(
 --         "Chance for the %s\n  to be slowed: %f,\n  to be poisoned: %f,\n  to die: %f.\nAverage HP: %f.",
 --         n, t.slowed, t.poisoned, t.hp_chance[0], t.average_hp))
--- local att_stats, def_stats = wesmere.simulate_combat(att, att_weapon, def, def_weapon)
+-- att_stats, def_stats = wesmere.simulate_combat(att, att_weapon, def, def_weapon)
 -- display_stats("attacker", att_stats)
 -- display_stats("defender", def_stats)
 -- Returns 2 additional tables which contain information about the weapons and the effect of single hits with these keys: num_blows, damage, chance_to_hit, poisons, slows, petrifies, plagues, plague_type, backstabs, rounds, firststrike, drains, drain_constant, drain_percent, attack_num, name. Name is the wsl name not the description. If there is no weapon, then name will be nil
@@ -313,6 +332,8 @@ wesmere.simulate_combat = (attacker, [attacker_weapon_index], defender, [defende
 -- wesmere.message(string.format(
 --     "The attack %s should be countered with %s, which does %d damage, has %d%% chance to hit and forces %d attack rounds due to its berserk ability.",
 --     att_weapon.name, def_weapon.name or "no weapon", def_weapon.damage, def_weapon.chance_to_hit, def_weapon.rounds))
+-- @function wesmere.simulate_combat
+wesmere.simulate_combat = (attacker, [attacker_weapon_index], defender, [defender_weapon_index]) ->
 
 ----
 -- Changes the type of a unit and adjust attributes accordingly. Note that hit points are only changed if necessary to accommodate the new maximum hit points. Poison is automatically removed if the transformed unit is immune.
@@ -328,3 +349,30 @@ wesmere.simulate_combat = (attacker, [attacker_weapon_index], defender, [defende
 -- u.status.poisoned = false
 wesmere.transform_unit = (unit, to_type) ->
     unit\transform(to_type)
+
+
+{
+    :get_units
+    :get_unit
+    :match_unit
+    :put_unit
+    :erase_unit -- (Version 1.13.2 and later only)
+    :get_recall_units
+    :put_recall_unit
+    :create_unit
+    :copy_unit
+    :extract_unit
+    :add_modification
+    :unit_resistance
+    :unit_defense
+    :unit_movement_cost
+    :unit_vision_cost
+    :unit_jamming_cost
+    :unit_ability
+    :unit_types
+    :races
+    :get_traits
+    :simulate_combat
+    :transform_unit
+    :effects -- (Version 1.13.2 and later only)
+}
