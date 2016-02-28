@@ -13,7 +13,7 @@ wsl_action
             description: [[StandardUnitFilter all the units matching the filter and having the heals ability will have their animation played (if animate is set to true) for each of the units healed.]]
 
         amount:
-            description: [[(integer, default full) the maximum points the unit(s) will be healed. Can't set below 1 or above max_hitpoints. If "full", sets hitpoints to max_hitpoints. Before 1.9 the default is 0.]]
+            description: [[(integer, default full) the maximum points the unit(s) will be healed. Can't set below 1 or above max_hitpoints. If "full", sets hitpoints to max_hitpoints.]]
             type: "Integer"
 
         animate:

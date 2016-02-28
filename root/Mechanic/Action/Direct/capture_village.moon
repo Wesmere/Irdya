@@ -33,8 +33,7 @@ wsl_action
             default: false
             type: "bool"
 
-    -- returns:
-    --     description: "The location of all villages that got the ownership transfered."
-    --     type: "Location"
-    --     list: true
-
+    return:
+        description: "The location of all villages that got the ownership transfered."
+        type: "Location"
+        list: true

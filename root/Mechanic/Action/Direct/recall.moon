@@ -4,13 +4,24 @@ wsl_action
 If neither a valid map location is provided nor a leader on the map would be able to recall it, the tag is ignored.]]
 
     scheme:
-
--- StandardUnitFilter: the first matching unit will be recalled. If no units match this tag is ignored. Do not use a [filter] tag. If a comma separated list is given, every unit currently considered for recall is checked against all the types (not each single one of the types against all units).
--- x,y: the unit is placed here instead of next to the leader.
-
+        filter:
+            description: [[the first matching unit will be recalled. If no units match this tag is ignored. If a comma separated list is given, every unit currently considered for recall is checked against all the types (not each single one of the types against all units).]]
+            type: {"table", "function"}
+            table: "SUF" 
+        x:
+            description: "the unit is placed here instead of next to the leader."
+            type: "number"
+        y:
+            type: "number"
         show:
-            description:[[yes/no, default yes: whether the unit is animated (faded in) or instantly displayed]]
+            description: "whether the unit is animated (faded in) or instantly displayed"
+            default: true
+            type: "bool"
         fire_event:
-            description: [[boolean yes|no (default no); whether any according prerecall or recall events shall be fired.]]
+            description: "whether any according prerecall or recall events shall be fired."
+            type: "bool"
+            default: false
         check_passability:
-            description: [[(boolean yes|no, default yes): If yes, checks for terrain passability when placing the unit (a nearby passable hex is chosen).]]
+            description: "If true, checks for terrain passability when placing the unit (a nearby passable hex is chosen)."
+            type: "bool"
+            default: true
