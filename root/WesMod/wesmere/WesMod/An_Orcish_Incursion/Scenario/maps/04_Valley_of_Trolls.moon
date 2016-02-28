@@ -1,4 +1,8 @@
-Mm, Mm, Mm, Hhd, Re, Re, Gd, Re, Gd, Ww, Gd^Fp, Gd, Gd, Hhd, Mm, Mm, Mm, Mm, Xu, Xu, Xu, Xu
+
+map
+    id:"04_Valley_of_Trolls"
+    map_data:[[
+    Mm, Mm, Mm, Hhd, Re, Re, Gd, Re, Gd, Ww, Gd^Fp, Gd, Gd, Hhd, Mm, Mm, Mm, Mm, Xu, Xu, Xu, Xu
 Mm, Mm, Mm, Hhd, Re, Re, Gd, Re, Gd, Ww, Gd^Fp, Gd, Gd, Hhd, Mm, Mm, Mm, Mm, Xu, Xu, Xu, Xu
 Mm, Mm, Re, Re, Hhd, Hhd, Hhd^Vc, Gd, Gd, Ww, Gd^Fp, Gd^Vo, Gd, Hhd, Mm, Mm, Xu, Xu, Cud, Xu, Xu, Xu
 Mm, Mm, Uu, Mm, Mm, Mm, Hhd, Gd, Gd, Ww, Ww, Gd^Fp, Gd, Hhd, Mm, Mm, Uh, Cud, 3 Kud, Cud, Xu, Xu
@@ -20,3 +24,4 @@ Xu, Xu, Xu, Mm, Mm, Mm, Hhd, Hhd, Gd, Gd, Gd, Gll^Fp, Gd, Ww, Gd^Vo, Gd, Ce, Ce,
 Mm, Mm, Mm, Mm, Mm, Hhd, Hhd^Vc, Gd, Gd, Gd, Hhd, Gd, Gd, Ww, Ww, Gd, Ce, 1 Ke, Ce, Gd, Gd, Gd
 Mm, Mm, Mm, Mm, Mm, Hhd, Hhd, Hhd, Hhd, Hhd, Gll^Fp, Gll^Fp, Gll^Fp, Gd, Ww, Gd, Gd, Ce, Gd, Re, Re, Re
 Mm, Mm, Mm, Mm, Mm, Hhd, Hhd, Hhd, Hhd, Hhd, Gll^Fp, Gll^Fp, Gll^Fp, Gd, Ww, Gd, Gd, Gd, Gd, Re, Re, Re
+]]
