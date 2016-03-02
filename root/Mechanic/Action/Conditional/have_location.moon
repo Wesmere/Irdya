@@ -1,10 +1,4 @@
 
-_ = (str) -> return str
-
-parse_range = (str) ->
-
-
-
 wsl_action
     id: "have_location"
     description: _ "A location matching this filter exists."
@@ -14,9 +8,8 @@ wsl_action
             return kernel\get_location(cfg) != nil
 
         locations = kernel\get_locations(cfg)
-
         number = #locations
-
+        return wesmere.match_range(number, cfg.count)
 
     scheme:
         StandardLocationFilter:
