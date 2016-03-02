@@ -6,10 +6,7 @@
         
 # KDE dolphin
 .directory
-
-# Lua sources
-*.lua
-        
+       
 # Compiled Lua sources
 luac.out
 
