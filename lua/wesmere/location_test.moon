@@ -8,14 +8,19 @@ describe "Location", ->
 
         loc1 = Location(1,1)
 
-        it "distance_between (1,2)", ->
+        it "distance_between (1/2)", ->
             loc2 = Location(1,2)
             assert.are.equal 1, loc1\distance_between(loc2.x, loc2.y)
 
+        loc2 = Location(12,18)
         it "distance_between (12/18)", ->
-            loc2 = Location(12,18)
             assert.are.equal 23, loc1\distance_between(loc2.x, loc2.y)
 
+        it "(1/1) - (12/18)", ->
+            assert.are.equal 23, loc1 - loc2
+
+        it "alternative argument", ->
+            assert.are.equal 23, loc1\distance_between(loc2)
 
     describe "(14/18)", ->
 
@@ -25,7 +30,7 @@ describe "Location", ->
             assert(loc\matches_range("12-16", "17-23"))
 
         it "matches not", ->
-            assert(loc\matches_range("15-17", "14-17"))
+            assert(not loc\matches_range("15-17", "14-17"))
 
 
     describe "Equality test", ->
@@ -65,6 +70,12 @@ describe "Location", ->
             assert.are.equal 5, loc.x
             assert.are.equal 10, loc.y
 
+    describe "index access", ->
+
+        it "Location(5, 10)", ->
+            loc = Location(5, 10)
+            assert.are.equal 5, loc[1]
+            assert.are.equal 10, loc[2]
 
     describe "adjacents! tests", ->
 
