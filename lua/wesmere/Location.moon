@@ -76,9 +76,10 @@ class Location extends HasGetters
     -- @number y
     -- @treturn number the distance
     distance_between: (x, y) =>
-        hdist = math.abs(x - @x)
-        vdist = math.abs(y - @y)
-    	if (y < @y and not is_even(x) and is_even(@x)) or (@y < y and not is_even(@x) and is_even(x))
+        other = Location(x, y)
+        hdist = math.abs(other.x - @x)
+        vdist = math.abs(other.y - @y)
+    	if (other.y < @y and not is_even(other.x) and is_even(@x)) or (@y < other.y and not is_even(@x) and is_even(other.x))
     	    vdist = vdist + 1
     	return math.max(hdist, vdist + math.floor(hdist / 2))
 
