@@ -72,8 +72,8 @@ class Location extends HasGetters
 
     ----
     -- Returns the distance between two tiles given by their WSL coordinates.
-    -- @number x
-    -- @number y
+    -- @tparam number|Location x x-coordinate or Location
+    -- @number y ignored if the first argument is a Location
     -- @treturn number the distance
     distance_between: (x, y) =>
         other = Location(x, y)
