@@ -4,6 +4,7 @@
 
 moon  = require "moon"
 bit32 = require "bit32"
+HasGetters = require "HasGetters"
 
 ----
 -- The fields of the Location table
@@ -11,9 +12,13 @@ bit32 = require "bit32"
 -- @tfield number x the x coordinate
 -- @tfield number y the y coordinate
 
-class Location
 
-    -- DIRECTION: { NORTH, NORTH_EAST, SOUTH_EAST, SOUTH, SOUTH_WEST, NORTH_WEST, NDIRECTIONS }
+class Location extends HasGetters
+    getters:
+        [1]: =>
+            @x
+        [2]: =>
+            @y
 
     ----
     -- Match the location against a pair of location ranges.
