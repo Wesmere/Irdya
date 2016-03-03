@@ -12,7 +12,10 @@ HasGetters = require "HasGetters"
 -- @tfield number x the x coordinate
 -- @tfield number y the y coordinate
 
-
+----
+-- The location class is mostly meant to isolate coordination quickly from a table.
+-- Whenever you implement a wsl_action, don't look for x,y or loc keys but just feed the Location constructor the wsl_action's argument table.
+-- @usage loc = Location(cfg) -- gives us a location no matter
 class Location extends HasGetters
     getters:
         [1]: =>
@@ -33,6 +36,8 @@ class Location extends HasGetters
 
         return true
 
+    --
+    -- used internally only
     process_args = (x, y) ->
         switch moon.type(x)
             when "number"
@@ -76,6 +81,15 @@ class Location extends HasGetters
     	if (y < @y and not is_even(x) and is_even(@x)) or (@y < y and not is_even(@x) and is_even(x))
     	    vdist = vdist + 1
     	return math.max(hdist, vdist + math.floor(hdist / 2))
+
+    ----
+    -- Syntactic sugar for distance_between
+    -- @usage dist = loc_a - loc_b
+    -- @treturn number the distance
+    -- @see distance_between
+    -- @tparam Location other
+    __sub: (other) =>
+        return @distance_between(other.x, other.y)
 
     ----
     -- Constructor
