@@ -1,1 +1,15 @@
- 
+
+= Wesmere API
+This api is the core of the game server.
+It is not meant to be used directly by the UMC Designer.
+
+Currently all functions are located in a single table.
+
+
+== Documentation
+
+The library uses the ldoc tool to allow the autogeneration of a API reference.
+
+== Unit Tests
+
+The busted unit test framework can be used to run the test suite on the module.
