@@ -4,6 +4,13 @@
 -- @usage items = wesmere.require "lua/wsl/items.lua"
 -- @submodule wesmere
 
+board =
+    map:
+        width: 0
+        height: 0
+        border_size: 0
+    units: {}
+
 ----
 -- Returns the width, the height, and the border size of the map.
 -- @function wesmere.get_map_size
@@ -12,9 +19,9 @@
 -- @treturn number border size
 -- @usage w,h,b = wesmere.get_map_size!
 get_map_size = () ->
-    width  = wesmere.board.map.width
-    height = wesmere.board.map.height
-    border = wesmere.board.map.border_size
+    width  = board.map.width
+    height = board.map.height
+    border = board.map.border_size
     return width, height, border
 
 ----
@@ -23,7 +30,7 @@ get_map_size = () ->
 -- @tparam number y
 -- @usage is_grassland = wesmere.get_terrain(12, 15) == "Gg"
 get_terrain = (x, y) ->
-    return wesmere.board.map[x][y]
+    return board.map[x][y]
 
 ----
 -- Modifies the terrain at the given location.
@@ -37,18 +44,18 @@ get_terrain = (x, y) ->
 -- @usage create_village = (x, y) ->
 --     wesmere.set_terrain(x, y, "Gg^Vh")
 set_terrain = (x, y, terrain_code, layer="both", replace_if_failed=false) ->
-    old = wesmere.board.map[x][y]
-    base, overlay = old\match("([^\^]+),([^\^]+)")
+    old = board.map[x][y]
+    -- base, overlay = old\match("([^\^]+),([^\^]+)")
 
     switch layer
         when nil
-            wesmere.board.map[x][y] = terrain_code
+            board.map[x][y] = terrain_code
         when "both"
-            wesmere.board.map[x][y] = terrain_code
+            board.map[x][y] = terrain_code
         when "overlay"
-            wesmere.board.map[x][y] = base + "^" + terrain_code
+            board.map[x][y] = base + "^" + terrain_code
         when "base"
-            wesmere.board.map[x][y] = terrain_code + "^" + overlay
+            board.map[x][y] = terrain_code + "^" + overlay
         else
             wesmere.wsl_error("wesmere.set_terrain: unknown layer: " + layer)
 
@@ -352,10 +359,10 @@ match_location = (x, y, filter) ->
     --     }
     -- }
     if owner_side = filter.owner_side
-        return false if wesmere.board.village[loc.x][loc.y] != owner_side
+        return false if board.village[loc.x][loc.y] != owner_side
 
     if filter_owner = filter.filter_owner
-        owner_side = wesmere.board.village[loc.x][loc.y]
+        owner_side = board.village[loc.x][loc.y]
         return false unless wesmere.match_side(owner_side, filter_owner)
 
     return true
@@ -387,7 +394,7 @@ remove_tile_overlay = (x, y, filename) ->
 -- @string filename
 -- @usage items = wesmere.require "lua/wsl/items.lua"
 -- items.place_image(17, 42, "items/orcish-flag.png")
-items.place_image = (x, y, filename) ->
+-- items.place_image = (x, y, filename) ->
 
 ----
 -- Behaves the same as #items.place_image but for halos.
@@ -395,7 +402,7 @@ items.place_image = (x, y, filename) ->
 -- @number x
 -- @number y
 -- @string filename
-items.place_halo = (x, y, filename) ->
+-- items.place_halo = (x, y, filename) ->
 
 ----
 -- Removes an overlay set by #items.place_image or #items.place_halo. If no filename is provided, all the overlays on a given tile are removed.
@@ -404,10 +411,11 @@ items.place_halo = (x, y, filename) ->
 -- @number y
 -- @string[opt] filename
 -- @usage items.remove(17, 42, "items/orcish-flag.png")
-items.remove = (x, x, filename) ->
+-- items.remove = (x, x, filename) ->
 
 
 {
+    :board
     :get_map_size
     :get_terrain
     :set_terrain
