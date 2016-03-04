@@ -5,7 +5,8 @@
 moon = require "moon"
 Set = require "pl.Set"
 
-Location = require "kernel/Location"
+Loc = require "Location"
+HasGetters = require "HasGetters"
 
 ---
 -- @table this
@@ -74,12 +75,27 @@ Location = require "kernel/Location"
 
 ----
 -- Unit
-class Unit
+class Unit extends HasGetters
+
+    getters: (key) =>
+        switch key
+            when "x"
+                return wesmere.board.units[@id].x
+            when "y"
+                return wesmere.board.units[@id].y
+            when "loc"
+                return wesmere.board.units[@id]
+            -- when "type"
+            --     return wesmere.unit_types[@type]
+            else
+                return wesmere.unit_types[@type][key]
+
     ----
     -- Constructor
     -- @param self
     -- @param cfg
     new: (cfg) =>
+        wesmere.wsl_error("Unit without type.") unless cfg.type
         @ = cfg
 
     ----
@@ -108,13 +124,6 @@ class Unit
     -- Return the terrain the unit is currenty on
     -- @param self
     terrain: =>
-        log.warn("Not implemented yet")
-
-    ---
-    -- Return the position of the unit
-    -- @tparam Unit self
-    -- @treturn Location of the unit
-    loc: =>
         log.warn("Not implemented yet")
 
     ----
@@ -249,18 +258,19 @@ class Unit
     clone: () =>
 
     ----
-    -- superjo
+    -- Removes the unit from the map
     -- @tparam Unit self
     extract: () =>
 
     ----
-    -- yeah
+    -- Returns the unit's id in string context
     -- @tparam Unit self
+    -- @treturn string "id: <unit_id>"
     __tostring: =>
         return("id: " .. @data.id)
 
     ----
-    -- yes yes yes
+    -- Compare function
     -- @tparam Unit self
     -- @tparam Unit other
     __eq: (other) =>
