@@ -92,7 +92,7 @@
 -- @tparam StandardUnitFilter filter
 -- @usage leaders_on_side_two = get_units { side: 2, can_recruit: true }
 -- name_of_leader = leaders_on_side_two[1].name
-wesmere.get_units = (filter) ->
+get_units = (filter) ->
 
 ----
 -- Returns the unit with the given underlying ID.
@@ -109,7 +109,7 @@ wesmere.get_units = (filter) ->
 -- @treturn Unit at the location
 -- @usage args = ...
 -- unit = wesmere.get_unit(args.x1, args.y1)
-wesmere.get_unit = (x, y) ->
+get_unit = (x, y) ->
     unless y
         return wesmere.units[x]
 
@@ -122,7 +122,7 @@ wesmere.get_unit = (x, y) ->
 -- @tparam StandardUnitFilter filter
 -- @tparam[opt] Unit other_unit
 -- @usage assert(unit.can_recruit == wesmere.match_unit(unit, { can_recruit: true }))
-wesmere.match_unit = (unit, filter, other_unit) ->
+match_unit = (unit, filter, other_unit) ->
     return unit\match(filter, other_unit)
 
 ----
@@ -136,7 +136,7 @@ wesmere.match_unit = (unit, filter, other_unit) ->
 -- @number x
 -- @number y
 -- @see Unit:erase
-wesmere.erase_unit = (x, y) ->
+erase_unit = (x, y) ->
     u = wesmere.get_unit(x, y)
     return u\erase!
 
@@ -145,7 +145,7 @@ wesmere.erase_unit = (x, y) ->
 -- @function wesmere.get_recall_units
 -- @tparam StandardUnitFilter filter
 -- @treturn {Unit,...}
-wesmere.get_recall_units = (filter) ->
+get_recall_units = (filter) ->
     recall_units = for side in *wesmere.sides
         for unit in *side.recall
             if unit\match(filter)
@@ -162,7 +162,7 @@ wesmere.get_recall_units = (filter) ->
 -- @usage -- put the unit at location 17,42 on the recall list for side 2
 -- wesmere.put_recall_unit(wesmere.get_units({ x: 17, y: 42 })[1], 2)
 -- @usage wesmere.put_recall_unit = (unit, [side]) ->
-wesmere.put_recall_unit = (unit, side) ->
+put_recall_unit = (unit, side) ->
     if moon.type(unit) != Unit
         u = Unit(unit)
         u\to_recall(side)
@@ -173,7 +173,7 @@ wesmere.put_recall_unit = (unit, side) ->
 -- @function wesmere.create_unit
 -- @tparam unit_table unit_info
 -- @usage u = wesmere.create_unit { type: "White Mage", gender: "female" }
-wesmere.create_unit = (unit_info) ->
+create_unit = (unit_info) ->
 
 
 
@@ -187,7 +187,7 @@ wesmere.create_unit = (unit_info) ->
 -- u = wesmere.copy_unit(wesmere.get_units({ type: "Thug" })[1])
 -- wesmere.put_unit(u.x, u.y)
 -- -- u is still valid at this point
-wesmere.copy_unit = (unit) ->
+copy_unit = (unit) ->
     return unit\clone!
 
 
@@ -203,7 +203,7 @@ wesmere.copy_unit = (unit) ->
 --     table.insert(l, u.__cfg)
 -- helper.set_variable_array("player_recall_list", l)
 -- Note: if the unit is on the map, it is just a shortcut for calling #wesmere.copy_unit and then #wesmere.put_unit without a unit. It is, however, the only way for removing a unit from a recall list without putting it on the map.
-wesmere.extract_unit = (unit) ->
+extract_unit = (unit) ->
     unit\extract!
 
 ----
@@ -214,7 +214,7 @@ wesmere.extract_unit = (unit) ->
 -- @tparam Unit unit
 -- @bool animate specifies whether the advancement should be animated.
 -- @bool fire_events specifies whether advancement related events should be fired.
-wesmere.advance_unit = (unit, animate, fire_events) ->
+advance_unit = (unit, animate, fire_events) ->
     unit\advance(animate, fire_events)
 
 ----
@@ -227,7 +227,7 @@ wesmere.advance_unit = (unit, animate, fire_events) ->
 -- @see Unit:add_modification
 -- @usage u = wesmere.get_units { canrecruit = true }[1]
 -- wesmere.add_modification(u, "object", { { "effect", { apply_to: "image_mod", replace: "RC(red>blue)" } } })
-wesmere.add_modification = (unit, type, effects, write_to_mods) ->
+add_modification = (unit, type, effects, write_to_mods) ->
     unit\add_modification(type, effects, write_to_mods)
 
 ----
@@ -237,7 +237,7 @@ wesmere.add_modification = (unit, type, effects, write_to_mods) ->
 -- @tparam[opt] Location loc coordinates of an optional map location (for the purpose of taking abilities into account).
 -- @see Unit:resistance
 -- @usage fire_resistance = 100 - wesmere.unit_resistance(u, "fire")
-wesmere.unit_resistance = (unit, damage_type) ->
+unit_resistance = (unit, damage_type) ->
     return unit\resistance(damage_type)
 
 ----
@@ -245,7 +245,7 @@ wesmere.unit_resistance = (unit, damage_type) ->
 -- @function wesmere.unit_defense
 -- @see Unit:defense
 -- @usage flat_defense = 100 - wesmere.unit_defense(u, "Gt")
-wesmere.unit_defense = (unit, terrain_code) ->
+unit_defense = (unit, terrain_code) ->
     return unit\defense(terrain_code)
 
 ----
@@ -253,7 +253,7 @@ wesmere.unit_defense = (unit, terrain_code) ->
 -- @function wesmere.unit_movement_cost
 -- @usage move_cost = wesmere.unit_movement_cost(u, "Gt")
 -- @see Unit:movement
-wesmere.unit_movement_cost = (unit, terrain_code) ->
+unit_movement_cost = (unit, terrain_code) ->
     unit\movement(terrain_code)
 
 ----
@@ -261,7 +261,7 @@ wesmere.unit_movement_cost = (unit, terrain_code) ->
 -- @function wesmere.unit_vision_cost
 -- @see Unit:vision
 -- @usage see_cost = wesmere.unit_vision_cost(u, "Gt")
-wesmere.unit_vision_cost = (unit, terrain_code) ->
+unit_vision_cost = (unit, terrain_code) ->
     return unit\vision(terrain_code)
 
 ----
@@ -269,7 +269,7 @@ wesmere.unit_vision_cost = (unit, terrain_code) ->
 -- @function wesmere.unit_jamming_cost
 -- @see Unit:jamming
 -- @usage jam_cost = wesmere.unit_jamming_cost(u, "Gt")
-wesmere.unit_jamming_cost = (unit, terrain_code) ->
+unit_jamming_cost = (unit, terrain_code) ->
     return unit\jamming(terrain_code)
 
 ----
@@ -278,7 +278,7 @@ wesmere.unit_jamming_cost = (unit, terrain_code) ->
 -- @see Unit:ability
 -- @usage has_teleport = (u) ->
 --     return wesmere.unit_ability(u, "teleport")
-wesmere.unit_ability = (unit, ability_tag) ->
+unit_ability = (unit, ability_tag) ->
     return unit\ability(ability_tag)
 
 ----
@@ -290,7 +290,7 @@ wesmere.unit_ability = (unit, ability_tag) ->
 -- __cfg: WSL table (dump)
 -- The metatable of these proxy tables appears as "unit type".
 -- @usage lich_cost = wesmere.unit_types["Ancient Lich"].cost
-wesmere.unit_types = {}
+unit_types = {}
 
 ----
 -- This is not a function but a table indexed by race ids. Its elements are proxy tables for all races the engine knows about. known fields of each element:
@@ -305,18 +305,18 @@ wesmere.unit_types = {}
 -- (all read only)
 -- __cfg: WSL table (dump)
 -- @usage wesmere.message(tostring(wesmere.races["lizard"].name))
-wesmere.races = {}
+races = {}
 
 ----
 -- Returns a table with named fields (trait id strings) holding the wsl tables defining the traits. arguments: none. All global traits the engine knows about, race-specific traits are not included. Known fields and subtags of each element are the ones which were given in the wsl definition of the trait.
 -- @function wesmere.get_traits
 -- @usage wesmere.message(tostring(wesmere.get_traits!.strong.male_name))
 -- @treturn tab hmmmm
-wesmere.get_traits = () ->
+get_traits = () ->
 
 --
 -- @todo traits
--- wesmere.traits = {}
+traits = {}
 
 ----
 -- Computes the hitpoint distribution and status chance after a combat between two units. The first unit is the attacker; it does not have to be on the map, though its location should be meaningful. The second unit is the defender; it has to be on the map.
@@ -335,7 +335,7 @@ wesmere.get_traits = () ->
 --     att_weapon.name, def_weapon.name or "no weapon", def_weapon.damage, def_weapon.chance_to_hit, def_weapon.rounds))
 -- @function wesmere.simulate_combat
 -- @usage wesmere.simulate_combat = (attacker, [attacker_weapon_index], defender, [defender_weapon_index]) ->
-wesmere.simulate_combat = (attacker, attacker_weapon_index, defender, defender_weapon_index) ->
+simulate_combat = (attacker, attacker_weapon_index, defender, defender_weapon_index) ->
 
 ----
 -- Changes the type of a unit and adjust attributes accordingly. Note that hit points are only changed if necessary to accommodate the new maximum hit points. Poison is automatically removed if the transformed unit is immune.
@@ -349,7 +349,7 @@ wesmere.simulate_combat = (attacker, attacker_weapon_index, defender, defender_w
 -- -- If a full heal is desired:
 -- u.hitpoints = u.max_hitpoints
 -- u.status.poisoned = false
-wesmere.transform_unit = (unit, to_type) ->
+transform_unit = (unit, to_type) ->
     unit\transform(to_type)
 
 
