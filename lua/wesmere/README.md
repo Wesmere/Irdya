@@ -13,3 +13,14 @@ The library uses the ldoc tool to allow the autogeneration of a API reference.
 == Unit Tests
 
 The busted unit test framework can be used to run the test suite on the module.
+
+luarocks can be used to install busted into your lua environment.
+
+On a debian/ubuntu linux system:
+
+```bash
+sudo apt-get install luarocks
+sudo luarocks install busted
+cd Irdya/lua/Wesmere
+busted
+```
