@@ -4,8 +4,10 @@ wsl_action
 
     action: (cfg, wesmere) ->
         var = cfg.variable or "turns"
-        wesmere.set_variable(var, wesmere.game_config.last_turn)
+        wesmere.set_variable(var, wesmere.current.last_turn)
 
     scheme:
         variable:
-            description: "(default='turns') the name of the variable in which to store the turn limit."
+            description: "the name of the variable in which to store the turn limit."
+            default: "turns"
+            type: "string"

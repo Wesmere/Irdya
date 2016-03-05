@@ -1,7 +1,7 @@
 
 wsl_action
     id: "have_location"
-    description: _ "A location matching this filter exists."
+    description: "A location matching this filter exists."
 
     action: (cfg, kernel) ->
         unless cfg.count
