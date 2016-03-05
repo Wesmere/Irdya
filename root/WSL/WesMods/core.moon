@@ -1,4 +1,4 @@
 
 wsl_handler
 
-    id: core
+    id: "core"
