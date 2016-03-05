@@ -5,10 +5,10 @@ describe "Wesmods", ->
 
     describe "Load Root", ->
 
-        it "root", ->
+        pending "root", ->
             wesmods.load_wesmod_by_path("../../root")
 
     describe "Scan Root", ->
 
-        it "Testroot", ->
+        pending "Testroot", ->
             wesmods.scan_root("../../root")
