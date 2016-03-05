@@ -35,6 +35,9 @@
   * ActionWSL functions (the counterpart to ActionWML)
   * CommandWSL functions ()
 * "test" a wesmod meant for testing purposes
+  * a test scenario
+  * some Units
+  * some terrain
 * "wesmere" - a wesmod with the wesnoth game content
   * port of the AOI campaign
   * description for all of Wesnoth's mainline units
