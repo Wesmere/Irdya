@@ -8,6 +8,10 @@ Set = require "pl.Set"
 Loc = require "Location"
 HasGetters = require "HasGetters"
 
+import wsl_error from require "actions"
+import board from require "map"
+import unit_types from require "units"
+
 ---
 -- @table this
 -- @tfield number hitpoints
@@ -73,6 +77,12 @@ HasGetters = require "HasGetters"
 -- @tfield {tab,...} modifications.object an object the unit has. Same format as [object], DirectActionsWSL.
 -- @tfield {tab,...} modifications.advance an advancement the unit has. Same format as [advancement], UnitTypeWSL. Might be used if the unit type has some advancements, but this particular one is supposed to have some of them already taken. (Version 1.13.2 and later only) In 1.13.2 and later this has been renamed to [advancement], to match the UnitTypeWSL tag of the same name.
 
+generate_id = (cfg) ->
+    return cfg.unit_type
+
+generate_name = (cfg) ->
+
+
 ----
 -- Unit
 class Unit extends HasGetters
@@ -80,23 +90,39 @@ class Unit extends HasGetters
     getters: (key) =>
         switch key
             when "x"
-                return wesmere.board.units[@id].x
+                if loc = board.units[@id]
+                    return loc.x
             when "y"
-                return wesmere.board.units[@id].y
+                if loc = board.units[@id]
+                    return loc.y
             when "loc"
-                return wesmere.board.units[@id]
-            -- when "type"
-            --     return wesmere.unit_types[@type]
+                return board.units[@id]
             else
-                return wesmere.unit_types[@type][key]
+                return unit_types[@type][key]
 
     ----
     -- Constructor
     -- @param self
     -- @param cfg
     new: (cfg) =>
-        wesmere.wsl_error("Unit without type.") unless cfg.type
-        @ = cfg
+
+        @gender = cfg.gender
+
+        @id = cfg.id or generate_id(cfg)
+        @name = cfg.name or generate_name(cfg)
+        @side = cfg.side or 1
+
+        wsl_error("Unit without type.") unless cfg.type
+        @type = cfg.type
+        unit_type = unit_types[@type]
+        unless unit_type
+            wsl_error("Unit Type '#{@type}' is unknown.")
+
+        @max_hitpoints = unit_type.hitpoints
+        @hitpoints = cfg.hitpoints or @max_hitpoints
+
+        @max_experience = cfg.max_experience or unit_type.experience
+        @experience = cfg.experience or 0
 
     ----
     -- Prints the table containing all the unit's data
@@ -166,8 +192,8 @@ class Unit extends HasGetters
             return false if Set(f.speaker)[@id]
         if f.type
             return false if Set(f.type)[@type]
-    -- TODO implement table filter
-    return true
+        -- TODO implement table filter
+        return true
 
     ----
     -- Places a unit on the map. This unit is described either by a WSL table or by a proxy unit. Coordinates can be passed as the first two arguments, otherwise the table is expected to have two fields x and y, which indicate where the unit will be placed. If the function is called with coordinates only, the unit on the map at the given coordinates is removed instead. (Version 1.13.2 and later only) This use is now deprecated; use wesmere.erase_unit instead.
