@@ -13,7 +13,6 @@ tablex = require "pl.tablex"
 
 wsl_error = require("actions").wsl_error
 
-
 -- Lifted from MoonScript@GitHub
 try = (t) ->
   ok,err = pcall t.do
@@ -24,31 +23,33 @@ try = (t) ->
 local ENV
 
 Registry = {}
-content = {}
+content =
+    toplevel: {}
 
 wsl_handler_loader = (cfg) ->
     assert(cfg.id, "no id for wsl table handler")
-    assert(cfg.scope, "no scope for wsl table handler " .. cfg.id)
+    -- assert(cfg.scope, "no scope for wsl table handler " .. cfg.id)
     local env
     local dest
     Registry[cfg.id] = {}
     if cfg.scope
         unless ENV.folders[cfg.scope]
             ENV.folders[cfg.scope] = {}
-        table.insert(ENV.folders, cfg.scope)
-        content[cfg.scope] = {}
-    env = ENV.folders[cfg.scope]
-    wsl_error("Folder unknown: " .. cfg.scope) unless env
-    dest = content[cfg.scope]
-    unless env[cfg.id]
-        env[cfg.id] = {}
-        dest[cfg.id] = {}
+            table.insert(ENV.folders, cfg.scope)
+            content[cfg.scope] = {}
+        env = ENV.folders[cfg.scope]
+        wsl_error("Folder unknown: " .. cfg.scope) unless env
+        dest = content[cfg.scope]
+        unless env[cfg.id]
+            env[cfg.id] = {}
+            dest[cfg.id] = {}
     else
         unless ENV.toplevel[cfg.id]
             ENV.toplevel[cfg.id] = {}
             content.toplevel[cfg.id] = {}
         env = ENV.toplevel
         dest = content.toplevel
+
     env[cfg.id] = (config, file, path) ->
         --- @todo do validation here!
         dest[cfg.id][config.id] = config
@@ -65,7 +66,7 @@ wsl_handler_loader = (cfg) ->
                 path: path
                 file: file
 
-ENV = -- holds tables being used as env
+ENV = -- holds tables being used as environment
     toplevel: {}
     on_scan:
         wsl_handler: (cfg, file, dir_path) ->
@@ -82,16 +83,11 @@ ENV = -- holds tables being used as env
             wsl_handler: wsl_handler_loader
     }
 
----
--- jo class game here
---class Game
-  --- @todo move into function or outside of class?
- -- try = require "../utils/try"
-  ----
-  -- Load a single file within the given environment.
-  -- @tparam Game self nothing
-  -- @string file the filepath to load
-  -- @tab env environment to execute in
+----
+-- Load a single file within the given environment.
+-- @tparam Game self nothing
+-- @string file the filepath to load
+-- @tab env environment to execute in
 load_cfg_file = (file, env) ->
     anal_mode = true --@state.Config.anal_mode
     --- @todo better and more output
@@ -179,10 +175,10 @@ load_all_files = (content_dir_path, env) ->
   --   @load_files(wesmod_path, env)
   --   return true
 
-  ---
-  -- Scans all the root for stuff
-  -- @tparam Game self
-  -- @string root_path
+----
+-- Scans all the root for stuff
+-- @tparam Game self
+-- @string root_path
 scan_root = (root_path) ->
     env = ENV.on_scan
     -- log.info("Scanning root: " .. root_path)
@@ -376,9 +372,9 @@ scan_root = (root_path) ->
 --             log.trace("Loaded File: " .. file)
 
 ----
---
+-- Loads a registered WesMod when you know the id
+-- @function load_wesmod
 -- @string id of the WesMod to load
---
 load_wesmod = (id) ->
     unless id
         print "Available WesMods:"
