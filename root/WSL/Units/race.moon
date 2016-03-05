@@ -3,9 +3,9 @@ wsl_handler
     scope: "Units"
     on_scan: (cfg) ->
     on_load: (cfg) ->
-        state.Units.race[cfg.id] = cfg
+        wesmere.races[cfg.id] = cfg
 
-    description: [[The [race] table is used to make shortcuts to describe units with similar names. Units from the same advancement tree should generally have the same race. Also, units with the same race should generally be recruitable by the same sides/factions.]]
+    description: [[The race table is used to make shortcuts to describe units with similar names. Units from the same advancement tree should generally have the same race. Also, units with the same race should generally be recruitable by the same sides/factions.]]
 
     scheme:
         id:
