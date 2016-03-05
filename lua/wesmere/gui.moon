@@ -34,7 +34,7 @@
 --  })
 -- -- (You don't have to format it like that, of course.)
 -- @usage wesmere.show_message_dialog = (attributes, [options, [text_input_attributes]]) ->
-wesmere.show_message_dialog = (attributes, options, text_input_attributes) ->
+show_message_dialog = (attributes, options, text_input_attributes) ->
 
 
 ----
@@ -44,7 +44,7 @@ wesmere.show_message_dialog = (attributes, options, text_input_attributes) ->
 -- @string title A title string for the dialog.
 -- @string message The message content for the dialog.
 -- @string[opt] image An image to show.
-wesmere.show_popup_dialog = (title, message, image) ->
+show_popup_dialog = (title, message, image) ->
 
 ----
 -- Displays a dialog box described by a WSL table and returns:
@@ -106,7 +106,7 @@ wesmere.show_popup_dialog = (title, message, image) ->
 -- r = wesmere.show_dialog(dialog, preshow, postshow)
 -- wesmere.message(string.format("Button %d pressed. Item %d selected.", r, li))
 -- @usage wesmere.show_dialog = (wsl_dialog_table, [pre_show_function, [post_show_function]]) ->
-wesmere.show_dialog = (wsl_dialog_table, pre_show_function, post_show_function) ->
+show_dialog = (wsl_dialog_table, pre_show_function, post_show_function) ->
 
 ----
 -- Sets the value of a widget on the current dialog. The value is given by the first argument; its semantic depends on the type of widget it is applied to. The last argument is the id of the widget. If it does not point to a unique widget in the dialog, some discriminating parents should be given on its left, making a path that is read from left to right by the engine. The row of a list is specified by giving the id' of the list as a first argument and the 1-based row number as the next argument.
@@ -115,7 +115,7 @@ wesmere.show_dialog = (wsl_dialog_table, pre_show_function, post_show_function) 
 -- @usage
 -- -- sets the value of a widget "bar" in the 7th row of the list "foo"
 -- wesmere.set_value(_"Hello world", "foo", 7, "bar")
-wesmere.set_dialog_value = (value, path, to, widget, id) ->
+set_dialog_value = (value, path, to, widget, id) ->
 
 ----
 -- Gets the value of a widget on the current dialog. The arguments described the path for reaching the widget
@@ -141,13 +141,13 @@ wesmere.set_dialog_value = (value, path, to, widget, id) ->
 -- Item 9 is selcted the value will be {2,1,3}
 -- @function wesmere.get_dialog_value
 -- @see set_dialog_value
-wesmere.get_dialog_value = (path, to, widget, id) ->
+get_dialog_value = (path, to, widget, id) ->
 
 ----
 -- Enables or disables a widget. The first argument is a boolean specifying whether the widget should be active (true) or inactive (false). The remaining arguments are the path to locate the widget in question -- -- @see wesmere.set_dialog_value
 -- @function wesmere.set_dialog_active
 -- @bool active
-wesmere.set_dialog_active = (active, path, to, widget, id) ->
+set_dialog_active = (active, path, to, widget, id) ->
 
 ----
 -- Sets the first argument as a callback function for the widget obtained by following the path of the other arguments
@@ -155,7 +155,7 @@ wesmere.set_dialog_active = (active, path, to, widget, id) ->
 -- @function wesmere.set_dialog_callback
 -- @func callback_function
 -- @see set_dialog_value
-wesmere.set_dialog_callback = (callback_function, path, to, widget, id) ->
+set_dialog_callback = (callback_function, path, to, widget, id) ->
 
 ----
 -- Sets the flag associated to a widget to enable or disable Pango markup. The new flag value is passed as the first argument (boolean), and the widget to modify is obtained by following the path of the other arguments (see #wesmere.set_dialog_value). Most widgets start with Pango markup disabled unless this function is used to set their flag to true.
@@ -163,7 +163,7 @@ wesmere.set_dialog_callback = (callback_function, path, to, widget, id) ->
 -- @bool allowed
 -- @usage wesmere.set_dialog_markup(true, "notice_label")
 -- wesmere.set_dialog_value("<big>NOTICE!</big>", "notice_label")
-wesmere.set_dialog_markup = (allowed, path, to, widget, id) ->
+set_dialog_markup = (allowed, path, to, widget, id) ->
 
 ----
 -- Switches the keyboard focus to the widget found following the given path.
@@ -173,7 +173,7 @@ wesmere.set_dialog_markup = (allowed, path, to, widget, id) ->
 -- @bool focused
 -- @see wesmere.set_dialog_value
 -- @usage wesmere.set_dialog_focus("my_listbox")
-wesmere.set_dialog_focus = (focused, path, to, widget, id) ->
+set_dialog_focus = (focused, path, to, widget, id) ->
 
 ----
 -- Sets a widget's visibility status. The new status is passed as the first argument, and the path to the widget is specified by the remaining arguments
@@ -186,7 +186,7 @@ wesmere.set_dialog_focus = (focused, path, to, widget, id) ->
 -- @bool visible
 -- @usage wesmere.set_dialog_visible(false, "secret_button")
 -- @see set_dialog_value
-wesmere.set_dialog_visible = (visible, path, to, widget, id) ->
+set_dialog_visible = (visible, path, to, widget, id) ->
 
 ----
 -- Sets the WSL passed as the second argument as the canvas content (index given by the first argument) of the widget obtained by following the path of the other arguments (see #wesmere.set_dialog_value). The content of the WSL table is described at GUICanvasWSL.
@@ -199,7 +199,7 @@ wesmere.set_dialog_visible = (visible, path, to, widget, id) ->
 --     T.rectangle { x: 20, y: 20, w: 20, h: 20, fill_color: "0,0,255,255" },
 --     T.rectangle { x: 30, y: 30, w: 20, h: 20, fill_color: "255,0,0,255" }
 -- })
-wesmere.set_dialog_value = (index, content, path, to, widget, id) ->
+set_dialog_value = (index, content, path, to, widget, id) ->
 
 ----
 -- Adds a childnode to a treeview widget or a treeview node.
@@ -207,11 +207,11 @@ wesmere.set_dialog_value = (index, content, path, to, widget, id) ->
 -- @function wesmere.add_dialog_tree_node
 -- @string type The type (id of the node definition) of the node is passed in the first parameter.
 -- @number index The second parameter (integer) spcifies where the node should be inserted in the parentnode.
-wesmere.add_dialog_tree_node = (type, index, path, to, widget, id) ->
+add_dialog_tree_node = (type, index, path, to, widget, id) ->
 
 ----
 -- Removes an item from a listbox, a multipage or a treeview. First parameter is the index of the item to delete, second parameter is the number of items to delete and the remaining parameters describe the path to the listbox, the multipage or the parent treview node.
 -- @function wesmere.remove_dialog_item
 -- @number index
 -- @number count
-wesmere.remove_dialog_item = (index, count, path, to, widget, id) ->
+remove_dialog_item = (index, count, path, to, widget, id) ->

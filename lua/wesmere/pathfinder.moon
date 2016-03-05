@@ -2,6 +2,8 @@
 -- This page describes the LuaWSL functions and helpers for finding paths.
 -- @submodule wesmere
 
+Loc = require "Location"
+
 ---
 -- This pablah blah blah
 -- @section Pathfinder
@@ -40,7 +42,7 @@
 --     )
 -- wesmere.message(string.format("It would take %d turns.", math.ceil(cost / 3)))
 -- @usage wesmere.find_path = (x1, y1, x2, y2, [path_options | cost_function]) ->
-wesmere.find_path = (x1, y1, x2, y2, path_options_or_cost_function) ->
+find_path = (x1, y1, x2, y2, path_options_or_cost_function) ->
 
 
 
@@ -55,7 +57,7 @@ wesmere.find_path = (x1, y1, x2, y2, path_options_or_cost_function) ->
 -- dst_x, dst_y = wesmere.find_vacant_tile(dst_x, dst_y, u)
 -- wesmere.put_unit(src_x, src_y)
 -- wesmere.put_unit(dst_x, dst_y, ut)
-wesmere.find_vacant_tile = (x, y, unit) ->
+find_vacant_tile = (x, y, unit) ->
 
 ----
 -- Returns all the locations reachable by a unit.
@@ -72,7 +74,7 @@ wesmere.find_vacant_tile = (x, y, unit) ->
 -- m = u.max_moves
 -- for l in *t
 --    wesmere.fire("label", { x: l[1], y: l[2], text: math.ceil(9 - l[3]/m) })
-wesmere.find_reach = (unit, path_options) ->
+find_reach = (unit, path_options) ->
 
 ----
 -- Builds a cost map for one, multiple units or unit types.
@@ -109,7 +111,8 @@ wesmere.find_reach = (unit, path_options) ->
 -- @number y1
 -- @number y2
 -- @usage d = distance_between(x1, y1, x2, y2)
-helper.distance_between = (x1, x2, y1, y2) ->
+distance_between = (x1, x2, y1, y2) ->
+    return Loc(x1,x2) - Loc(y1,y2)
 
 ----
 -- Returns an iterator on the (at most six) tiles around a given location that are on the map. If the third argument is true, tiles on the map border are also visited.
@@ -119,7 +122,8 @@ helper.distance_between = (x1, x2, y1, y2) ->
 -- @usage -- remove all the units next to the (a,b) tile
 -- for x, y in helper.adjacent_tiles(a, b) do
 --     wesmere.put_unit(x, y)
-helper.adjacent_tiles = (x, y, include_border) ->
+adjacent_tiles = (x, y, include_border) ->
+
 
 
 {
@@ -127,6 +131,6 @@ helper.adjacent_tiles = (x, y, include_border) ->
     :find_vacant_tile
     :find_reach
     :find_cost_map
-    -- helper.distance_between
-    -- helper.adjacent_tiles
+    :distance_between
+    :adjacent_tiles
 }

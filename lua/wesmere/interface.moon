@@ -14,13 +14,13 @@
 -- wesmere.message("Big Brother", "I'm watching you.")
 -- will result in "<Big Brother> I'm watching you."
 -- See also @see helper.wsl_error for displaying error messages.
-wesmere.message = (speaker="<Lua>", message) ->
+message = (speaker="<Lua>", message) ->
 
 ----
 -- Removes all messages from the chat window. No argument or returned values.
 -- @function wesmere.clear_messages
 -- @usage wesmere.clear_messages!
-wesmere.clear_messages = () ->
+clear_messages = () ->
 
 ----
 -- Creates a function proxy for lazily translating strings from the given domain.
@@ -32,14 +32,14 @@ wesmere.clear_messages = () ->
 -- The metatable of the function proxy appears as "message domain". The metatable of the translatable strings (results of the proxy) appears as "translatable string".
 -- The translatable strings can be appended to other strings/numbers with the standard .. operator. Translation can be forced with the standard tostring operator in order to get a plain string.
 -- wesmere.message(string.format(tostring(_ "You gain %d gold."), amount))
-wesmere.textdomain = (domain) ->
+textdomain = (domain) ->
 
 ----
 -- Delays the engine like the [delay] tag.
 -- @function wesmere.delay
 -- @number milliseconds time to delay in milliseconds
 -- @usage wesmere.delay(500)
-wesmere.delay = (milliseconds) ->
+delay = (milliseconds) ->
 
 ----
 -- Pops some text above a map tile.
@@ -48,7 +48,7 @@ wesmere.delay = (milliseconds) ->
 -- @number y
 -- @string text
 -- @usage wesmere.float_label(unit.x, unit.y, "<span color='#ff0000'>Ouch</span>")
-wesmere.float_label = (x, y, text) ->
+float_label = (x, y, text) ->
 
 ----
 -- Selects the given location in the game map as if the player would have clicked onto it.
@@ -58,14 +58,14 @@ wesmere.float_label = (x, y, text) ->
 -- @bool[opt=true] show_movement whether to show the movement range of any unit on that location (def: true)
 -- @bool[optchain=false] fire_events whether to fire any select events
 -- @usage wesmere.select_hex(14,6, true, true)
-wesmere.select_hex = (x, y, show_movement=true, fire_events=false) ->
+select_hex = (x, y, show_movement=true, fire_events=false) ->
 
 ----
 -- Reverses any select_hex call, leaving all locations unhighlighted. Takes no arguments.
 -- @function wesmere.deselect_hex
 -- @treturn Location formerly selected hex
 -- @usage wesmere.deselect_hex!
-wesmere.deselect_hex = () ->
+deselect_hex = () ->
 
 ----
 -- Scrolls the map to the given location. If true is passed as the third parameter, scrolling is disabled if the tile is hidden under the fog. If true is passed as the fourth parameter, the view instantly warps to the location regardless of the scroll speed setting in Preferences.
@@ -77,7 +77,7 @@ wesmere.deselect_hex = () ->
 -- @usage u = wesmere.get_unit { id: "hero" }
 -- wesmere.scroll_to_tile(u.x, u.y)
 -- @usage wesmere.scroll_to_tile = (x, y, [only_if_visible=false, [instant=false]]) ->
-wesmere.scroll_to_tile = (x, y, only_if_visible=false, instant=false) ->
+scroll_to_tile = (x, y, only_if_visible=false, instant=false) ->
 
 ----
 -- Locks or unlocks gamemap view scrolling for human players.
@@ -86,13 +86,13 @@ wesmere.scroll_to_tile = (x, y, only_if_visible=false, instant=false) ->
 -- @bool[opt=true] lock If true is passed as the first parameter, the view is locked; pass false to unlock.
 -- @usage wesmere.lock_view(true)
 -- wesmere.scroll_to_tile(12, 14, false, true)
-wesmere.lock_view = (lock=true) ->
+lock_view = (lock=true) ->
 
 ----
 -- Returns a boolean indicating whether gamemap view scrolling is currently locked.
 -- @function wesmere.view_locked
 -- @treturn bool iff scrolling is locked
-wesmere.view_locked = () ->
+view_locked = () ->
 
 ----
 -- Plays the given sound file once, optionally repeating it one or more more times if an integer value is provided as a second argument (note that the sound is repeated the number of times specified in the second argument, i.e. a second argument of 4 will cause the sound to be played once and then repeated four more times for a total of 5 plays. See the example below).
@@ -101,33 +101,33 @@ wesmere.view_locked = () ->
 -- @number[opt=0] repeat_count
 -- @usage wesmere.play_sound "ambient/birds1.ogg"
 -- @usage wesmere.play_sound("magic-holy-miss-3.ogg", 4) -- played 1 + 4 = 5 times
-wesmere.play_sound = (sound, repeat_count=0) ->
+play_sound = (sound, repeat_count=0) ->
 
 ----
 -- Sets the given table as an entry into the music list. See MusicListWSL for the recognized attributes.
 -- @function wesmere.set_music
 -- @tab music_entry Passing no argument forces the engine to take into account all the recent changes to the music list. (Note: this is done automatically when sequences of WSL commands end, so it is useful only for long events.)
 -- @usage wesmere.set_music { name: "traveling_minstrels.ogg" }
-wesmere.set_music = (music_entry) ->
+set_music = (music_entry) ->
 
 ----
 -- Returns true if messages are currently being skipped, for example because the player has chosen to skip replay, or has pressed escape to dismiss a message.
 -- @function wesmere.is_skipping_messages
 -- @treturn bool
-wesmere.is_skipping_messages = () ->
+is_skipping_messages = () ->
 
 ----
 -- Sets the skip messages flag. By default it sets it to true, but you can also pass false to unset the flag.
 -- @todo is this part of game_server or display_client only?
 -- @function wesmere.skip_messages
 -- @bool[opt=true] skip
-wesmere.skip_messages = (skip=true) ->
+skip_messages = (skip=true) ->
 
 ----
 -- Returns a proxy to the unit currently displayed in the side pane of the user interface, if any.
 -- @function wesmere.get_displayed_unit
 -- @usage name = tostring(wesmere.get_displayed_unit().name)
-wesmere.get_displayed_unit = () ->
+get_displayed_unit = () ->
 
 ----
 -- This field is not a function but an associative table. It links item names to the functions that describe their content. These functions are called whenever the user interface is refreshed. The description of an item is a WSL table containing [element] children. Each subtag shall contain either a text or an image field that is displayed to the user. It can also contain a tooltip field that is displayed to the user when moused over, and a "help" field that points to the help section that is displayed when the user clicks on the theme item.
@@ -205,7 +205,7 @@ wesmere.get_displayed_unit = () ->
 -- @field edit_left_button_function
 -- @field report_clock
 -- @field report_countdown
-wesmere.theme_items = {}
+theme_items = {}
 
 ----
 -- Displays a WSL message box querying a choice from the user. Attributes and options are taken from given tables (see [message]).
@@ -214,7 +214,7 @@ wesmere.theme_items = {}
 -- @tab options
 -- @treturn number The index of the selected option is returned.
 -- @usage result = helper.get_user_choice({ speaker: "narrator" }, { "Choice 1", "Choice 2" })
-helper.get_user_choice = (message_table, options) ->
+-- helper.get_user_choice = (message_table, options) ->
 
 
 

@@ -4,14 +4,8 @@
 -- LuaWSL:Events
 -- This page describes the LuaWSL functions and helpers for interacting with events and action handlers.
 
-----
--- Fires a WSL action.
--- @function wesmere.fire
--- @string wsl_action_name the name of the action.
--- @tab wsl_action_table the WSL table describing the action. Note: WSL variables are substituted.
--- @usage wesmere.fire("message", { speaker: "narrator", message: _ "Hello World!" })
-fire = (wsl_action_name, wsl_action_table) ->
-    return wsl_actions[wsl_action_name](wsl_action_table)
+import wsl_error from require "misc"
+
 
 ----
 -- This is not a function but an associative table indexed by WSL action names. It contains functions performing the corresponding actions. Using these functions is similar to calling #wesmere.fire, while setting entries of the table is similar to calling #wesmere.register_wsl_action.
@@ -23,11 +17,23 @@ fire = (wsl_action_name, wsl_action_table) ->
 -- -- The new tag can now be used in plain WSL code:
 -- freeze_unit
 --     id: "Delfador"
--- @usage -- You can override functions already assigned to the table. This is useful if you need to extend functionality of core tags. For instance, the following script overrides the [print] tag so that messages are displayed with a bigger font.
+-- @usage -- You can override functions already assigned to the table. This is useful if you need to extend functionality of core functions. For instance, the following script overrides the 'print' function so that messages are displayed with a bigger font.
 -- wesmere.wsl_actions.print = (cfg) ->
 --     cfg.size = (cfg.size or 12) + 10
 --     wsl_actions.print(cfg)
 wsl_actions = {}
+
+----
+-- Fires a WSL action.
+-- @function wesmere.fire
+-- @string wsl_action_name the name of the action.
+-- @tab wsl_action_table the WSL table describing the action. Note: WSL variables are substituted.
+-- @usage wesmere.fire("message", { speaker: "narrator", message: _ "Hello World!" })
+-- @return the return value of the wsl action function
+fire = (wsl_action_name, wsl_action_table) ->
+    if action = wsl_actions[wsl_action_name]
+        return wsl_actions[wsl_action_name](wsl_action_table)
+    else wsl_error("WSLAction '#{wsl_action_name}' not known")
 
 ----
 -- This is an associative table like wesmere.wsl_actions. You can use it to define new conditional wsl tags that will be recognized in WSL when using [if], [show_if], [while], etc., or more generally when wesmere.eval_conditional is run.
