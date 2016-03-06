@@ -10,3 +10,14 @@ describe "Wesmere module", ->
 
         pending "Load testmod", ->
             wesmere.load_wesmod("test")
+
+    describe "run test suite", ->
+
+        -- test_scenarios = wesmere.test_scenarios
+
+
+        --for scenario in *test_scenarios
+
+        --    pending "Running #{scenario.name}", ->
+
+        --        wesmere.start_scenario(scenario.id)
