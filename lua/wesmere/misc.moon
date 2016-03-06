@@ -341,8 +341,15 @@ random = (m, n) ->
 -- @func[opt] random_function
 --helper.shuffle = (array, random_function) ->
 
+-- Lifted from MoonScript@GitHub
+try = (t) ->
+    ok,err = pcall t["do"]
+    t.catch err unless ok
+    t.finally! if t.finally
+
 
 {
+    :try
     :game_config
     :get_era
     :current
