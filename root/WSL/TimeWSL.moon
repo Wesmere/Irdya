@@ -1,4 +1,5 @@
-wsl_table
+--wsl_table
+{
     id: "TimeWSL"
     description: [[The time of day influences damage done by lawful and chaotic units; this makes timing of your attack important. Graphically time of day is represented by a picture (landscape with sun or moon) in the status table, and by darkening the screen during night turns.
 Scenario author can schedule the times of day in scenario; use the pre-defined time macros, or create new times of day.
@@ -40,3 +41,4 @@ ReferenceWSL]]
             description: [[red, green, blue: describe the tint of the screen during the time period. Appears to be an integer value from -255 to 255. See schedules.cfg for examples.]]
         sound:
             description: [[a sound to play (in sounds/) when changing into this time of day.]]
+}

@@ -1,6 +1,6 @@
 -- This series of tests checks that [move] handles malformed x,y lists correctly.
 
-MOVE_MALFORMED_SCEN = (ID PX PY) ->
+MOVE_MALFORMED_SCEN = (ID, PX, PY) ->
     test
         name: "Unit Test {ID}"
         map_data: "{test/maps/move_skip_sighted.map}"

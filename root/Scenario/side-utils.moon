@@ -1,4 +1,4 @@
--- #textdomain wesmere
+export ^
 
 -- # Side-utils macros for balancing AI behaviour and setting village ownership.
 -- # You can, for example give an AI side the possibility to recruit high
@@ -181,24 +181,23 @@
 --     {CAPTURE_VILLAGES_OF_TYPE (*^V*) {SIDE} {X} {Y} {RADIUS}}
 -- #enddef
 
--- #define STARTING_VILLAGES SIDE RADIUS
---     # Macro to make a side start a scenario with villages.
---     # Creates an event, so it must be called from within the
---     # toplevel scenario tag.  Also note that this relies on the
---     # side having a unit with canrecruit-yes at start; if it
---     # doesn't, you should use STARTING_VILLAGES_AREA instead.
---     [event]
---         name=prestart
+----
+-- Macro to make a side start a scenario with villages.
+-- Creates an event, so it must be called from within the
+-- toplevel scenario tag.  Also note that this relies on the
+-- side having a unit with canrecruit-yes at start; if it
+-- doesn't, you should use STARTING_VILLAGES_AREA instead.
+STARTING_VILLAGES = (SIDE, RADIUS) ->
+    event
+        name:"Prestart"
 
---         [store_starting_location]
---             side={SIDE}
---             variable=temp_starting_location
---         [/store_starting_location]
+        command: ->
+            store_starting_location
+                side:SIDE
+                variable:temp_starting_location
 
---         {CAPTURE_VILLAGES {SIDE} $temp_starting_location.x $temp_starting_location.y {RADIUS}}
---         {CLEAR_VARIABLE temp_starting_location}
---     [/event]
--- #enddef
+            CAPTURE_VILLAGES SIDE, temp_starting_location.x, temp_starting_location.y, RADIUS
+            CLEAR_VARIABLE temp_starting_location
 
 -- #define STARTING_VILLAGES_AREA SIDE X Y RADIUS
 --     # Make a side start with ownership of villages in a given area.

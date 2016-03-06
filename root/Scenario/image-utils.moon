@@ -1,4 +1,5 @@
 -- Utility functions for images, overlays, and display effects.
+export ^
 
 -- # These don't depend on any other macros.  Please don't change this.
 

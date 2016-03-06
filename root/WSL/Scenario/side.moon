@@ -1,4 +1,5 @@
-wsl_table
+-- wsl_table
+{
     id: "Side"
     description: [[The _side_ table is used to describe a side in a particular scenario.]]
     scheme:
@@ -106,3 +107,4 @@ For the meaning and significance of defeated, see ScenarioWSL#Scenario_End_Condi
     -- faction_lock:
     -- faction:
     -- faction_from_recruit:
+}

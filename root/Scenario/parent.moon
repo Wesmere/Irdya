@@ -3,6 +3,12 @@
 -- It implements all the gameplay.
 --
 
+export TEDST_GLLL = () ->
+    print "sowas"
+
+TSLEFL = () ->
+    print "something"
+
 scenario
 
     id:"parent"

@@ -16,7 +16,7 @@ scenario
 
     story:
         part: AOI_BIGMAP
-            music:"northerners".ogg
+            music:"northerners"
             story: _ "The path of the orcish war band was easy to follow — a wide swathe of trampled ground through violated forest. Erlornas and his party swiftly followed it north and west."
         part: AOI_BIGMAP
             story: _ "Soon they arrived at a region where the forest was cut through by many streams, only to find something unexpected."
@@ -64,8 +64,8 @@ scenario
             grouping:"offensive"
             attack_depth:5
 
-    Prestart: STARTING_VILLAGES 1, 6
-    Prestart: STARTING_VILLAGES 2, 6 -- Gharlsa starts with all villages north of the northernmost river
+    Prestart: -> STARTING_VILLAGES 1, 6
+    Prestart: -> STARTING_VILLAGES 2, 6 -- Gharlsa starts with all villages north of the northernmost river
 
     Prestart: ->
 

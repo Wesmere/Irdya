@@ -1,6 +1,8 @@
 
 wsl_handler
     id: "toplevel"
+    scope: "Help"
+
     description: [[The toplevel tag denotes sections and topics that should be shown immediately when the "Help" button is clicked on (see the "help" action, ThemeWSL). The sections referenced within this tag are read recursively, including all subsections.]]
 
     scheme:

@@ -4,7 +4,7 @@
 
 ----
 -- @TODO add comments
-NEW_GOLD_CARRYOVER = (PERCENTAGE_NUMBER, cfg) ->
+export NEW_GOLD_CARRYOVER = (PERCENTAGE_NUMBER, cfg) ->
     cfg.carryover_add = true
     cfg.carryover_percentage = PERCENTAGE_NUMBER
     return cfg

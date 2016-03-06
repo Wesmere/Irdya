@@ -1,5 +1,5 @@
-wsl_table
-
+-- wsl_table
+{
     id: "SUF"
 
     description: [[From FilterWSL, this is the standard way of filtering units.
@@ -91,3 +91,4 @@ The term StandardUnitFilter means that the set of such keys and tags (see below)
 
         lua_function:
             description: [[the name of a Lua function in the global environment that takes a unit as an argument and returns true if the given unit matches the filter.]]
+}

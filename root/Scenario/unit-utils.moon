@@ -1,14 +1,15 @@
 -- This file contains unit utility functions for WSL authors.
+export ^
 
 -- This needs to match the magic UNREACHABLE constant in unit_movement_type
 UNREACHABLE = 99
 
 -- # Use this to restrict a filter to on-map units, not the recall list.
--- #define NOT_ON_RECALL_LIST
---     [not]
---         x,y=recall,recall
---     [/not]
--- #enddef
+NOT_ON_RECALL_LIST = {
+     -- not:
+        x:"recall"
+        y:"recall"
+    }
 
 -- # Rationale for the naming scheme of these generators:
 -- # All generators take SIDE X Y for consistency.
@@ -28,48 +29,45 @@ UNIT = (SIDE, TYPE, X, Y, WSL) ->
 -- Creates a generic unit of TYPE belonging to SIDE at X,Y, which has a
 -- random name, gender and traits (just like a recruited unit).
 GENERIC_UNIT = (SIDE, TYPE, X, Y) ->
-    return unit
-        side: SIDE
-        type: TYPE
-        x: X
-        y: Y
-        generate_name: true
-        random_traits: true
-        random_gender: true
-        upkeep: "full"
+    side: SIDE
+    type: TYPE
+    x: X
+    y: Y
+    generate_name: true
+    random_traits: true
+    random_gender: true
+    upkeep: "full"
 
 -- Creates a unit with no traits, random gender and generated name.
--- 
+--
 -- Example:
 -- ! {NOTRAIT_UNIT 1 (Elvish Fighter) 19 16}
---     
+--
 NOTRAIT_UNIT = (SIDE, TYPE, X, Y) ->
-    return unit
-       side: SIDE
-       type: TYPE
-       x: X
-       y: Y
-       generate_name: true
-       random_traits: false
-       random_gender: true
+   side: SIDE
+   type: TYPE
+   x: X
+   y: Y
+   generate_name: true
+   random_traits: false
+   random_gender: true
 
 -- Creates a unit with the Loyal trait.
--- 
+--
 -- Example:
 -- ! {LOYAL_UNIT 1 (Elvish Fighter) 19 16}
--- 
+--
 LOYAL_UNIT = (SIDE, TYPE, X, Y) ->
-    return unit
-        type: TYPE
-        side: SIDE
-        x: X
-        y: Y
-        generate_name: true
-        modifications: TRAIT_LOYAL
-        overlays: "misc/loyal-icon.png"
+    type: TYPE
+    side: SIDE
+    x: X
+    y: Y
+    generate_name: true
+    modifications: TRAIT_LOYAL
+    overlays: "misc/loyal-icon.png"
 
 -- Place a named unit with embedded WSL specified.
--- 
+--
 NAMED_UNIT = (SIDE, TYPE, X, Y, ID_STRING, NAME_STRING, WSL) ->
     unless WSL
         WSL = {}
@@ -83,50 +81,47 @@ NAMED_UNIT = (SIDE, TYPE, X, Y, ID_STRING, NAME_STRING, WSL) ->
     unit WSL
 
 -- Creates a unit with the Loyal trait.
--- 
+--
 -- Example:
 -- ! {NAMED_LOYAL_UNIT 1 (Elvish Fighter) 19 16 (Myname) ( _ "Myname")}
---     
+--
 NAMED_LOYAL_UNIT = (SIDE, TYPE, X, Y, ID_STRING, NAME_STRING) ->
-    unit
-        side: SIDE
-        type: TYPE
-        id: ID_STRING
-        name: NAME_STRING
-        x: X
-        y: Y
-        modifications: TRAIT_LOYAL
-        overlays: "misc/loyal-icon"
+    side: SIDE
+    type: TYPE
+    id: ID_STRING
+    name: NAME_STRING
+    x: X
+    y: Y
+    modifications: TRAIT_LOYAL
+    overlays: "misc/loyal-icon"
 
 -- Creates a generic unit of TYPE belonging to SIDE at X,Y, which has a
 -- generated gender and traits (just like a recruited unit).
 NAMED_GENERIC_UNIT = (SIDE, TYPE, X, Y, ID_STRING, NAME_STRING) ->
-    unit
-        side: SIDE
-        type: TYPE
-        id: ID_STRING
-        name: NAME_STRING
-        x: X
-        y: Y
-        random_traits: true
-        random_gender: true
-        upkeep: "full"
+    side: SIDE
+    type: TYPE
+    id: ID_STRING
+    name: NAME_STRING
+    x: X
+    y: Y
+    random_traits: true
+    random_gender: true
+    upkeep: "full"
 
 -- Creates a unit with no traits, random gender and specified name.
--- 
+--
 -- Example:
 -- ! {NAMED_NOTRAIT_UNIT 1 (Elvish Fighter) 20 22 (Mochi) (_"Mochi") }
---     
+--
 NAMED_NOTRAIT_UNIT = (SIDE, TYPE, X, Y, ID_STRING, NAME_STRING) ->
-    unit
-        side: SIDE
-        type: TYPE
-        id: ID_STRING
-        name: NAME_STRING
-        x: X
-        y: Y
-        random_traits: false 
-        random_gender: true
+    side: SIDE
+    type: TYPE
+    id: ID_STRING
+    name: NAME_STRING
+    x: X
+    y: Y
+    random_traits: false
+    random_gender: true
 
 RECALL = (ID_STRING) ->
     recall
@@ -172,7 +167,7 @@ RECALL_XY = (ID_STRING, X, Y) ->
 -- #enddef
 
 -- Stores an attribute of a unit into the given global variable.
--- 
+--
 -- Example where this is used to flip all orcs to whatever side James is on:
 -- ! {STORE_UNIT_VAR (id=James) side side_of_James}
 -- ! {MODIFY_UNIT (race=orc) side $side_of_James}
@@ -187,7 +182,7 @@ STORE_UNIT_VAR = (FILTER, VAR, TO_VAR_NAME) ->
     return unit[VAR]
 
 -- Advances all units matching the filter to ID_STRING or if missing, their normal advancement
--- 
+--
 -- Example to advance all spearmen to a cavalrymen:
 -- ! {ADVANCE_UNIT type=Spearman Cavalryman}
 -- Example to advance your leader normally:

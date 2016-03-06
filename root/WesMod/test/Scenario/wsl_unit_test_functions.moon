@@ -21,7 +21,7 @@ ASSERT = (X) ->
             result:"defeat"
             linger_mode:"yes"
 
-GENERIC_UNIT_TEST = (NAME, CONTENT) ->
+export GENERIC_UNIT_TEST = (NAME, CONTENT) ->
     test
         name: "Unit Test " .. NAME
         map_data: "generic_unit_test"
@@ -46,8 +46,8 @@ GENERIC_UNIT_TEST = (NAME, CONTENT) ->
 
         Prestart: CONTENT
 
-FAIL ->
+FAIL = ->
     RETURN false
 
-SUCCEED ->
+SUCCEED = ->
 	RETURN true

@@ -58,8 +58,8 @@ scenario
         -- Use stock flags
         facing:"nw"
 
-    Prestart: STARTING_VILLAGES 1, 6
-    Prestart: STARTING_VILLAGES 2, 9
+    Prestart: -> STARTING_VILLAGES 1, 6
+    Prestart: -> STARTING_VILLAGES 2, 9
 
     Prestart: ->
         objectives HINT _ "Use Elven Scouts and Linaera’s power of teleportation to mount hit-and-run attacks."

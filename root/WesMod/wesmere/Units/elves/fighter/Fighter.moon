@@ -4,7 +4,7 @@ unit_type
     race: "elf"
 
     hitpoints:33
-    movement_type: LESS_NIMBLE_ELF woodland
+    movement_type: "woodland-less-nimble"
     movement:5
     experience:40
     level:1

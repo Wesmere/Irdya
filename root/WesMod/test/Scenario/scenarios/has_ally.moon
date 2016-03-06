@@ -1,6 +1,6 @@
 -- This test checks that the has_ally function is working as expected.
 
-TEST_HAS_ALLY_SCEN: (ID, EVENTS) ->
+TEST_HAS_ALLY_SCEN = (ID, EVENTS) ->
     test
         name: "Unit Test {ID}"
         map_data: "move_skip_sighted"
@@ -33,7 +33,7 @@ TEST_HAS_ALLY_SCEN: (ID, EVENTS) ->
             controller:"human"
             name: "Dave"
             type: "Dwarvish Fighter"
-            id:dave
+            id:"dave"
             fog:false
             team_name:"East"
 
@@ -55,21 +55,21 @@ TEST_HAS_ALLY_SCEN "has_ally", ->
         command: ->
 
             ASSERT have_unit
-                id:dave
+                id:"dave"
                 filter_side:
                     has_ally:
                         has_unit:
                             id:bob
             ASSERT
                 have_unit:
-                    id:dave
+                    id:"dave"
                     filter_side:
                         has_enemy:
                             has_unit:
                                 id:"alice"
             ASSERT
                 have_unit:
-                    id:dave
+                    id:"dave"
                     filter_side:
                         not:
                             has_ally:
@@ -77,15 +77,15 @@ TEST_HAS_ALLY_SCEN "has_ally", ->
                                     id:"steve"
             ASSERT
                 have_unit:
-                    id:dave
+                    id:"dave"
                     filter_side:
                         has_enemy:
                             side:{1,4}
             ASSERT not have_unit
-                    id:dave
-                    filter_side]
-                        has_ally]
-                            has_unit]
-                                id:charlie
+                    id:"dave"
+                    filter_side:
+                        has_ally:
+                            has_unit:
+                                id:"charlie"
 
             SUCCEED!

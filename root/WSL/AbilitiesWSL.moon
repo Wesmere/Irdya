@@ -81,7 +81,7 @@ ability =
             description: [[filters on the value before any modifications; uses the keys equals, not_equals, etc. If several keys are used all have to match.]]
 
 
-wsl_table
+-- wsl_table
     id: "abilitiesWSL"
     description: [[The abilities table
 Any other name is valid (for example [dummy]), but will result in an ability that does nothing but report it's there. These tags still use the same common keys and tags as every other ability. Note: a dummy ability must have an id for the name and description to display.

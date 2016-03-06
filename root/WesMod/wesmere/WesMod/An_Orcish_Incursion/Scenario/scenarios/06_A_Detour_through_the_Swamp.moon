@@ -9,8 +9,7 @@ scenario
     time:DEFAULT_SCHEDULE
     music:{"underground","vengeful","revelation"}
 
-    story:AOI_TRACK JOURNEY_06_NEW
-        music: the_deep_path
+    story:AOI_TRACK JOURNEY_06_NEW, { music: "the_deep_path" }
 
     side: FLAG_VARIANT "wood-elvish"
         side:1
