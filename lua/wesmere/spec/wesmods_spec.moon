@@ -1,7 +1,23 @@
 
+moon = require "moon"
+
 wesmods = require "wesmods"
 
 describe "Wesmods", ->
+
+    describe "Load Config file", ->
+
+        it "test_file", ->
+
+            ENV =
+                test: () ->
+
+            wesmods.load_cfg_file("spec/wesmods_input.moon", ENV)
+
+            assert ENV.AND_ME
+
+            moon.p(ENV)
+
 
     describe "Load Root", ->
 
@@ -10,5 +26,5 @@ describe "Wesmods", ->
 
     describe "Scan Root", ->
 
-        pending "Testroot", ->
+        it "Testroot", ->
             wesmods.scan_root("../../root")
