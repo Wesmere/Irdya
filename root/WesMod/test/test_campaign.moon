@@ -1,2 +1,2 @@
-campaign
-    id: "Irdya_Test_Campaign"
+--campaign
+--    id: "Irdya_Test_Campaign"
