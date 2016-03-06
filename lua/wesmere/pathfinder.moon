@@ -52,12 +52,76 @@ find_path = (x1, y1, x2, y2, path_options_or_cost_function) ->
 -- @number y
 -- @tparam[opt] Unit unit An optional unit (either a WSL table or a proxy object) can be passed as a third argument; if so, the returned tile has terrain which is passable for the passed unit.
 -- @usage function teleport(src_x, src_y, dst_x, dst_y)
--- u = wesmere.get_units({x = src_x, y = src_y })[1]
+-- u = wesmere.get_units({x: src_x, y: src_y })[1]
 -- ut = u.__cfg
 -- dst_x, dst_y = wesmere.find_vacant_tile(dst_x, dst_y, u)
 -- wesmere.put_unit(src_x, src_y)
 -- wesmere.put_unit(dst_x, dst_y, ut)
 find_vacant_tile = (x, y, unit) ->
+    loc = Loc(x,y)
+
+--    while not found
+--    for loc\adjacent_tiles(false)
+-- map_location find_vacant_tile(const map_location& loc, VACANT_TILE_TYPE vacancy,
+--                               const unit* pass_check, const team* shroud_check, const game_board* board)
+-- {
+--     if (!board) {
+--         board = resources::gameboard;
+--         assert(board);
+--     }
+--     const gamemap & map = board->map();
+--     const unit_map & units = board->units();
+
+--     if (!map.on_board(loc)) return map_location();
+
+--     const bool do_shroud = shroud_check  &&  shroud_check->uses_shroud();
+--     std::set<map_location> pending_tiles_to_check, tiles_checked;
+--     pending_tiles_to_check.insert(loc);
+--     // Iterate out 50 hexes from loc
+--     for (int distance = 0; distance < 50; ++distance) {
+--         if (pending_tiles_to_check.empty())
+--             return map_location();
+--         //Copy over the hexes to check and clear the old set
+--         std::set<map_location> tiles_checking;
+--         tiles_checking.swap(pending_tiles_to_check);
+--         //Iterate over all the hexes we need to check
+--         BOOST_FOREACH(const map_location &loc, tiles_checking)
+--         {
+--             // Skip shrouded locations.
+--             if ( do_shroud  &&  shroud_check->shrouded(loc) )
+--                 continue;
+--             //If this area is not a castle but should, skip it.
+--             if ( vacancy == VACANT_CASTLE  &&  !map.is_castle(loc) ) continue;
+--             const bool pass_check_and_unreachable = pass_check
+--                 && pass_check->movement_cost(map[loc]) == movetype::UNREACHABLE;
+--             //If the unit can't reach the tile and we have searched
+--             //an area of at least radius 10 (arbitrary), skip the tile.
+--             //Neccessary for cases such as an unreachable
+--             //starting hex surrounded by 6 other unreachable hexes, in which case
+--             //the algorithm would not even search distance==1
+--             //even if there's a reachable hex for distance==2.
+--             if (pass_check_and_unreachable && distance > 10) continue;
+--             //If the hex is empty and we do either no pass check or the hex is reachable, return it.
+--             if (units.find(loc) == units.end() && !pass_check_and_unreachable) return loc;
+--             map_location adjs[6];
+--             get_adjacent_tiles(loc,adjs);
+--             BOOST_FOREACH(const map_location &loc, adjs)
+--             {
+--                 if (!map.on_board(loc)) continue;
+--                 // Add the tile to be checked if it hasn't already been and
+--                 // isn't being checked.
+--                 if (tiles_checked.find(loc) == tiles_checked.end() &&
+--                     tiles_checking.find(loc) == tiles_checking.end())
+--                 {
+--                     pending_tiles_to_check.insert(loc);
+--                 }
+--             }
+--         }
+--         tiles_checked.swap(tiles_checking);
+--     }
+--     return map_location();
+-- }
+
 
 ----
 -- Returns all the locations reachable by a unit.
@@ -123,7 +187,7 @@ distance_between = (x1, x2, y1, y2) ->
 -- for x, y in helper.adjacent_tiles(a, b) do
 --     wesmere.put_unit(x, y)
 adjacent_tiles = (x, y, include_border) ->
-
+    return Loc(x,y)\adjacent_tiles(include_border)
 
 
 {
