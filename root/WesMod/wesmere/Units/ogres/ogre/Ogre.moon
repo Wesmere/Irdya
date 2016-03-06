@@ -7,11 +7,10 @@ unit_type
     resistance:
         arcane:80
     movement:5
-    experience:100
+    experience:80
     level:2
     alignment:"neutral"
-    advances_to:nil
-    -- AMLA_DEFAULT
+    advances_to:"Great Ogre"
     cost:33
     usage:"fighter"
     description: _ "Ogres are giant creatures that usually live alone in the wilderness, remarkably similar to humans in form, though large and misshapen. While they can be easily outrun or outsmarted, their strength is not to be underestimated."
