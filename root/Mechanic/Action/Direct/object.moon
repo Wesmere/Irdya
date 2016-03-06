@@ -3,12 +3,11 @@ wsl_action
     id: "object"
     description: "Gives some unit an object which modifies their stats in some way."
 
-    action: (cfg, kernel) ->
+    action: (cfg) ->
 
-
-        helper = wesmere.require "lua/helper.lua"
-        utils = wesmere.require "lua/wsl-utils.lua"
-        T = helper.set_wsl_tag_metatable {}
+        -- helper = wesmere.require "lua/helper.lua"
+        -- utils = wesmere.require "lua/wsl-utils.lua"
+        -- T = helper.set_wsl_tag_metatable {}
         wsl_actions = wesmere.wsl_actions
 
         used_items = {}
@@ -23,8 +22,7 @@ wsl_action
 
         local unit, command_type, text
 
-        filter = helper.get_child(cfg, "filter")
-        if filter
+        if filter = cfg.filter
             unit = wesmere.get_units(filter)[1]
         else
             unit = wesmere.get_unit(context.x1, context.y1)
@@ -93,9 +91,13 @@ wsl_action
 
     scheme:
         id:
-            description: [[(Optional) when the object is picked up, a flag is set for id. The object cannot be picked up if a flag for id has been set. This means that any object with an id can only be used once, even if first_time_only=no is set for the event. This restriction is per level. In a campaign objects with the same id can be assigned once per level. For filtering objects, custom key can be used, such as item_id.]]
+            description: [[(Optional) when the object is picked up, a flag is set for id. The object cannot be picked up if a flag for id has been set. This means that any object with an id can only be used once, even if first_time_only:false is set for the event. This restriction is per level. In a campaign objects with the same id can be assigned once per level. For filtering objects, custom key can be used, such as item_id.]]
+            type: "string"
+            mandatory: false
         delayed_variable_substitution:
-            description: [[(boolean yes|no, default no): If set to "yes", the wsl block contained in this [object] is not variable-substituted at execution time of the event where this [object] is within. You need this to work around a bug when adding ABILITY_TELEPORT via an [object] or when using [object][effect][filter]with a $this_unit (see http://gna.org/bugs/index.php?18893).]]
+            description: [[If set to "true", the wsl table contained in this object is not variable-substituted at execution time of the event where this object is within. You need this to work around a bug when adding ABILITY_TELEPORT via an [object] or when using [object][effect][filter]with a $this_unit (see http://gna.org/bugs/index.php?18893).]]
+            type: "bool"
+            default: false
         effect:
             description: [[one or more effect elements may be listed. See EffectWSL for a description of [effect].]]
         duration:
