@@ -1,3 +1,14 @@
+wsl_handler
+    id: "test"
+    scope: "Scenario"
+
+wsl_handler
+    id: "tutorial"
+    scope: "Scenario"
+
+wsl_handler
+    id: "multiplayer"
+    scope: "Scenario"
 
 wsl_handler
     id: "scenario"
@@ -10,11 +21,11 @@ wsl_handler
     ignore_cap_keys: true
     type: "table"
     mandatory: true
-    description: [[The top level tags [multiplayer], [test], [tutorial] and [scenario] are all formatted the same way. The difference between these tags is the way that the scenarios they describe are accessed.
-The keys id and next_scenario affect how scenarios can be accessed. Whenever a scenario is won, the scenario with id=next_scenario of the same tag type will be played. Units from the first scenario will be available for recall in the second.
+    description: [[The wsl handler functions 'multiplayer', 'test', 'tutorial' and 'scenario' are all formatted the same way. The difference between these tags is the way that the scenarios they describe are accessed.
+The keys id and next_scenario affect how scenarios can be accessed. Whenever a scenario is won, the scenario with id:next_scenario of the same tag type will be played. Units from the first scenario will be available for recall in the second.
 Some scenarios can be played without playing other scenarios first (in this case there is nothing on the recall list). These scenarios are called initial scenarios.
 A list of initial scenarios, and how to access them:
-All [multiplayer] scenarios (without allow_new_game=no) are initial scenarios listed in the multiplayer scenario selector screen (accessed by the "multiplayer" button).
+All [multiplayer] scenarios (without allow_new_game:false) are initial scenarios listed in the multiplayer scenario selector screen (accessed by the "multiplayer" button).
 The [test] scenario with the attribute id=test is an initial scenario. This test scenario can be accessed by running the game in test mode. (note: this is NOT the same as debug mode. It can be accessed using -t or --test)
 The [tutorial] scenario with the attribute id=tutorial is an initial scenario. The tutorial is accessed by clicking on the "tutorial" button.
 Any [scenario] scenario with an id listed in the value of first_scenario in a campaign tag (see CampaignWSL) is an initial scenario accessed by selecting that campaign after clicking on the "campaign" button.]]
@@ -22,7 +33,7 @@ Any [scenario] scenario with an id listed in the value of first_scenario in a ca
         id:
             type: "String"
             mandatory: true
-            description: [[A unique identifier for this scenario. All scenarios must have an id. Can't clash with id used in [multiplayer] tags.]]
+            description: [[A unique identifier for this scenario. All scenarios must have an id. Can't clash with id used in multiplayer tables.]]
         next_scenario:
             type: "String"
             description: [[The id of the scenario to load when the current one is won. This can be changed dynamically, to build non-linear campaigns.]]
@@ -60,7 +71,7 @@ Any [scenario] scenario with an id listed in the value of first_scenario in a ca
         victory_when_enemies_defeated:
             type: "Bool"
             default: true
-            description:
+            description: ""
         carryover_percentage:
             default: 80
             type: "Integer"
@@ -72,7 +83,7 @@ Any [scenario] scenario with an id listed in the value of first_scenario in a ca
         remove_from_carryover_on_defeat:
             default: true
             type: "Bool"
-            description: "when this is set to yes (default), for sides who got defeated (according to the side.defeat_condition), carryover will be removed."
+            description: "when this is set to true (default), for sides who got defeated (according to the side.defeat_condition), carryover will be removed."
         disallow_recall:
             type: "Bool"
             description:
