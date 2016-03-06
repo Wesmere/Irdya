@@ -11,7 +11,15 @@ dir = require "pl.dir"
 utils = require "pl.utils"
 tablex = require "pl.tablex"
 
-wsl_error = require("actions").wsl_error
+wsl_error = error
+-- import wsl_error from require "actions"
+import message from require "interface"
+
+log =
+    warn: message
+    :error --: wsl_error
+    trace: message
+    debug: message
 
 -- Lifted from MoonScript@GitHub
 try = (t) ->
@@ -121,20 +129,20 @@ load_cfg_file = (file, env) ->
           utils.quit("Anal exit")
       finally: ->
       --  log.trace("Loaded File: " .. file)
-  ---
-  -- Load only the files at this level of the directory structure.
-  -- @tparam Game self
-  -- @string content_dir_path
-  -- @tab env environment to execute the files in
-  -- load_files: (content_dir_path, env) =>
-  --   assert(content_dir_path)
-  --   assert(env)
-  --   --- @todo this patterns don't work
-  --   --files = dir.getfiles(content_dir_path, "@(*.moon|*.lua)")
-  --   files = dir.getfiles(content_dir_path, "*.moon")
-  --   for file in *files
-  --     filePath = path.join(content_dir_path, file)
-  --     @load_cfg_file(filePath, env)
+
+---
+-- Load only the files at this level of the directory structure.
+-- @tparam Game self
+-- @string content_dir_path
+-- @tab env environment to execute the files in
+load_files = (content_dir_path, env) ->
+    assert(content_dir_path)
+    assert(env)
+    --- @todo this patterns don't work
+    --files = dir.getfiles(content_dir_path, "@(*.moon|*.lua)")
+    files = dir.getfiles(content_dir_path, "*.moon")
+    for file in *files
+        load_cfg_file(file, env)
 
 ----
 -- Load each and every file in the given path.
