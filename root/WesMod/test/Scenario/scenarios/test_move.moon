@@ -49,10 +49,10 @@ MOVE_MALFORMED_SCEN = (ID, PX, PY) ->
                 y:PY
             SUCCEED!
 
-MOVE_MALFORMED_SCEN test_move, {16,15,14,13,12,11}, {3,3,3,3,3,3}
-MOVE_MALFORMED_SCEN test_move_fail_1, {16,15,14,13,12,11,10}, {3,3,3,3,3,3}
-MOVE_MALFORMED_SCEN test_move_fail_2, {16,15,14,13,12,11}, {3,3,3,3,3,3,3}
-MOVE_MALFORMED_SCEN test_move_fail_3, {16,15,14,13,12,11}, {3,3,3,3,3}
-MOVE_MALFORMED_SCEN test_move_fail_4, {16,15,14,13,12}, {3,3,3,3,3,3}
-MOVE_MALFORMED_SCEN test_move_fail_5, {16,15,"chicken",13,12,11}, {3,3,3,3,3,3}
-MOVE_MALFORMED_SCEN test_move_fail_6, {16,15,14,13,12,11}, {3,3,3,3,3,"bock"}
+MOVE_MALFORMED_SCEN "test_move", {16,15,14,13,12,11}, {3,3,3,3,3,3}
+MOVE_MALFORMED_SCEN "test_move_fail_1", {16,15,14,13,12,11,10}, {3,3,3,3,3,3}
+MOVE_MALFORMED_SCEN "test_move_fail_2", {16,15,14,13,12,11}, {3,3,3,3,3,3,3}
+MOVE_MALFORMED_SCEN "test_move_fail_3", {16,15,14,13,12,11}, {3,3,3,3,3}
+MOVE_MALFORMED_SCEN "test_move_fail_4", {16,15,14,13,12}, {3,3,3,3,3,3}
+MOVE_MALFORMED_SCEN "test_move_fail_5", {16,15,"chicken",13,12,11}, {3,3,3,3,3,3}
+MOVE_MALFORMED_SCEN "test_move_fail_6", {16,15,14,13,12,11}, {3,3,3,3,3,"bock"}
