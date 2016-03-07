@@ -1,2 +1,5 @@
 # Don't track compiled lua files
 *.lua
+
+# Don't track Wesnoth map files
+*.map
