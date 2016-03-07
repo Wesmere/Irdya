@@ -2,9 +2,6 @@ wsl_handler
     id: "terrain_type"
     scope: "Terrain"
     description: [[The "terrain_type" table describes a terrain in WSL.]]
-    
-    on_scan: (cfg) ->
-    on_load: (cfg) ->
 
     scheme:
         id:

@@ -1,10 +1,8 @@
-
 wsl_handler
-
     id: "section"
-    description: "The section table describes a section in the help browser. A section contains subsections and/or topics."
-
     scope:"Help"
+
+    description: "The section table describes a section in the help browser. A section contains subsections and/or topics."
 
     scheme:
 

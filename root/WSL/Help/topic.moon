@@ -1,7 +1,7 @@
-
 wsl_handler
     id: "topic"
     scope: "Help"
+
     description: "The topic table describes one topic, i.e, one help page."
 
     scheme:

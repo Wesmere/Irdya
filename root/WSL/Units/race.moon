@@ -1,9 +1,6 @@
 wsl_handler
     id: "race"
     scope: "Units"
-    on_scan: (cfg) ->
-    on_load: (cfg) ->
-        wesmere.races[cfg.id] = cfg
 
     description: [[The race table is used to make shortcuts to describe units with similar names. Units from the same advancement tree should generally have the same race. Also, units with the same race should generally be recruitable by the same sides/factions.]]
 

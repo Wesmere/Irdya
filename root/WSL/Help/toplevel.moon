@@ -1,4 +1,3 @@
-
 wsl_handler
     id: "toplevel"
     scope: "Help"

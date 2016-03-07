@@ -2,25 +2,20 @@ wsl_handler
     id: "test"
     scope: "Scenario"
 
+
 wsl_handler
     id: "tutorial"
     scope: "Scenario"
 
+
 wsl_handler
     id: "multiplayer"
     scope: "Scenario"
-    on_scan: (cfg, file, path) ->
-        state.Registry.scenarios[cfg.id] = false
-    on_load: (cfg) ->
-        state.Scenario[cfg.id] = cfg
+
 
 wsl_handler
     id: "scenario"
     scope: "Scenario"
-    on_load: (cfg) ->
-        state.Scenario[cfg.id] = cfg
-    on_scan: (cfg, file, path) ->
-        state.Registry.scenarios[cfg.id] = false
 
     ignore_cap_keys: true
     type: "table"

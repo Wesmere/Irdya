@@ -1,10 +1,6 @@
 wsl_handler
     id: "unit_type"
     scope: "Units"
-    on_scan: (cfg) ->
-        --state.Registry.unit_type[cfg.id] = false
-    on_load: (cfg) ->
-        state.Units.unit_type[cfg.id] = cfg
 
     description: "Each unit_type() function call defines one unit type. (for the use of unit() to create a unit, see SingleUnitWML)"
 
@@ -97,7 +93,7 @@ If the previous unit type makes use of [male] and/or [female] tags, then the cur
         small_profile="portraits/elves/transparent/marksman+female.png~CROP(0,20,380,380)~SCALE(205,205)"
         profile="portraits/elves/transparent/marksman+female.png"]]
         race:
-            description: "See [race]. Also used in standard unit filter (see FilterWML). Mainline Wesnoth features following values: bats, drake, dwarf, elf, falcon, goblin, gryphon, human, khalifate, lizard, mechanical, merman, monster, naga, ogre, orc, troll, undead, wolf, wose. They are defined in /data/core/units.cfg."
+            description: "See [race]. Also used in standard unit filter (see FilterWML). Mainline Wesmere features following values: bats, drake, dwarf, elf, falcon, goblin, gryphon, human, khalifate, lizard, mechanical, merman, monster, naga, ogre, orc, troll, undead, wolf, wose."
             type: "string"
         undead_variation:
             description: [[When a unit of this type is killed by a weapon with the plague special, this variation is applied to the new plague unit that is created, whatever its type. For example, if the plague special creates Walking Corpses and undead_variation is set to "troll", you'll get a troll Walking Corpse. Defaults to the undead_variation set in this unit type's race.]]
