@@ -1,15 +1,16 @@
 
 -- Variant HP, MP, and MP types for the Soulless
-UNIT_BODY_SOULLESS_STATS = (MOVETYPE_ID, MOVES_NUMBER, HP_AMOUNT) ->
-    hitpoints:HP_AMOUNT
-    movement_type:MOVETYPE_ID
-    movement:MOVES_NUMBER
+UNIT_BODY_SOULLESS_STATS = (MOVETYPE_ID, MOVES_NUMBER, HP_AMOUNT, cfg) ->
+    with cfg
+        .hitpoints= HP_AMOUNT
+        .movement_type= MOVETYPE_ID
+        .movement= MOVES_NUMBER
 
 -- Variant animations for the Soulless
 --define UNIT_BODY_SOULLESS_GRAPHICS BASE_NAME DEATH_FRAMES_NUMBER
 --enddef
 
-unit_type UNIT_BODY_SOULLESS_STATS smallfoot, 4, 28
+unit_type UNIT_BODY_SOULLESS_STATS smallfoot, 4, 28,
     id:"Soulless"
     name: _ "Soulless"
     -- No profile variations for now
@@ -105,29 +106,29 @@ unit_type UNIT_BODY_SOULLESS_STATS smallfoot, 4, 28
     --         forest:4
     --         hills:4
 
-    variation: UNIT_BODY_SOULLESS_STATS largefoot, 4, 33
-        variation_id:"troll"
-        variation_name: _ "wc_variation^Troll"
-        inherit:"yes"
-        -- UNIT_BODY_SOULLESS_GRAPHICS soulless-troll 4
+    -- variation: UNIT_BODY_SOULLESS_STATS largefoot, 4, 33
+    --     variation_id:"troll"
+    --     variation_name: _ "wc_variation^Troll"
+    --     inherit:"yes"
+    --     -- UNIT_BODY_SOULLESS_GRAPHICS soulless-troll 4
 
-    variation: UNIT_BODY_SOULLESS_STATS "treefolk", 3, 40
-        variation_id:"wose"
-        variation_name: _ "wc_variation^Wose"
-        inherit:"yes"
-        -- UNIT_BODY_SOULLESS_GRAPHICS soulless-wose 4
-        movement_costs:
-            deep_water:3
+    -- variation: UNIT_BODY_SOULLESS_STATS "treefolk", 3, 40
+    --     variation_id:"wose"
+    --     variation_name: _ "wc_variation^Wose"
+    --     inherit:"yes"
+    --     -- UNIT_BODY_SOULLESS_GRAPHICS soulless-wose 4
+    --     movement_costs:
+    --         deep_water:3
 
-    variation: UNIT_BODY_SOULLESS_STATS "fly", 5, 24
-        variation_id:"bat"
-        variation_name: _ "wc_variation^Bat"
-        inherit:"yes"
-        movement_costs:
-            cave:1
-            fungus:1
-        defense:
-            cave:50
-            fungus:50
-        resistance:
-            cold:70
+    -- variation: UNIT_BODY_SOULLESS_STATS "fly", 5, 24
+    --     variation_id:"bat"
+    --     variation_name: _ "wc_variation^Bat"
+    --     inherit:"yes"
+    --     movement_costs:
+    --         cave:1
+    --         fungus:1
+    --     defense:
+    --         cave:50
+    --         fungus:50
+    --     resistance:
+    --         cold:70
