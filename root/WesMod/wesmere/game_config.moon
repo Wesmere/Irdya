@@ -1,5 +1,6 @@
 
 game_config
+    id:"default"
     server:
         name:_"Official Wesnoth Server"
         address:"server.wesnoth.org:15000"
