@@ -4,8 +4,16 @@
 -- LuaWSL:Events
 -- This page describes the LuaWSL functions and helpers for interacting with events and action handlers.
 
-import wsl_error from require "misc"
+import try, wsl_error from require "misc"
+import get_unit from require "units"
 
+import setfenv from require "pl.utils"
+
+log =
+    error: error
+    trace: -> --print
+    debug: print
+    info: print
 
 ----
 -- This is not a function but an associative table indexed by WSL action names. It contains functions performing the corresponding actions. Using these functions is similar to calling #wesmere.fire, while setting entries of the table is similar to calling #wesmere.register_wsl_action.
@@ -89,6 +97,7 @@ wsl_conditionals = {}
 -- Which should then be called from every on_event callback which changes the gamestate.
 game_events = {}
 
+--stack_depth = 0
 ----
 -- Fires all the WSL events with the given name. Optional parameters allow passing two locations and two tables. These parameters will be matched against the [filter], [filter_second], [filter_attack], and [filter_second_attack] of any event handler, and are used to fill the WSL variables "unit", "second_unit", "weapon", and "second_weapon". These parameters can also be read through current.event_context.
 -- @function wesmere.fire_event
@@ -102,35 +111,11 @@ game_events = {}
 -- @treturn bool The function returns a boolean indicating whether the game state was modified.
 -- @usage wesmere.fire_event("explosion", 17, 42, { damage: "fire" })
 -- @usage wesmere.fire_event = (event_name, [x1, y1, [x2, y2]], [first_weapon, [second_weapon]]) ->
-fire_event = (event_name, x1, y1, x2, y2, first_weapon, second_weapon) ->
-    handlers = wesmere.event_handlers[event_name]
-    return false unless handlers
+fire_event = (event_name, x1, y1, x2, y2, first_weapon, second_weapon) =>
+    handlers = @current.event_handlers[event_name]
+    return false, "No '#{event_name}' Events" unless handlers
 
-    ----
-    -- setfenv implementation
-    setfenv = (fn, env) ->
-        i = 1
-        while true
-            name = debug.getupvalue(fn, i)
-            if name == "_ENV"
-                debug.upvaluejoin(fn, i, () -> return env, 1)
-                break
-            elseif not name
-                break
-            i += 1
-        return fn
-
-    ----
-    -- getfenv implementation
-    getfenv = (fn) ->
-        i = 1
-        while true
-            name, val = debug.getupvalue(fn, i)
-            if name == "_ENV"
-                return val
-            elseif not name
-                break
-            i += 1
+    event_context = @current.event_context
 
     ----
     -- execute a single event handler
@@ -142,16 +127,16 @@ fire_event = (event_name, x1, y1, x2, y2, first_weapon, second_weapon) ->
     -- @param first_weapon
     -- @param second_weapon
     -- @tab _ENV Using the pragma of how Lua handles the global namespace to sandbox all event wml execution.
-    execute_event_handler = (handler, primary, second, first_weapon, second_weapon, _ENV) ->
-        return false if handler.remove
-        return false if handler.filter_side and not wesmere.match_side(side_number, handler.filter_side)
-        return false if handler.filter_condition and not wesmere.eval_conditional(handler.filter_condition)
+    execute_event_handler = (handler, primary, second, first_weapon, second_weapon, ENV) ->
+        return false, "handler disabled" if handler.remove
+        return false, "failed side filter" if handler.filter_side and not wesmere.match_side(side_number, handler.filter_side)
+        return false, "failed condition" if handler.filter_condition and not wesmere.eval_conditional(handler.filter_condition)
         if filter = handler.filter
-            return false unless unit
-            return false unless unit\matches(filter)
+            return false, "no unit thus no filtering" unless unit
+            return false, "unit does not match filter" unless unit\matches(filter)
         if filter = handler.filter_second
-            return false unless second_unit
-            return false unless second_unit\matches(filter)
+            return false, "no second unit thus no filtering" unless second_unit
+            return false, "second unit does not match filter" unless second_unit\matches(filter)
         -- @todo filter_attack
         -- @todo filter_second_attack
 
@@ -161,13 +146,21 @@ fire_event = (event_name, x1, y1, x2, y2, first_weapon, second_weapon) ->
         if handler.first_time_only
             handler.remove = true
 
+        setfenv(handler.command, ENV)
+
         handler.command(primary, secondary)
         return true
 
-    unit = wesmere.get_unit(x1, y1)
-    second_unit = wesmere.get_unit(x2, y2)
 
-    with wesmere.current.event_context
+    local unit, second_unit
+    if x1
+        try
+            do: -> unit = get_unit(x1, y1)
+            catch: (err) -> error "wesmere.fire_event: #{err}"
+    if x2
+        second_unit = get_unit(x2, y2)
+
+    with event_context
         .name = event_name
         .x1 = x1
         .y1 = y1
@@ -177,43 +170,53 @@ fire_event = (event_name, x1, y1, x2, y2, first_weapon, second_weapon) ->
         -- .weapon =; -- .second_weapon =
         -- .unit_x = ; .unit_y =
 
-    with ENV = wesmere.current.event_env
-        .side_number = wesmere.current.side
+    ENV = @current.event_context
+    with ENV
+        .side_number = @current.side
         .x1 = x1
         .y1 = y1 -- position of primary unit
         .x2 = x2
         .y2 = y2 -- position of secondary unit
-        .unit = unit
-        .second_unit = second_unit -- primary unit; secondary_unit
+        .Unit = unit
+        .Second_Unit = second_unit -- primary unit; secondary_unit
         -- .damage_inflicted = 0 -- @todo
+
+
+    modified = false
 
     if primary
         primary_unit = (type(primary) == Unit) and primary or @get_unit(primary)
     if secondary
         secondary_unit = (type(secondary) == Unit) and secondary or @get_unit(secondary)
-    if events = @game.events[name]
-        modified = false
-        for event in *@game.events[name]
-            modified or execute_event_handler event, primary_unit,
-                secondary_unit, first_weapon, second_weapon, ENV
+
+    for event in *handlers
+        fired, err = execute_event_handler event, primary_unit,
+            secondary_unit, first_weapon, second_weapon, ENV
+        if fired
+            modified = fired
+        else print "err"
 
     return modified
+
 
 ----
 -- Registers a new event handler.
 -- @function wesmere.add_event_handler
 -- @tab cfg This takes a WSL table containing the same information normally used by the [event] table.
-add_event_handler = (cfg) ->
+add_event_handler = (cfg) =>
     -- @todo handle id
     -- @todo handle remove
-    assert(cfg.name)
-    assert(cfg.command)
+    assert(cfg)
+    assert(type cfg == "table")
+    assert(cfg.command, "Missing 'command' in #{cfg.name} event")
+    assert(cfg.name, "Missing 'name' in event")
 
-    if wesmere.game_events[cfg.name]
-        table.insert(wesmere.game_events[cfg.name], cfg)
+    if @current.event_handlers[cfg.name]
+        table.insert(@current.event_handlers[cfg.name], cfg)
     else
-        wesmere.game_events[cfg.name] = { cfg }
+        @current.event_handlers[cfg.name] = { cfg }
     return true -- @todo
+
 
 ----
 -- Removes an event handler. This requires the event handler to have been assigned an id at creation time.
@@ -225,14 +228,17 @@ remove_event_handler = (id) ->
             if handler.id == id
                 handler.remove = true
 
+
 ----
 -- Returns true if the conditional described by the WSL table passes. Note: WSL variables are substituted.
 -- @function wesmere.eval_conditional
 -- @tab conditional_table
--- @usage result = wesmere.eval_conditional {
---   { "have_unit", { id: "hero" } }
---   { "variable", { name: "counter", numerical_equals: "$old_counter" } }
--- }
+-- @usage result = wesmere.eval_conditional
+--    have_unit:
+--        id: "hero"
+--    variable:
+--        name: "counter"
+--        numerical_equals: "old_counter"
 eval_conditional = (conditional_table) ->
 
 ----
@@ -252,7 +258,7 @@ set_wsl_action_metatable = () ->
 -- W.message { speaker = "narrator", message = "?" }
 
 ----
--- Interrupts the current execution and displays a chat message that looks like a WSL error.
+-- Interrupts the @current execution and displays a chat message that looks like a WSL error.
 -- @function helper.wsl_error
 -- @usage names = cfg.name or helper.wsl_error("clear_variable() missing required name: key.")
 wsl_error = (message) ->
