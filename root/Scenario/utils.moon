@@ -169,6 +169,7 @@ VARIABLE_OP = (VAR, OP_NAME, VALUE) ->
 
 -- Macro to do conditional operations on variables.
 VARIABLE_CONDITIONAL = (VAR, OP_NAME, VALUE) ->
+
     variable
         name: VAR
         [OP_NAME]: VALUE
@@ -187,8 +188,8 @@ CLEAR_GLOBAL_VARIABLE = (NAMESPACE, MY_VARIABLE_NAME, SIDE) ->
         side: SIDE
         immediate: false
 
--- #define FOREACH ARRAY_VALUE VAR
 -- # Macro to begin a WSL clause that iterates over an array.
+-- FOREACH = (ARRAY_VALUE, VAR) ->
 -- {VARIABLE {VAR} 0}
 -- [while]
 --     [variable]
@@ -268,6 +269,8 @@ MODIFY_UNIT = (FILTER, VAR, VALUE) ->
         unstore_unit
             variable: "unit"
             find_vacant: false
+
+
 ----
 --
 -- @tparam SUF FILTER
@@ -284,6 +287,8 @@ MOVE_UNIT_BY = (FILTER, OFFSET_X, OFFSET_Y) ->
         unstore_unit
             variable: mover
             find_vacant: false
+
+
 ----
 -- Moves a unit from its current location to the given location,
 -- displaying movement normally.
@@ -299,6 +304,8 @@ MOVE_UNIT = (FILTER, TO_X, TO_Y) ->
         .to_y = TO_Y
         .fire_event = false
     move_unit FILTER
+
+
 ----
 -- Heals all? unit(s?) matching the given filter from all pain and diseases.
 -- @tparam SUF FILTER
@@ -308,6 +315,7 @@ FULL_HEAL = (FILTER) ->
         filter: FILTER
         amount: "full"
         restore_statuses: true
+
 
 ----
 -- This places a given unit back to the recall list of the side it is on.
@@ -328,6 +336,8 @@ FULL_HEAL = (FILTER) ->
 --     command: PUT_TO_RECALL_LIST {x: 20, y: 38}
 PUT_TO_RECALL_LIST = (FILTER) ->
     put_to_recall_list FILTER
+
+
 ----
 --
 -- @tparam string IMAGE
@@ -335,6 +345,8 @@ PUT_TO_RECALL_LIST = (FILTER) ->
 -- @fixme Documentation for these is needed.
 MENU_IMG_TXT = (IMAGE, TEXT) ->
     return "&" .. IMAGE .. "=" .. TEXT
+
+
 ----
 --
 -- @tparam string IMAGE
@@ -342,6 +354,8 @@ MENU_IMG_TXT = (IMAGE, TEXT) ->
 -- @tparam string SECOND_TEXT_VALUE
 MENU_IMG_TXT2 = (IMAGE, FIRST_TEXT_VALUE, SECOND_TEXT_VALUE) ->
     return "&" .. IMAGE .. "=" .. FIRST_TEXT_VALUE .. "=" .. SECOND_TEXT_VALUE
+
+
 ----
 -- Allows a side to seemingly recruit variations of a given unit,
 -- such as the Walking Corpse.
@@ -372,6 +386,8 @@ RECRUIT_UNIT_VARIATIONS = (SIDE, TYPE, VARIATIONS) ->
                     effect:
                         apply_to: "hitpoints"
                         heal_full: true
+
+
 ----
 -- Scatters the given kind of units randomly on a given area on the map.
 --
@@ -423,6 +439,8 @@ SCATTER_UNITS = (NUMBER, TYPES, PADDING_RADIUS, FILTER, UNIT_WSL) ->
                 radius: PADDING_RADIUS
         unit UNIT_WSL
     return res
+
+
 ----
 -- Invisibly forces certain units to always have a specific chance to hit
 -- when fighting against certain other units.
@@ -476,6 +494,8 @@ FORCE_CHANCE_TO_HIT = (FILTER, SECOND_FILTER, CTH_NUMBER, EXTRA_CONDITIONS_WSL) 
         filter_second: FILTER
         filter_condition: EXTRA_CONDITIONS_WSL
         :command
+
+
 ----
 -- Gives a side gold and informs the player about it.
 -- @tparam number AMOUNT the amount of gold to give to the player's side
