@@ -1,8 +1,9 @@
+export ^
 
 RETURN = (X) ->
     if X
         endlevel
-            result:victory
+            result:"victory"
             linger_mode: true
     else
         test_condition
@@ -19,32 +20,39 @@ ASSERT = (X) ->
         	--- TODO {X}
         endlevel
             result:"defeat"
-            linger_mode:"yes"
+            linger_mode:true
 
-export GENERIC_UNIT_TEST = (NAME, CONTENT) ->
+GENERIC_UNIT_TEST = (NAME, CONTENT) ->
+
+    unless CONTENT
+        CONTENT = ->
+
     test
-        name: "Unit Test " .. NAME
-        map_data: "generic_unit_test"
+        name:"Generic Unit Test #{Name}"
+        map_data:"generic_unit_test"
         turns: -1
-        id: NAME
+        id:NAME
 
         time:DAWN
 
-        side:
-            side:1
-            controller:"human"
-            name: "Alice"
-            type: "Elvish Archer"
-            id:"alice"
+        side: {
+            {
+                side:1
+                controller:"human"
+                name:"Alice"
+                type:"Elvish Archer"
+                id:"alice"
+            },
+            {
+                side:2
+                controller:"human"
+                name:"Bob"
+                type:"Orcish Grunt"
+                id:"bob"
+            }
+        }
 
-        side:
-            side:2
-            controller:"human"
-            name: "Bob"
-            type: "Orcish Grunt"
-            id:"bob"
-
-        Prestart: CONTENT
+        Preload:CONTENT
 
 FAIL = ->
     RETURN false
