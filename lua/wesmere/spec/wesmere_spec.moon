@@ -1,23 +1,30 @@
 
 wesmere = require "init"
 
-describe "Wesmere module", ->
 
-    describe "Setup", ->
+describe "WSL Test Suite", ->
 
-        pending "Load root", ->
-            wesmere.load_wesmod_by_path("../root")
+    wesmere.load_wesmod_by_path("../../root")
+    wesmere.scan_root("../../root/WesMod/test")
+    wesmere.load_wesmod("test")
 
-        pending "Load testmod", ->
-            wesmere.load_wesmod("test")
+    for key, test in pairs wesmere.content.Scenario.test
 
-    describe "run test suite", ->
+        it "running ##{test.id}", ->
 
-        -- test_scenarios = wesmere.test_scenarios
+            test_scenario = wesmere.load_test(key)
+            test_scenario.start!
 
+            switch key
+                when "empty_test"
+                    assert not test_scenario.is_regular_game_end!, "Test did finish but shouldn't"
+                else
+                    assert test_scenario.is_regular_game_end!, "Test didn't finish"
 
-        --for scenario in *test_scenarios
-
-        --    pending "Running #{scenario.name}", ->
-
-        --        wesmere.start_scenario(scenario.id)
+            switch key
+                when "empty_test"
+                    assert true
+                when "test_assert_fail", "test_assert_fail_two", "two_plus_two_fail", "test_return_fail"
+                    assert not (test_scenario.get_end_level_data!.is_victory), "Test should fail but didn't'"
+                else
+                    assert (test_scenario.get_end_level_data!.is_victory), "Test failed"
