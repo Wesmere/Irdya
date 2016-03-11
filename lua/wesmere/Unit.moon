@@ -8,9 +8,11 @@ Set = require "pl.Set"
 Loc = require "Location"
 HasGetters = require "HasGetters"
 
+import wrapInArray from require "misc"
 import wsl_error from require "actions"
 import board from require "map"
-import unit_types from require "units"
+unit_types = require("wesmods").content.Units.unit_type
+
 
 ---
 -- @table this
@@ -160,9 +162,9 @@ class Unit extends HasGetters
     -- @treturn bool iff this unit matches the filter
     -- @usage assert(unit.canrecruit == wesmere.match_unit(unit, { can_recruit: true }))
     matches: (filter, other_unit) =>
-
-        assert(type(f) == "function" or type(f) == "table")
-        return filter(@, other_unit) if type(f) == "function"
+        assert(filter, "Unit\matches: missing filter argument.")
+        assert(type(filter) == "function" or type(filter) == "table")
+        return filter(@, other_unit) if type(filter) == "function"
 
         return true if next(filter) == nil -- empty filter matches every unit
 
@@ -175,23 +177,23 @@ class Unit extends HasGetters
         if not_filter = filter["not"]
             return false if @filter(not_filter)
 
-        -- TODO log.warn("filtering the unit with the id: #{@.id}")
+        -- @todo log.warn("filtering the unit with the id: #{@.id}")
 
 --special ones
     -- defense: current defense of the unit on current tile
     -- (chance to hit %, like in movement type definitions)
-        if f.defense
-            return false if Set(f.defense)[@defense!]
-        if f.movement_cost
-            return false if Set(f.movement_cost)[@movement_cost!]
+        if filter.defense
+            return false if Set(filter.defense)[@defense!]
+        if filter.movement_cost
+            return false if Set(filter.movement_cost)[@movement_cost!]
     --find_in: name of an array or container variable; if present, the unit will not match unless it is also found stored in the variable
         items = { id: true, speaker: true, type: true }
-        if id = wrapInArray(f.id)
+        if id = wrapInArray(filter.id)
             return false if Set(id)[@id]
-        if f.speaker
-            return false if Set(f.speaker)[@id]
-        if f.type
-            return false if Set(f.type)[@type]
+        if filter.speaker
+            return false if Set(filter.speaker)[@id]
+        if filter.type
+            return false if Set(filter.type)[@type]
         -- TODO implement table filter
         return true
 
