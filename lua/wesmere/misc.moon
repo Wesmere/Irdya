@@ -84,7 +84,7 @@ get_era = (id) ->
 -- local_choice the current code was invoked by wesmere.synchronize_choice and runs only on one local client to calculate the return value for wesmere.synchronize_choice. You cannot enter the synced context with [do_command] now.
 -- preload we are currently running a preload event or an even earlier event, this behaves similar to local_choice
 -- wesmere.message(string.format("Turn %d, side %d is playing.", wesmere.current.turn, wesmere.current.side))
-current = {}
+
 
 ----
 -- (Version 1.13.2 and later only) wesmere.synchronize_choice([description], function, [ai_function], [for_side])
@@ -196,18 +196,18 @@ have_file = (filename) ->
 -- wesmere.message(wesmere.debug(vconfig))
 -- wesmere.message(wesmere.debug(vconfig.__literal))
 debug = (wsl_table) ->
--- ilevel = 0
--- indent = (a, b)->
---   steps, fn = if b
---     a, b
---   else
---     1, a
---   ilevel += steps
---   fn!
---   ilevel -= steps
--- writeindent = -> io.write "   "\rep ilevel
+    ilevel = 0
+    indent = (a, b)->
+        steps, fn = if b
+            a, b
+        else
+            1, a
+        ilevel += steps
+        fn!
+        ilevel -= steps
+    writeindent = -> io.write "   "\rep ilevel
 
--- debug.write = =>
+-- debug_write = =>
 --   visited = {}
 --   _write = =>
 --     if type(self) == 'table' and not visited[self]
@@ -231,13 +231,13 @@ debug = (wsl_table) ->
 --       io.write tostring self
 --   _write self
 
--- debug.print = (...)->
---   remaining = #{...}
---   for arg in *{...}
---     remaining -= 1
---     debug.write arg
---     io.write ', ' unless remaining == 0
---   print!
+-- debug = (...) ->
+--     remaining = #{...}
+--     for arg in *{...}
+--         remaining -= 1
+--         debug.write arg
+--         io.write ', ' unless remaining == 0
+--     print!
 
 -- { write: debug.write, print: debug.print }
 
@@ -341,14 +341,39 @@ random = (m, n) ->
 -- @func[opt] random_function
 --helper.shuffle = (array, random_function) ->
 
+----
 -- Lifted from MoonScript@GitHub
+--
 try = (t) ->
     ok,err = pcall t["do"]
     t.catch err unless ok
     t.finally! if t.finally
 
 
+----
+-- Check for a table not consisting of any records and thus being a pure array.
+-- @tab t to be checked
+-- @return iff t is a pure array
+isArray = (t) ->
+  return false if type(t) == "function"
+  return false unless type(t) == "table"
+  i = 0
+  for _ in pairs(t)
+    i += 1
+    return false if t[i] == nil
+  return true
+
+----
+-- Checks if the given arguement is already
+-- @param t item to wrap
+-- @return tab
+wrapInArray = (t) ->
+  return t if isArray(t)
+  return { t }
+
+
 {
+    :wrapInArray
     :try
     :game_config
     :get_era
