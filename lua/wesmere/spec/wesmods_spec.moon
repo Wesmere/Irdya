@@ -1,6 +1,4 @@
 
-moon = require "moon"
-
 wesmods = require "wesmods"
 
 describe "Wesmods", ->
@@ -16,15 +14,13 @@ describe "Wesmods", ->
 
             assert ENV.AND_ME
 
-            moon.p(ENV)
-
-
     describe "Load Root", ->
 
         it "root", ->
-            wesmods.load_wesmod_by_path("../../root")
+            assert(wesmods.load_wesmod_by_path("../../root"))
 
     describe "Scan Root", ->
 
         it "Testroot", ->
-            wesmods.scan_root("../../root")
+            assert(wesmods.scan_root("../../root"))
+
