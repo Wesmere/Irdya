@@ -2,23 +2,24 @@
 Unit = require "Unit"
 Loc = require "Location"
 
-import unit_types from require "units"
-import board from require "map"
+loc = Loc(12,8)
 
-describe "Unit", ->
+state =
+    board:
+        units:
+            Kalenz: loc
 
-    elvish_fighter =
+unit_types =
+    [Elvish Fighter]:
         id: "Elvish Fighter"
         hitpoints: 28
 
-    unit_types[elvish_fighter.id] = elvish_fighter
+describe "Unit", ->
 
-    loc = Loc(12,8)
-    board.units["Kalenz"] = loc
-
-    cfg =
+    cfg = {
         id: "Kalenz"
         type: "Elvish Fighter"
+    }
 
     unit = Unit(cfg)
 
