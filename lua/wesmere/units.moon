@@ -1,6 +1,14 @@
 ----
 -- @submodule wesmere
 
+import board from require "map"
+import current, try from require "misc"
+
+import type from require "moon"
+
+Loc = require "Location"
+
+
 -- LuaWSL:Units
 -- This page describes the LuaWSL functions for handling units.
 
@@ -61,13 +69,7 @@
 -- The term "proxy", here in particular "proxy unit", means that the variable retrieved in the lua code (with get_units for example) is an accessor (reference) to the C++ object which represents that unit. This is very different from unit variables obtained by [store_unit] in wsl. The fields marked as "writable" above can be modified without the need to use put_unit afterwards. This same reason explains that modifications to the unit from outside the lua code (like [kill] invalidating the proxy unit) have immediate effect on the lua code's proxy unit variable (with the exception of private proxy units).
 -- @table unit
 
-----
--- Returns an array of all the units on the map matching the WSL filter passed as the first argument.
--- @function wesmere.get_units
--- @tparam StandardUnitFilter filter
--- @usage leaders_on_side_two = get_units { side: 2, can_recruit: true }
--- name_of_leader = leaders_on_side_two[1].name
-get_units = (filter) ->
+
 
 ----
 -- Returns the unit with the given underlying ID.
@@ -84,11 +86,33 @@ get_units = (filter) ->
 -- @treturn Unit at the location
 -- @usage args = ...
 -- unit = wesmere.get_unit(args.x1, args.y1)
-get_unit = (x, y) ->
-    unless y
-        return wesmere.units[x]
+get_unit = (x, y) =>
+    assert(x, debug.traceback("called get_unit without arguments"))
 
-    return wesmere.units[wesmere.board.units[x][y]]
+    local loc
+    try
+        do: ->
+            loc = Loc(x,y)
+        catch: (err) ->
+            print debug.traceback("get_unit stacktrace")
+            error "get_unit: Invalid arguments #{err}"
+        finally: ->
+            return @board.units[loc.x][loc.y]
+
+
+----
+-- Returns an array of all the units on the map matching the WSL filter passed as the first argument.
+-- @function wesmere.get_units
+-- @tparam StandardUnitFilter filter
+-- @usage leaders_on_side_two = get_units { side: 2, can_recruit: true }
+-- name_of_leader = leaders_on_side_two[1].name
+get_units = (filter) =>
+    return for id, loc in pairs @units
+        assert(loc.x)
+        assert(loc.y)
+        if unit = get_unit(@,loc.x,loc.y)
+            unit if unit\matches(filter)
+
 
 ----
 -- Returns true if the given unit matches the WSL filter passed as the second argument. If other_unit is specified, it is used for the $other_unit auto-stored variable in the filter. Otherwise, this variable is not stored for the filter.
@@ -99,6 +123,7 @@ get_unit = (x, y) ->
 -- @usage assert(unit.can_recruit == wesmere.match_unit(unit, { can_recruit: true }))
 match_unit = (unit, filter, other_unit) ->
     return unit\match(filter, other_unit)
+
 
 ----
 -- Erases a unit from the map. After calling this on a unit, the unit is no longer valid.
@@ -111,9 +136,15 @@ match_unit = (unit, filter, other_unit) ->
 -- @number x
 -- @number y
 -- @see Unit:erase
-erase_unit = (x, y) ->
-    u = wesmere.get_unit(x, y)
-    return u\erase!
+erase_unit = (x, y) =>
+    local loc
+    try
+        do: ->
+            loc = Loc(x, y)
+            u = wesmere.get_unit(loc.x, loc.y)
+        catch: (err) -> error "wesmere.erase_unit: bad arguments - #{err}"
+        finally: ->
+            return u\erase!
 
 ----
 -- Returns an array of all the units on the recall lists matching the WSL filter passed as the first argument.
@@ -138,7 +169,7 @@ get_recall_units = (filter) ->
 -- wesmere.put_recall_unit(wesmere.get_units({ x: 17, y: 42 })[1], 2)
 -- @usage wesmere.put_recall_unit = (unit, [side]) ->
 put_recall_unit = (unit, side) ->
-    if moon.type(unit) != Unit
+    if type(unit) != Unit
         u = Unit(unit)
         u\to_recall(side)
     else unit\to_recall(side)
@@ -265,7 +296,7 @@ unit_ability = (unit, ability_tag) ->
 -- __cfg: WSL table (dump)
 -- The metatable of these proxy tables appears as "unit type".
 -- @usage lich_cost = wesmere.unit_types["Ancient Lich"].cost
-unit_types = {}
+unit_types = require("wesmods").content.Units.unit_type
 
 ----
 -- This is not a function but a table indexed by race ids. Its elements are proxy tables for all races the engine knows about. known fields of each element:
@@ -326,6 +357,39 @@ simulate_combat = (attacker, attacker_weapon_index, defender, defender_weapon_in
 -- u.status.poisoned = false
 transform_unit = (unit, to_type) ->
     unit\transform(to_type)
+
+
+----
+-- @function wesmere.put_unit
+-- @tparam Unit|tab unit
+-- @number x
+-- @number y
+-- wesmere.put_unit(unit, x, y)
+-- @see Unit.to_map
+-- Places a unit on the map. This unit is described either by a WML table or by a proxy unit. Coordinates can be passed as the first two arguments, otherwise the table is expected to have two fields x and y, which indicate where the unit will be placed. If the function is called with coordinates only, the unit on the map at the given coordinates is removed instead. (Version 1.13.2 and later only) This use is now deprecated; use wesmere.erase_unit instead.
+-- @usage -- create a unit with random traits, then erase it
+-- wesmere.put_unit({ type: "Elvish Lady" }, 17, 42)
+-- wesmere.erase_unit(17, 42)
+-- When the argument is a proxy unit, no duplicate is created. In particular, if the unit was private or on a recall list, it no longer is; and if the unit was on the map, it has been moved to the new location. Note: passing a WML table is just a shortcut for calling #wesmere.create_unit and then putting the resulting unit on the map.
+-- @usage -- move the leader back to the top-left corner
+-- wesmere.put_unit(wesmere.get_units({ can_recruit: true })[1], 1, 1)
+put_unit = (unit, x, y) =>
+    Unit = require "Unit"
+    local loc
+    try
+        do: ->
+            loc = Loc(x,y)
+        catch: (err) ->
+            assert(unit.x)
+            assert(unit.y)
+            loc = Loc(unit.x, unit.y)
+
+    unless type(unit) == Unit
+        unit = Unit(unit)
+
+    @units[unit.id] = loc
+    @board.units[loc.x][loc.y] = unit
+
 
 
 {
