@@ -4,12 +4,47 @@
 -- @usage items = wesmere.require "lua/wsl/items.lua"
 -- @submodule wesmere
 
-board =
-    map:
-        width: 0
-        height: 0
-        border_size: 0
-    units: {}
+
+array2d = require "pl.array2d"
+import content from require "wesmods"
+import try from require "misc"
+Location = require "Location"
+
+BORDER_SIZE = 1
+
+
+parse_map_string = (map_string, border_size=BORDER_SIZE) ->
+    assert(map_string)
+    -- log.trace("Parsing map string: " .. map_string)
+    map = {}
+    y = 1 - border_size
+    local x
+    for line in string.gmatch(map_string, "[^\r\n]+")
+        x = 1 - border_size
+        for terrain_string in string.gmatch(line, "([^ ]+)")
+            if map[x] == nil
+                map[x] = {}
+            map[x][y] = terrain_string
+            x += 1
+        y += 1
+    with map
+        .width = x-1-border_size
+        .height = y-1-border_size
+        .border_size = border_size
+    return map
+
+
+load_map = (id, border_size=BORDER_SIZE) =>
+    assert(id)
+
+    if map = content.Scenario.map[id]
+        @board.map = parse_map_string(map.map_data)
+    else
+        error("Map with id '#{id}' not found")
+
+    @board.units = array2d.new(@board.map.width, @board.map.height, false)
+    @board.villages = array2d.new(@board.map.width, @board.map.height, false)
+
 
 ----
 -- Returns the width, the height, and the border size of the map.
@@ -18,10 +53,10 @@ board =
 -- @treturn number height
 -- @treturn number border size
 -- @usage w,h,b = wesmere.get_map_size!
-get_map_size = () ->
-    width  = board.map.width
-    height = board.map.height
-    border = board.map.border_size
+get_map_size = () =>
+    width  = @board.map.width
+    height = @board.map.height
+    border = @board.map.border_size
     return width, height, border
 
 ----
@@ -29,8 +64,12 @@ get_map_size = () ->
 -- @tparam number x
 -- @tparam number y
 -- @usage is_grassland = wesmere.get_terrain(12, 15) == "Gg"
-get_terrain = (x, y) ->
-    return board.map[x][y]
+get_terrain = (x, y) =>
+    local loc
+    try
+        do: -> loc = Location(x,y)
+        catch: (err) -> error "get_terrain: Invalid arguments: #{err}"
+    return @board.map[x][y]
 
 ----
 -- Modifies the terrain at the given location.
@@ -43,21 +82,21 @@ get_terrain = (x, y) ->
 -- @treturn string the replaced terrain code
 -- @usage create_village = (x, y) ->
 --     wesmere.set_terrain(x, y, "Gg^Vh")
-set_terrain = (x, y, terrain_code, layer="both", replace_if_failed=false) ->
+set_terrain = (x, y, terrain_code, layer="both", replace_if_failed=false) =>
     old = board.map[x][y]
     -- base, overlay = old\match("([^\^]+),([^\^]+)")
 
     switch layer
         when nil
-            board.map[x][y] = terrain_code
+            @board.map[x][y] = terrain_code
         when "both"
-            board.map[x][y] = terrain_code
+            @board.map[x][y] = terrain_code
         when "overlay"
-            board.map[x][y] = base + "^" + terrain_code
+            @board.map[x][y] = base + "^" + terrain_code
         when "base"
-            board.map[x][y] = terrain_code + "^" + overlay
+            @board.map[x][y] = terrain_code + "^" + overlay
         else
-            wesmere.wsl_error("wesmere.set_terrain: unknown layer: " + layer)
+            @wesmere.wsl_error("wesmere.set_terrain: unknown layer: " + layer)
 
     return old
 
@@ -93,27 +132,6 @@ get_terrain_info = (terrain_code) ->
 --   :lua chg_unit("status.poisoned", true)
 get_selected_tile = () ->
 
-----
--- Returns a table containing all the locations matching the given filter. Locations are stored as pairs: tables of two elements.
--- @function wesmere.get_locations
--- @tparam StandardLocationFilter See StandardLocationFilter for details about location filters.
--- @treturn {Location,...} The matching locations
--- @usage -- replace all grass terrains by roads
--- for loc in *wesmere.get_locations { terrain: "Gg" }
---     wesmere.set_terrain(loc[1], loc[2], "Rr")
-get_locations = (filter) ->
-
-    get_ranges = (x, y) ->
-        x_ranges = {}
-        y_ranges = {}
-
-        lower_x, upper_x = x\gmatch("^-","-^")
-        lower_y, upper_y = y\gmatch("^-","-^")
-
-    return for loc in *get_ranges(x,y)
-        if wesmere.match_location(loc.x, loc.y, filter)
-            loc
-        else continue
 
 ----
 -- This function, when called without arguments, returns a table containing all the villages present on the map (as tables of two elements). If it's called with a WSL table as argument, a table containing only the villages matching the supplied StandardLocationFilter is returned.
@@ -123,9 +141,12 @@ get_locations = (filter) ->
 -- @usage -- How many villages do we have on our map?
 -- v = #wesmere.get_villages!
 get_villages = (filter) ->
-    locations = wesmere.get_locations(filter)
+    local locations
+    try
+        do: -> locations = get_locations(filter)
+        catch: (err) -> error "get_villages: #{err}"
     return for loc in locations
-        if wesmere.is_village(loc)
+        if is_village(loc)
             loc
         else continue
 
@@ -137,7 +158,14 @@ get_villages = (filter) ->
 -- @number y
 -- @tparam StandardLocationFilter filter
 -- @usage b = wesmere.match_location(x, y, { terrain: "Ww", { "filter_adjacent_location", terrain: "Ds,*^Bw*" } })
-match_location = (x, y, filter) ->
+match_location = (x, y, filter) =>
+
+    local loc
+    try
+        do: ->
+            loc = Location(x,y)
+        catch: (err) ->
+            error "match_location: Invalid location arguements #{err}"
 
     -- Filter Areas
     -- if (cfg_.has_attribute("area") &&
@@ -204,7 +232,7 @@ match_location = (x, y, filter) ->
     --         return false;
     -- }
     if unit_filter = filter.filter
-        unit = wesmere.get_unit(loc)
+        unit = get_unit(loc)
         return false unless unit\match(unit_filter)
 
     -- // Allow filtering on visibility to a side
@@ -359,13 +387,46 @@ match_location = (x, y, filter) ->
     --     }
     -- }
     if owner_side = filter.owner_side
-        return false if board.village[loc.x][loc.y] != owner_side
+        return false if @board.village[loc.x][loc.y] != owner_side
 
     if filter_owner = filter.filter_owner
-        owner_side = board.village[loc.x][loc.y]
-        return false unless wesmere.match_side(owner_side, filter_owner)
+        owner_side = @board.village[loc.x][loc.y]
+        return false unless match_side(owner_side, filter_owner)
 
     return true
+
+----
+-- Returns a table containing all the locations matching the given filter. Locations are stored as pairs: tables of two elements.
+-- @function wesmere.get_locations
+-- @tparam StandardLocationFilter See StandardLocationFilter for details about location filters.
+-- @treturn {Location,...} The matching locations
+-- @usage -- replace all grass terrains by roads
+-- for loc in *wesmere.get_locations { terrain: "Gg" }
+--     wesmere.set_terrain(loc[1], loc[2], "Rr")
+get_locations = (filter) =>
+
+    print debug.traceback "stacktrace get_locations"
+
+    assert(type(filter) == "table" or type(filter) == "function", "get_locations: Filter argument must be a table or function")
+
+    result = {}
+    for x=1, @board.map.width
+        for y=1, @board.map.width
+            if match_location(@, x, y, filter)
+                table.insert(result, Location(x,y))
+
+    -- get_ranges = (x, y) ->
+    --     x_ranges = {}
+    --     y_ranges = {}
+
+    --     lower_x, upper_x = x\gmatch("^-","-^")
+    --     lower_y, upper_y = y\gmatch("^-","-^")
+
+    -- return for loc in *get_ranges(x,y)
+    --     if match_location(@, loc.x, loc.y, filter)
+    --         loc
+    --     else continue
+    return result
 
 
 ----
@@ -415,6 +476,8 @@ remove_tile_overlay = (x, y, filename) ->
 
 
 {
+    :load_map
+    :parse_map_string
     :board
     :get_map_size
     :get_terrain
