@@ -14,13 +14,16 @@ describe "Wesmods", ->
 
             assert ENV.AND_ME
 
-    describe "Load Root", ->
 
-        it "root", ->
-            assert(wesmods.load_wesmod_by_path("../../root"))
+    -- describe "Load Root", ->
+    --     it "root", ->
+    --         assert(wesmods.load_wesmod_by_path("../../root"))
 
-    describe "Scan Root", ->
+    -- describe "Load Root", ->
+    --     it "root", ->
+    --         assert(wesmods.load_wesmod_by_path("../../root/WesMod/test"))
 
-        it "Testroot", ->
-            assert(wesmods.scan_root("../../root"))
+    -- describe "Scan Root", ->
 
+    --     it "Testroot", ->
+    --         assert(wesmods.scan_root("../../root"))
