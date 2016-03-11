@@ -4,15 +4,14 @@ wsl_action
 Units can be unstored with negative (or zero) hit points. This can be useful if modifying a unit in its last_breath event (as the unit's death is already the next step), but tends to look wrong in other cases. In particular, it is possible to have units with negative hit points in play. Such units are aberrations, subject to unusual behavior as the game compensates for them. (For example, such units are currently automatically hit–and killed–in combat.) The details of the unusual behavior are subject to change between stable releases without warning."
 
     action: (cfg) ->
-        unit = cfg.variable
-        -- unit = _G["unit_variable"]
-
-        loc = wesmere.Location(cfg)
+        unit = wesmere.get_variable(cfg.variable)
+        local loc
+        try
+            do: -> loc = Loc(cfg)
+            catch: (err) ->
 
         -- if find_vacant
         --    if check_passability
-
-
         wesmere.put_unit(unit, loc)
 
     scheme:

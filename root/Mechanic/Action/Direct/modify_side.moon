@@ -3,8 +3,8 @@ wsl_action
     id: "modify_side"
     description: "Modifies some details of a given side in the middle of a scenario. The following listed properties are the only properties that [modify_side] can affect!"
 
-    action: (cfg, wesmere) ->
-        wesmere.modify_side(cfg)
+    action: (cfg) ->
+        print "'modify_side' not implemented yet."
 
     scheme:
         side:

@@ -1,9 +1,14 @@
+id = "store_locations"
+
 wsl_action
-    id: "store_locations"
+    id: id
     description: [[Stores a series of locations that pass certain criteria into an array. Each member of the array has members 'x' and 'y' (the position) and 'terrain' (the terrain type) and 'owner_side' (villages only). The array will include any unreachable border hexes, if applicable.]]
 
-    action: (cfg, wesmere) ->
-        locs = wesmere.get_locations(cfg)
+    action: (cfg) ->
+        local locs
+        try
+            do: -> locs = wesmere.get_locations(cfg)
+            catch: (err) -> error "WSLAction #{id}: #{err}"
         result = for loc in *locs
             X = loc.x
             Y = loc.y
@@ -15,7 +20,7 @@ wsl_action
                 unit: wesmere.get_unit(X, Y)
             }
         if variable = cfg.variable
-            _G[variable] = result
+            wesmere.set_variable(variable, result)
         return result
 
         -- the variable can be mentioned in a [find_in] subtag, so it
@@ -24,9 +29,10 @@ wsl_action
     scheme:
         variable:
             description: [[the name of the variable (array) into which to store the locations.]]
-            type: "String"
+            type: "string"
         filter_location:
             description: [[StandardLocationFilter: a location or location range which specifies the locations to store. By default, all locations on the map are stored.]]
+            type:{"table","function"}
 
 
 

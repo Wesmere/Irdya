@@ -5,18 +5,32 @@ wsl_action
 
     action: (cfg) ->
 
-        found = 0
-        if cfg.search_recall_list
-            for side in *wesmere.sides
-                continue unless wesmere.match_side(side, cfg)
-                for unit in *side.recall_list
-                    found += 1 if wesmere.match_unit(unit, cfg) and unit.hitpoints > 0
+        assert(cfg)
+        --- @todo support count and search_recall_list
 
-        unless cfg.count
-            return wesmere.get_unit(cfg) != nil
+        -- found = 0
+        -- if cfg.search_recall_list
+        --     for side in *wesmere.sides
+        --         continue unless wesmere.match_side(side, cfg)
+        --         for unit in *side.recall_list
+        --             found += 1 if wesmere.match_unit(unit, cfg) and unit.hitpoints > 0
 
-        found += #wesmere.get_units(cfg)
-        return wesmere.match_range(found, cfg.count)
+        -- local units
+        -- try
+        --     do: ->
+        units = wesmere.get_units(cfg)
+        return #units > 0
+            -- catch: (err) ->
+            --     error err
+            -- finally: ->
+
+
+
+        -- unless cfg.count
+        --     return wesmere.get_units(cfg) != nil
+
+        -- found += #wesmere.get_units(cfg)
+        -- return wesmere.match_range(found, cfg.count)
 
     scheme:
         StandardUnitFilter:

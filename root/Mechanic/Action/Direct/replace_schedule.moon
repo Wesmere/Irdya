@@ -3,8 +3,8 @@ wsl_action
     id: "replace_schedule"
     description: "Replace the time of day schedule of the entire scenario."
 
-    action: (cfg, kernel) ->
-        kernel\print("'replace_schedule' not implemented yet.")
+    action: (cfg) ->
+        print("'replace_schedule' not implemented yet.")
 
     scheme:
         schedule:

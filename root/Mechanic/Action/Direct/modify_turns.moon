@@ -3,8 +3,8 @@ wsl_action
     id: "modify_turns"
     description: "Modifies the turn limit in the middle of a scenario."
 
-    action: (cfg, kernel) ->
-        kernel\print("'modify_turns' not implemented yet.")
+    action: (cfg) ->
+        print("'modify_turns' not implemented yet.")
 
     scheme:
         value:

@@ -19,18 +19,29 @@ SSF = (cfg) ->
 wsl_action
     id: "event"
 
-    action: (cfg, kernel) ->
-        if cfg.remove
-            wsl_actions.remove_event(cfg)
+    action: (ev) ->
+
+        assert ev
+
+        if ev.name == nil
+            error "no name in embeded event" unless ev.name
+            print debug.traceback("stack trace")
+            wesmere.debug ev
+
+
+        error "no command in embeded #{ev.name} event" unless ev.command
+
+        if ev.remove
+            wesmere.remove_ev(ev)
         else
-            wesmere.add_event_handler(cfg)
+            wesmere.add_event_handler(ev)
 
     scheme:
         name:
             description: "hmmm"
         first_time_only:
             description: [[Whether the event should be removed from the scenario after it is triggered. This key takes a boolean; for example:
-first_time_only=yes
+first_time_only: true
 Default behavior if key is omitted. The event will trigger the first time it can and never again.
 first_time_only=no
 The event will trigger every time the criteria are met instead of only the first time.]]

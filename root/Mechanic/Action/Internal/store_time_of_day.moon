@@ -8,13 +8,18 @@ Time areas matter; illumination does not. If this is omitted, the global (locati
     action: (cfg) ->
         turn = cfg.turn or wesmere.current.turn
         illumination = cfg.illumination
-        local time
-        if cfg.x and cfg.y
-            time = wesmere.get_time_of_day(turn, {cfg.x, cfg.y, illumination})
-        else
-            time = wesmere.get_time_of_day(turn)
 
-        wesmere.set_variable(cfg.variable, time)
+        local time, loc
+        try
+            do: ->
+                loc = Loc(cfg)
+            catch: (err) ->
+                time = wesmere.get_time_of_day(turn)
+            finally: ->
+                time = wesmere.get_time_of_day(turn, {loc.x, loc.y, illumination})
+
+        if variable = cfg.variable
+            wesmere.set_variable(cfg.variable, time)
         return time
 
     scheme:
@@ -25,8 +30,8 @@ Time areas matter; illumination does not. If this is omitted, the global (locati
             description: "Location to store the time for."
             type: "number"
         variable:
-            description: "(default='time_of_day') name of the container on which to store the information. The container will be filled with the same attributes found on TimeWSL."
-            default: "time_of_day"
+            description:"name of the container on which to store the information. The container will be filled with the same keys found on TimeWSL."
+            default:"time_of_day"
             type: "string"
         turn:
             description: "(defaults to the current turn number) changes the turn number for which time of day information should be retrieved."

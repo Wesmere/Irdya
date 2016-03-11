@@ -13,18 +13,21 @@ Note: stored units also exist on the field, and modifying the stored variable wi
 
         --cache the needed units here, since the filter might reference the to-be-cleared variable(s)
         units = wesmere.get_units(filter)
-        recall_units = wesmere.get_recall_units(filter)
+        -- recall_units = wesmere.get_recall_units(filter)
 
-        result = for u in *units
-            if kill_units then wesmere.erase_unit(u)
-            u
+        result = units
+        -- result = for u in *units
+        --     -- if kill_units
+        --     --     wesmere.erase_unit(u)
+        --     u
 
-        if (not filter.x or filter.x == "recall") and (not filter.y or filter.y == "recall")
-            for u in *recall_units
-                u.x = "recall"
-                u.y = "recall"
-                table.insert(result, u)
-                if kill_units then wesmere.erase_unit(u)
+        -- if (not filter.x or filter.x == "recall") and (not filter.y or filter.y == "recall")
+        --     for u in *recall_units
+        --         u.x = "recall"
+        --         u.y = "recall"
+        --         table.insert(result, u)
+        --         if kill_units
+        --             wesmere.erase_unit(u)
 
         wesmere.set_variable(cfg.variable, result)
         return result
@@ -34,6 +37,7 @@ Note: stored units also exist on the field, and modifying the stored variable wi
             description: "with a StandardUnitFilter as argument. All units matching this filter will be stored. If there are multiple units, they will be stored into an array of variables. The units will be stored in order of their internal underlying_id attribute, which is usually in creation order (but you normally should not depend on the order)."
         variable:
             description: "the name of the variable into which to store the unit(s)"
+            type: "string"
         mode:
             description: "defaults to always_clear, which clears the variable, whether or not a match is found. If mode is set to replace, the variable will not be cleared, and units which match the filter will overwrite existing elements at the start of the array, leaving any additional elements intact if the original array contained more elements than there are units matching the filter. If mode is set to append, the variable will not be cleared, and units which match the filter will be added to the array after the existing elements."
         kill:

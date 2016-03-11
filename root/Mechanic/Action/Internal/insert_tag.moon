@@ -1,9 +1,11 @@
 
-
 wsl_action
     id: "insert_tag"
     description: [[Inserts a variable as WSL. In other words, the value of the passed container variable will be injected into the game as if they had been written out in WSL form. (See Example).
 Tag insertion is a special case in that it can be used in places where other ActionWSL cannot be used. The basic rule is that anywhere that $variable syntax works, tag insertion will also work. In practice this means pretty much everywhere except directly within top-level scenario tags.]]
+
+    action: (cfg) ->
+        print "'insert_tag' not implemented yet."
 
     scheme:
         name:

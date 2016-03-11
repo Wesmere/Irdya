@@ -1,5 +1,6 @@
 wsl_action
     id: "unit"
-    action: (cfg, kernel) ->
-        return kernel\create_unit(cfg)
+    description: ""
+    action: (cfg) ->
+        return wesmere.put_unit(cfg)
 

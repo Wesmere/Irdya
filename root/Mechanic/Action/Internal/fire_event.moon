@@ -2,7 +2,7 @@ wsl_action
     id: "fire_event"
     description: [[Trigger a WSL event (used often for custom events)]]
 
-    action: (cfg, wesmere) ->
+    action: (cfg) ->
         u1 = cfg.primary_unit
         u1 = u1 and wesmere.get_units(u1)[1]
         x1, y1 = 0, 0
@@ -17,7 +17,8 @@ wsl_action
         w2 = cfg.secondary_attack
         if w2 then w1 = w1 or {}
 
-        wesmere.fire_event(cfg.name, x1, y1, x2, y2, w1, w2)
+        --wesmere.fire_event(cfg.name, x1, y1, x2, y2, w1, w2)
+        wesmere.fire_event cfg.name
 
     scheme:
         name:

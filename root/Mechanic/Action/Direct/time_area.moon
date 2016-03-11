@@ -7,10 +7,11 @@ time_area:
     x: {"1-2", "4-5"}
     y: {"1-2", "1-2"}
     time: UNDERGROUND]]
-    
-    action: (cfg, wesmere) ->
+
+    action: (cfg) ->
+        assert(cfg)
         if cfg.remove
-            wsl_actions.remove_time_area(cfg)
+            wesmere.wsl_actions.remove_time_area(cfg)
         else
             wesmere.add_time_area(cfg)
 
