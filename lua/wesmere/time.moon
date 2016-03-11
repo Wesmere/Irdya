@@ -10,7 +10,7 @@
 
 
 
-areas = {}
+--areas = {}
 
 
 -- {
@@ -34,32 +34,36 @@ areas = {}
 --     -- @treturn time_of_day The function returns a time of day table.
 --     -- @usage wesmere.get_time_of_day(2, { 37, 3, true })
 --get_time_of_day = (for_turn=wesmere.current.turn_number, [ {x, y, [consider_illuminates]} ]) ->
-get_time_of_day = (for_turn=wesmere.current.turn_number, more) ->
-    return wesmere.time_of_day[for_turn]
+get_time_of_day = (for_turn, more) =>
+    unless for_turn then for_turn = @current.turn_number
+    return @time[for_turn]
 
---     ----
---     -- Creates a new time area.
---     -- @function wesmere.add_time_area
---     -- @tab cfg This takes a WSL table containing the same information normally used by the 'time_area' table.
---     -- @string|{string,..} cfg.id  an unique identifier assigned to a time_area. Optional, unless you want to remove the time_area later. Can be a comma-separated list when removing time_areas, see below.
---     -- @tab cfg.filter_location StandardLocationFilter: the locations to affect. note: only for [event][time_area]s - at scenario toplevel [time_area] does not support StandardLocationFilter, only location ranges
---     -- @tab cfg.time the new schedule. type: "TimeWSL"
---     -- @bool cfg.remove Indicates whether the specified time_area should be removed. Requires an identifier. If no identifier is used, however, all time_areas are removed.
---     -- @number cfg.current_time The time slot number (starting with one) active at the creation of the area.
-add_time_area = (cfg) ->
-    index = table.insert(areas, cfg)
+----
+-- Creates a new time area.
+-- @function wesmere.add_time_area
+-- @tab cfg This takes a WSL table containing the same information normally used by the 'time_area' table.
+-- @string|{string,..} cfg.id  an unique identifier assigned to a time_area. Optional, unless you want to remove the time_area later. Can be a comma-separated list when removing time_areas, see below.
+-- @tab cfg.filter_location StandardLocationFilter: the locations to affect. note: only for [event][time_area]s - at scenario toplevel [time_area] does not support StandardLocationFilter, only location ranges
+-- @tab cfg.time the new schedule. type: "TimeWSL"
+-- @bool cfg.remove Indicates whether the specified time_area should be removed. Requires an identifier. If no identifier is used, however, all time_areas are removed.
+-- @number cfg.current_time The time slot number (starting with one) active at the creation of the area.
+add_time_area = (cfg) =>
+    assert(cfg)
+    index = table.insert(@area, cfg)
     if id = cfg.id
-        areas[id] = index
+        @area[id] = index
 
---     ----
---     -- Removes a time area. This requires the time area to have been assigned an id at creation time.
---     -- @function wesmere.remove_time_area
---     -- @string id of the area to remove
---     -- @usage for id in *({'foo', 'bar', 'baz'})
---     --    wesmere.remove_time_area(id)
-remove_time_area = (id) ->
-    if index = wesmere.areas[id]
-        wesmere.areas[index].disabled = true
+----
+-- Removes a time area. This requires the time area to have been assigned an id at creation time.
+-- @function wesmere.remove_time_area
+-- @string id of the area to remove
+-- @usage for id in *({'foo', 'bar', 'baz'})
+--    wesmere.remove_time_area(id)
+remove_time_area = (id) =>
+    if index = @area[id]
+        @area[index].disabled = true
+
+
 
 {
     :areas
