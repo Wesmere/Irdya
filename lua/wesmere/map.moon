@@ -405,8 +405,6 @@ match_location = (x, y, filter) =>
 --     wesmere.set_terrain(loc[1], loc[2], "Rr")
 get_locations = (filter) =>
 
-    print debug.traceback "stacktrace get_locations"
-
     assert(type(filter) == "table" or type(filter) == "function", "get_locations: Filter argument must be a table or function")
 
     result = {}
