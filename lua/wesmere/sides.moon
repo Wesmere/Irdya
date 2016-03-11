@@ -35,7 +35,12 @@
 -- @string defeat_condition (read/write) See description at SideWSL, ScenarioWSL#Scenario_End_Conditions
 -- @bool lost (read/write) If lost=true this side will be removed from the persitent list at the end of the scenario. This key can also be used to stop the engine from removing a side by setting it to false. Writing this key only works in a victory/defeat event.
 -- @tab __cfg WSL table (dump)
-sides = {}
+
+
+
+add_side = (cfg) =>
+
+
 
 ----
 -- Returns a table array containing tables for these sides matching the passed StandardSideFilter.
@@ -53,16 +58,7 @@ get_sides = (filter) ->
             side
         else continue
 
-----
--- Stub text
--- @function wesmere.get_village_owner
--- @number x
--- @number y
--- @treturn number the side that owns the village at the given location.
--- @usage owned_by_side_1 = wesmere.get_village_owner(12, 15) == 1
-get_villlage_owner = (x, y) ->
-    -- @todo rename to get_tile_owner to make it less wesnoth specific
-    return wesmere.board.village[x][y]
+
 
 ----
 -- Gives ownership of the village at the given location to the given side (or remove ownership if none). Ownership is also removed if nil or 0 is passed for the third parameter, but no capture events are fired in this case.
@@ -71,28 +67,26 @@ get_villlage_owner = (x, y) ->
 -- @number y
 -- @number[opt=0] side
 -- @bool[opt=false] fire_events An optional 4th parameter (boolean true|false, default: false) can be passed determining whether to fire any capture events.
--- @treturn number side number of the former owner
+-- @treturn number|bool side number of the former owner
 -- @usage wesmere.set_village_owner(12, 15, 1)
-set_village_owner = (x, y, side=0, fire_events=false) ->
+set_village_owner = (x, y, side=0, fire_events=false) =>
 	-- int x = luaL_checkint(L, 1);
 	-- int y = luaL_checkint(L, 2);
 
 	-- int new_side = lua_isnoneornil(L, 3) ? 0 : luaL_checkint(L, 3);
 
-	-- map_location loc(x - 1, y - 1);
-	-- if (!board().map().is_village(loc))
-	-- 	return 0;
+	loc = Location(x,y)
+	return false unless is_village(@board.map[x][y])
 
-	-- int old_side = board().village_owner(loc) + 1;
     old_side = wesmere.board.village[x][y]
 
     -- if (new_side == old_side || new_side < 0 || new_side > static_cast<int>(teams().size()) || board().team_is_defeated(teams()[new_side - 1])) {
     --     return 0;
     -- }
 
-    -- if (old_side) {
+    --if old_side
     --     teams()[old_side - 1].lose_village(loc);
-    -- }
+
     -- if (new_side) {
     --     teams()[new_side - 1].get_village(loc, old_side, (luaW_toboolean(L, 4) ? &gamedata() : NULL) );
     -- }
@@ -350,9 +344,21 @@ get_starting_location = (side) ->
 all_sides = () ->
     return sides
 
+----
+-- Stub text
+-- @function wesmere.get_village_owner
+-- @number x
+-- @number y
+-- @treturn number the side that owns the village at the given location.
+-- @usage owned_by_side_1 = wesmere.get_village_owner(12, 15) == 1
+get_village_owner = (x, y) =>
+    -- @todo rename to get_tile_owner to make it less wesnoth specific
+    return @board.villages[x][y]
+
 
 {
     :sides
+    :add_side
     :get_sides
     :get_village_owner
     :set_village_owner
