@@ -24,7 +24,7 @@ UNIT = (SIDE, TYPE, X, Y, WSL) ->
         .type = TYPE
         .x = X
         .y = Y
-    return unit WSL
+    return WSL
 
 -- Creates a generic unit of TYPE belonging to SIDE at X,Y, which has a
 -- random name, gender and traits (just like a recruited unit).
@@ -78,7 +78,7 @@ NAMED_UNIT = (SIDE, TYPE, X, Y, ID_STRING, NAME_STRING, WSL) ->
         .y = Y
         .id = ID_STRING
         .name = NAME_STRING
-    unit WSL
+    WSL
 
 -- Creates a unit with the Loyal trait.
 --
