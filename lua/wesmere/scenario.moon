@@ -16,6 +16,62 @@ log =
     error: error
     info: print
 
+-- 1 Predefined Events Without Filters
+-- 1.1 preload okay
+-- 1.2 prestart okay
+-- 1.3 start okay
+-- 1.4 new turn okay
+-- 1.5 turn end okay
+-- 1.6 turn X end okay
+-- 1.7 side turn okay
+-- 1.8 ai turn todo
+-- 1.9 turn refresh okay
+-- 1.10 turn X okay
+-- 1.11 side X turn Y okay
+-- 1.12 side X turn okay
+-- 1.13 side turn X okay
+-- 1.14 side X turn Y refresh okay
+-- 1.15 side X turn refresh okay
+-- 1.16 turn X refresh okay
+-- 1.17 side turn end okay
+-- 1.18 time over okay
+-- 1.19 enemies defeated todo
+-- 1.20 victory todo
+-- 1.21 defeat todo
+
+-- 2 Predefined Events With Filters
+-- 2.1 moveto
+-- 2.2 sighted
+-- 2.3 enter_hex
+-- 2.4 exit_hex
+-- 2.5 attack
+-- 2.6 attack end
+-- 2.7 attacker hits
+-- 2.8 attacker misses
+-- 2.9 defender hits
+-- 2.10 defender misses
+-- 2.11 petrified
+-- 2.12 last breath
+-- 2.13 die
+-- 2.14 capture
+-- 2.15 recruit
+-- 2.16 prerecruit
+-- 2.17 recall
+-- 2.18 prerecall
+-- 2.19 advance
+-- 2.20 pre advance
+-- 2.21 post advance
+-- 2.22 select
+-- 2.23 menu item X
+-- 2.24 unit placed (Version 1.13.3 and later only)
+
+
+
+
+
+
+
+
 
 Scenario = (scenario, extra_config) ->
 
@@ -170,7 +226,9 @@ Scenario = (scenario, extra_config) ->
     set_next_scenario = (id) ->
 
     check_end_level = ->
-        return unless is_regular_game_end!
+        return false unless is_regular_game_end!
+
+        return true
 
     local check_end_turn
     new_side_turn = ->
@@ -184,13 +242,17 @@ Scenario = (scenario, extra_config) ->
         fire_event(state, "Side#{turn_side}TurnRefresh")
         fire_event(state, "Turn#{turn_number}Refresh")
         fire_event(state, "Side#{turn_side}Turn#{turn_number}Refresh")
-        check_end_level!
+        return if is_regular_game_end!
         check_end_turn!
 
 
     new_turn = ->
+        return if is_regular_game_end!
         turn_number += 1
         turn_side = 0
+
+        if turn_number >= scenario.turns
+            fire_event(state, "TimeOver")
 
         fire_event(state, "Turn#{turn_number}")
         fire_event(state, "NewTurn")
@@ -220,8 +282,8 @@ Scenario = (scenario, extra_config) ->
         fire_event(state, "Preload") -- should be fired every time a scenario got reloaded
         fire_event(state, "Prestart") -- before anything is on the screen
         fire_event(state, "Start")
-        check_end_level!
-        new_turn!
+        unless check_end_level!
+            new_turn!
 
     {
         :get_end_level_data
