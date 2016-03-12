@@ -3,12 +3,6 @@
 -- It implements all the gameplay.
 --
 
-export TEDST_GLLL = () ->
-    print "sowas"
-
-TSLEFL = () ->
-    print "something"
-
 scenario
 
     id:"parent"
@@ -38,35 +32,17 @@ scenario
     Start:
         id: "todo"
 
-    _Prestart:
-        id: "last prestart"
-        command: ->
-            wesmere.fire_event("Start")
-
-    _Start:
-        id: "last start"
-        command: ->
-            wesmere.fire_event("NewTurn")
-
 ---------- Turns -----------------------
 
-    NewTurn:
-        -- id: "increase turn_number" -- disable when you like it to be not adjustable
 
-        command: ->
+    -- NewTurn:
+    --     id: "check_TimeOver"
 
-            -- The turn number should not be changed that easily.
-            -- Although, the turn_number variable only holds a copy.
-            -- turn_number += 1
+    --     command: ->
 
-    NewTurn:
-        id: "check_TimeOver"
-
-        command: ->
-
-            if turn_number > turns
-                fire_event
-                    name: "TimeOver"
+    --         if turn_number > turns
+    --             fire_event
+    --                 name: "TimeOver"
 
 
 --------- Side Turns ------------------
@@ -79,3 +55,9 @@ scenario
 
     TurnRefresh:
         id: "income"
+
+    TurnRefresh:
+        id: "restore_movement"
+
+    TurnRefresh:
+        id: "status"
