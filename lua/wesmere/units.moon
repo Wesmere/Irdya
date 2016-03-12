@@ -387,6 +387,7 @@ put_unit = (unit, x, y) =>
     unless type(unit) == Unit
         unit = Unit(unit)
 
+    assert(unit.id)
     @units[unit.id] = loc
     @board.units[loc.x][loc.y] = unit
 
