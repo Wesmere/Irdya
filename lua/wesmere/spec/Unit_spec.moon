@@ -10,7 +10,7 @@ state =
             Kalenz: loc
 
 unit_types =
-    [Elvish Fighter]:
+    ["Elvish Fighter"]:
         id: "Elvish Fighter"
         hitpoints: 28
 
