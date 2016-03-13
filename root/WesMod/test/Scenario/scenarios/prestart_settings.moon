@@ -45,7 +45,7 @@ GENERIC_UNIT_TEST "modify_turns_one", ->
     event
         name:"Side1Turn1"
         command: ->
-            store_turns:
+            store_turns
                 variable:"temp"
             RETURN VARIABLE_CONDITIONAL "temp", "equals", 42
 
@@ -54,7 +54,7 @@ GENERIC_UNIT_TEST "modify_turns_two", ->
     event
         name:"Prestart"
         command: ->
-            modify_turns:
+            modify_turns
                 current:42
     event
         name:"Side1Turn1"
