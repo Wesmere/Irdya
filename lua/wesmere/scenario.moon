@@ -66,18 +66,13 @@ log =
 -- 2.24 unit placed (Version 1.13.3 and later only)
 
 
-
-
-
-
-
-
-
 Scenario = (scenario, extra_config) ->
 
+    modified_turn_number = false
     -- private fields
     turn_number = 0
     turn_side = 0
+    turn_limit = -1
     end_level_data = false
     turn_ended = false
 
@@ -96,6 +91,18 @@ Scenario = (scenario, extra_config) ->
         current:
             event_context: {}
             event_handlers: {}
+
+    get_turn = () ->
+        return turn_number
+
+    set_turn = (turn) ->
+        modified_turn_number = turn
+
+    set_turn_limit = (new_limit) ->
+        turn_limit = new_limit
+
+    get_turn_limit = () -> return turn_limit
+
 
     is_regular_game_end = () ->
         return end_level_data != false
@@ -127,6 +134,8 @@ Scenario = (scenario, extra_config) ->
         set_end_level_data(data)
         return true
 
+    -- Setup
+    turn_limit = scenario.turns
 
     -- Let's load the map.
     if map_data = scenario.map_data
@@ -148,6 +157,10 @@ Scenario = (scenario, extra_config) ->
 
         env = {
             wesmere: {
+                sides: state.sides
+                :set_turn
+                :set_turn_limit
+                :get_turn_limit
                 current: state.current
                 add_time_area: (cfg) -> add_time_area(state,cfg)
                 get_time_of_day: (...) -> get_time_of_day(state, ...)
@@ -248,10 +261,14 @@ Scenario = (scenario, extra_config) ->
 
     new_turn = ->
         return if is_regular_game_end!
-        turn_number += 1
+        if modified_turn_number
+            turn_number = modified_turn_number
+            modified_turn_number = false
+        else
+            turn_number += 1
         turn_side = 0
 
-        if turn_number >= scenario.turns
+        if turn_number >= turn_limit
             fire_event(state, "TimeOver")
 
         fire_event(state, "Turn#{turn_number}")
@@ -286,6 +303,7 @@ Scenario = (scenario, extra_config) ->
             new_turn!
 
     {
+        :get_turn
         :get_end_level_data
         :is_regular_game_end
         :start
