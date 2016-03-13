@@ -18,7 +18,7 @@ describe "WSL Test Suite", ->
                 when "empty_test"
                     assert not test_scenario.is_regular_game_end!, "Test did finish but shouldn't"
                 else
-                    assert test_scenario.is_regular_game_end!, "Test didn't finish"
+                    assert test_scenario.is_regular_game_end!, "Test didn't finish, turn number is #{test_scenario.get_turn!}"
 
             switch key
                 when "empty_test"
@@ -26,4 +26,4 @@ describe "WSL Test Suite", ->
                 when "test_assert_fail", "test_assert_fail_two", "two_plus_two_fail", "test_return_fail"
                     assert not (test_scenario.get_end_level_data!.is_victory), "Test should fail but didn't'"
                 else
-                    assert (test_scenario.get_end_level_data!.is_victory), "Test failed"
+                    assert (test_scenario.get_end_level_data!.is_victory), "Test failed, ended at turn #{test_scenario.get_turn!}"
