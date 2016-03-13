@@ -20,7 +20,6 @@ GENERIC_UNIT_TEST "set_gold_in_prestart_one", ->
             RETURN VARIABLE_CONDITIONAL "temp.gold", "equals", 666
 
 
-
 GENERIC_UNIT_TEST "set_gold_in_prestart_two", ->
     event
         name:"Prestart"
