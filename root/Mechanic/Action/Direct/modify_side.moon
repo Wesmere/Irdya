@@ -4,11 +4,31 @@ wsl_action
     description: "Modifies some details of a given side in the middle of a scenario. The following listed properties are the only properties that [modify_side] can affect!"
 
     action: (cfg) ->
-        print "'modify_side' not implemented yet."
+
+        assert(wesmere.sides)
+
+        modify_side = (side) ->
+            assert(side)
+            with side
+                if income = cfg.income
+                    .income = income
+                if gold = cfg.gold
+                    .gold = gold
+
+        side = cfg.side or 1
+        if cfg.filter_side
+            sides = wesmere.get_sides(cfg.filter_side)
+            for side in *sides
+                modify_side(side)
+        else
+            wesmere.debug wesmere.sides
+            side = wesmere.sides[side]
+            assert(side)
+            modify_side(wesmere.sides[side])
 
     scheme:
         side:
-            description: "(default=1) the number of the side that is to be changed. note: Default side=1 for empty side= is deprecated."
+            description: "the number of the side that is to be changed. note: Default side=1 for empty side= is deprecated."
             default: 1
             type: "number"
         filter_side:
