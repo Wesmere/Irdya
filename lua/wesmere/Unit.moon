@@ -92,13 +92,13 @@ class Unit extends HasGetters
     getters: (key) =>
         switch key
             when "x"
-                if loc = board.units[@id]
+                if loc = @state.board.units[@id]
                     return loc.x
             when "y"
-                if loc = board.units[@id]
+                if loc = @state.board.units[@id]
                     return loc.y
             when "loc"
-                return board.units[@id]
+                return @state.board.units[@id]
             else
                 return unit_types[@type][key]
 
@@ -106,7 +106,11 @@ class Unit extends HasGetters
     -- Constructor
     -- @param self
     -- @param cfg
-    new: (cfg) =>
+    new: (state, cfg) =>
+        assert(state)
+        assert(cfg)
+
+        @state = state
 
         @gender = cfg.gender
 
@@ -162,7 +166,7 @@ class Unit extends HasGetters
     -- @treturn bool iff this unit matches the filter
     -- @usage assert(unit.canrecruit == wesmere.match_unit(unit, { can_recruit: true }))
     matches: (filter, other_unit) =>
-        assert(filter, "Unit\matches: missing filter argument.")
+        assert(filter, "Unit.matches: missing filter argument.")
         assert(type(filter) == "function" or type(filter) == "table")
         return filter(@, other_unit) if type(filter) == "function"
 

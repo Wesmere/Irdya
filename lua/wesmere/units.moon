@@ -374,6 +374,8 @@ transform_unit = (unit, to_type) ->
 -- @usage -- move the leader back to the top-left corner
 -- wesmere.put_unit(wesmere.get_units({ can_recruit: true })[1], 1, 1)
 put_unit = (unit, x, y) =>
+    assert @
+    assert unit
     Unit = require "Unit"
     local loc
     try
@@ -385,7 +387,7 @@ put_unit = (unit, x, y) =>
             loc = Loc(unit.x, unit.y)
 
     unless type(unit) == Unit
-        unit = Unit(unit)
+        unit = Unit(@, unit)
 
     assert(unit.id)
     @units[unit.id] = loc
