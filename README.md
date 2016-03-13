@@ -36,7 +36,7 @@ Although Irdya ships with the ported unit test scenario suite of the original We
 The design and coding of the framework is mostly finished.
 The focus of the current work is to implement the gameplay which should be done when all the unit tests are passed.
 
-[![Build Status](https://travis-ci.org/wesmere/irdya.svg?branch=master)](https://travis-ci.org/wesmere/irdya)
+[![Build Status](https://travis-ci.org/Wesmere/Irdya.svg?branch=master)](https://travis-ci.org/Wesmere/Irdya)
 
 ### Wesmere
 
