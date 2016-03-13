@@ -360,13 +360,13 @@ transform_unit = (unit, to_type) ->
 
 
 ----
+-- Places a unit on the map. This unit is described either by a WSL table or by a proxy unit. Coordinates can be passed as the first two arguments, otherwise the table is expected to have two fields x and y, which indicate where the unit will be placed. If the function is called with coordinates only, the unit on the map at the given coordinates is removed instead. (Version 1.13.2 and later only) This use is now deprecated; use wesmere.erase_unit instead.
 -- @function wesmere.put_unit
 -- @tparam Unit|tab unit
 -- @number x
 -- @number y
 -- wesmere.put_unit(unit, x, y)
 -- @see Unit.to_map
--- Places a unit on the map. This unit is described either by a WML table or by a proxy unit. Coordinates can be passed as the first two arguments, otherwise the table is expected to have two fields x and y, which indicate where the unit will be placed. If the function is called with coordinates only, the unit on the map at the given coordinates is removed instead. (Version 1.13.2 and later only) This use is now deprecated; use wesmere.erase_unit instead.
 -- @usage -- create a unit with random traits, then erase it
 -- wesmere.put_unit({ type: "Elvish Lady" }, 17, 42)
 -- wesmere.erase_unit(17, 42)

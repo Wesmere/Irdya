@@ -27,6 +27,7 @@ class Location extends HasGetters
 
     ----
     -- Match the location against a pair of location ranges.
+    -- @tparam Location self
     -- @string x_range
     -- @string y_range
     -- @treturn bool whether the location matches the given coordination ranges.
@@ -85,6 +86,7 @@ class Location extends HasGetters
 
     ----
     -- Returns the distance between two tiles given by their WSL coordinates.
+    -- @tparam Location self
     -- @tparam number|Location x x-coordinate or Location
     -- @number y ignored if the first argument is a Location
     -- @treturn number the distance
@@ -100,10 +102,11 @@ class Location extends HasGetters
 
     ----
     -- Syntactic sugar for distance_between
-    -- @usage dist = loc_a - loc_b
-    -- @treturn number the distance
     -- @see distance_between
+    -- @tparam Location self
     -- @tparam Location other
+    -- @treturn number the distance
+    -- @usage dist = loc_a - loc_b
     __sub: (other) =>
         return @distance_between(other.x, other.y)
 

@@ -1,6 +1,6 @@
 ----
--- This class is more or less just a loader for the game's content
--- @classmod Game
+-- Functions which deal with WesMod loading and verifying
+--
 
 -- MoonScript
 moonscript = require "moonscript"
@@ -109,7 +109,6 @@ ENV = -- holds tables being used as environment
 
 ----
 -- Load a single file within the given environment.
--- @tparam Game self nothing
 -- @string file the filepath to load
 -- @tab env environment to execute in
 load_cfg_file = (file, env) ->
@@ -168,7 +167,6 @@ load_cfg_file = (file, env) ->
 
 ---
 -- Load only the files at this level of the directory structure.
--- @tparam Game self
 -- @string content_dir_path
 -- @tab env environment to execute the files in
 load_files = (content_dir_path, env) ->
@@ -183,7 +181,6 @@ load_files = (content_dir_path, env) ->
 
 ----
 -- Load each and every file in the given path.
--- @tparam Game self
 -- @string content_dir_path root path to load from
 -- @tab env environment to run the file loader with
 load_all_files = (content_dir_path, env) ->
@@ -203,7 +200,6 @@ load_all_files = (content_dir_path, env) ->
 
 ----
 -- Scans all the root for stuff
--- @tparam Game self
 -- @string root_path
 scan_root = (root_path) ->
     env = ENV.on_scan
@@ -251,7 +247,6 @@ wsl_table_scanner = (cfg, file, dir_path) ->
 
 ----
 -- load WesMod by path
--- @tparam Game self
 -- @string wesmod_path
 load_wesmod_by_path = (wesmod_path) ->
     log.info("Loading WesMod at: " .. wesmod_path)

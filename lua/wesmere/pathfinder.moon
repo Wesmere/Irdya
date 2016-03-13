@@ -155,9 +155,9 @@ find_reach = (unit, path_options) ->
 -- @number options.viewing_side
 -- @bool options.debug
 -- @bool options.use_max_moves
--- @tparam StandardLocationFilter
-
+-- @tparam StandardLocationFilter filter
 -- @return A array of quadruples (coordinates + a summed cost + reach count)
+-- @usage
 -- 1 + 2. A units location
 -- OR 1. A unit
 -- OR 1. A unit filter
@@ -165,6 +165,9 @@ find_reach = (unit, path_options) ->
 -- 3. (optional) A table with options:
 -- 4. (optional) A Standard Location Filter.
 -- If the array of unit types is given the units will be added to the first parameter. Use a empty filter or a invalid location to only add unit types.
+find_cost_map = (unit, another_unit, options, filter) ->
+
+
 
 -- A location set can be build by calling location.set.of_pairs(retval).
 

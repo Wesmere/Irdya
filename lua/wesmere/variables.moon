@@ -37,7 +37,7 @@ get_all_vars = () =>
     return @current.event_context
 
 
-----
+--
 -- Sets the metatable of a table so that it can be used to access WSL variables. Returns the table. The fields of the tables are then proxies to the WSL objects with the same names; reading/writing to them will directly access the WSL variables.
 -- helper.set_wsl_var_metatable(_G)
 -- my_persistent_variable = 42
@@ -65,7 +65,7 @@ get_all_vars = () =>
 --helper.set_wsl_var_metatable = () ->
 
 
-----
+--
 -- Returns the first sub-tag of a WSL object with the given name.
 -- If a third parameter is passed, only children having a id attribute equal to it are considered.
 -- @function helper.get_child
@@ -74,7 +74,7 @@ get_all_vars = () =>
 -- wesmere.message(string.format("Delfador needs %d points to move through a forest.", costs.forest))
 --helper.get_child = (config, child_tag_name) ->
 
-----
+--
 -- Returns the nth sub-tag of a WSL object with the given name.
 -- @function helper.get_nth_child
 -- @param config
@@ -82,12 +82,12 @@ get_all_vars = () =>
 -- @param n
 --helper.get_child = (config, child_tag_name, n) ->
 
-----
+--
 -- Returns the number of children in the config with the given tag name.
 -- @function helper.child_count
 --helper.child_count = (config, child_tag_name) ->
 
-----
+--
 -- Returns an iterator over all the sub-tags of a WSL object with the given name.
 -- @function helper.child_range
 -- helper.child_range = (config, child_tag_name) ->
@@ -95,12 +95,12 @@ get_all_vars = () =>
 --     for att in helper.child_range(u.__cfg, "attack")
 --         wesmere.message(tostring(att.description))
 
-----
+--
 -- Like helper.child_range, but returns an array instead of an iterator. Useful if you need random access to the children.
 -- @function helper.child_array
 --helper.child_array = (config, child_tag_name) ->
 
-----
+--
 -- Fetches all the WSL container variables with given name and returns a table containing them (starting at index 1).
 -- @function helper.get_variable_array
 -- @usage get_recall_list = (side) ->
@@ -111,14 +111,14 @@ get_all_vars = () =>
 -- helper.get_variable_array = (var_name) ->
 
 
-----
+--
 -- Creates proxies for all the WSL container variables with given name and returns a table containing them (starting at index 1).
 -- This function is similar to #helper.get_variable_array, except that the proxies can be used for modifying WSL containers.
 -- @function helper.get_variable_proxy_array
 -- helper.get_variable_proxy_array = (var_name) ->
 
 
-----
+--
 -- Creates WSL container variables with given name from given table.
 -- @function helper.set_variable_array
 -- helper.set_variable_array = (varname, array) ->

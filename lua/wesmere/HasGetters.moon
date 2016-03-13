@@ -1,5 +1,9 @@
 ----
 -- lifted from leafo.net
+-- @classmod HasGetters
+
+----
+-- Classes deriving from HasGetters can be extended to
 class HasGetters
     getters: {}
     __inherited: (cls) =>

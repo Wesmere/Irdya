@@ -1,3 +1,3 @@
 project=wesmere
-title=WSL API Reference
+title="WSL API Reference"
 

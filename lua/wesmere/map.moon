@@ -49,6 +49,7 @@ load_map = (id, border_size=BORDER_SIZE) =>
 ----
 -- Returns the width, the height, and the border size of the map.
 -- @function wesmere.get_map_size
+-- @tab state the game state
 -- @treturn number width
 -- @treturn number height
 -- @treturn number border size
@@ -61,6 +62,7 @@ get_map_size = () =>
 
 ----
 -- Returns the terrain code for the given location.
+-- @tab self the game state
 -- @tparam number x
 -- @tparam number y
 -- @usage is_grassland = wesmere.get_terrain(12, 15) == "Gg"
@@ -74,6 +76,7 @@ get_terrain = (x, y) =>
 ----
 -- Modifies the terrain at the given location.
 -- wesmere.set_terrain
+-- @tab self the game state
 -- @number x
 -- @number y
 -- @string terrain_code
@@ -154,6 +157,7 @@ get_villages = (filter) ->
 ----
 -- Returns true if the given location passes the filter.
 -- wesmere.match_location
+-- @tab self the game state
 -- @number x
 -- @number y
 -- @tparam StandardLocationFilter filter
