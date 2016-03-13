@@ -5,13 +5,13 @@
 
 ASSERT_NO_9_5 = ->
     ASSERT not have_unit
-                x:9
-                y:5
+        x:9
+        y:5
 
 ASSERT_YES_9_5 = ->
     ASSERT have_unit
-            x:9
-            y:5
+        x:9
+        y:5
 
 GENERIC_UNIT_TEST "test_unit_map", ->
     event
