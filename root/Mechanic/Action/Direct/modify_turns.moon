@@ -4,7 +4,17 @@ wsl_action
     description: "Modifies the turn limit in the middle of a scenario."
 
     action: (cfg) ->
-        print("'modify_turns' not implemented yet.")
+        if value = cfg.value
+            wesmere.set_turn_limit(value)
+        if add = cfg.add
+            old_limit = wesmere.get_turn_limit!
+            wesmere.set_turn_limit(old_limit + add)
+        if current = cfg.current
+            assert(1 <= current, "WSL_Action 'modify_turns': Can't set a negative current turn.'")
+            limit = wesmere.get_turn_limit!
+            if limit >= 0
+                assert(current <= wesmere.get_turn_limit!, "WSL_Action 'modify_turns': Can't set the current turn beyond the turn limit.'")
+            wesmere.set_turn(current)
 
     scheme:
         value:
