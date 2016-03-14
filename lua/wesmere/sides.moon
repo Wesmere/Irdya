@@ -37,29 +37,6 @@
 -- @tab __cfg WSL table (dump)
 
 
-
-add_side = (cfg) =>
-
-
-
-----
--- Returns a table array containing tables for these sides matching the passed StandardSideFilter.
--- @function wesmere.get_sides
--- @tab filter StandardSideFilter
--- @usage
--- -- set gold to 0 for all sides with a leader
--- sides = wesmere.get_sides({ {"has_unit", { can_recruit: true }} })
--- for side in *sides
---     side.gold = 0
-get_sides = (filter) ->
-    -- @todo check for filter.side and preselect
-    return for side in *wesmere.sides
-        if wesmere.match_filter(side, filter)
-            side
-        else continue
-
-
-
 ----
 -- Gives ownership of the village at the given location to the given side (or remove ownership if none). Ownership is also removed if nil or 0 is passed for the third parameter, but no capture events are fired in this case.
 -- @function wesmere.set_village_owner
@@ -70,35 +47,31 @@ get_sides = (filter) ->
 -- @treturn number|bool side number of the former owner
 -- @usage wesmere.set_village_owner(12, 15, 1)
 set_village_owner = (x, y, side=0, fire_events=false) =>
-	-- int x = luaL_checkint(L, 1);
-	-- int y = luaL_checkint(L, 2);
 
-	-- int new_side = lua_isnoneornil(L, 3) ? 0 : luaL_checkint(L, 3);
+	new_side = side
 
 	loc = Location(x,y)
-	return false unless is_village(@board.map[x][y])
+	return false unless is_village(@board.map[loc.x][loc.y])
 
     old_side = wesmere.board.village[x][y]
 
-    -- if (new_side == old_side || new_side < 0 || new_side > static_cast<int>(teams().size()) || board().team_is_defeated(teams()[new_side - 1])) {
-    --     return 0;
-    -- }
+    if (new_side == old_side or new_side < 0 or
+        new_side > static_cast<int>(teams().size()) or
+        board().team_is_defeated(teams()[new_side]))
+            return false;
 
-    --if old_side
-    --     teams()[old_side - 1].lose_village(loc);
+    if old_side
+        @sides[old_side].lose_village(loc);
 
-    -- if (new_side) {
-    --     teams()[new_side - 1].get_village(loc, old_side, (luaW_toboolean(L, 4) ? &gamedata() : NULL) );
-    -- }
-    -- return 0;
+    if new_side
+        @sides[new_side].get_village(loc, old_side, (fire_events ? &gamedata() : NULL) );
 
-    --if old_side
-    --    wesmere.board.village[x][y]
-
-    if side
-        wesmere.board.village[x][y] = side
+    if new_side
+        @board.village[x][y] = new_side
+    else @board.village[x][y] = false
 
     return old_side
+
 
 ----
 -- Returns true if sideA is enemy of sideB, false otherwise.
@@ -107,46 +80,43 @@ set_village_owner = (x, y, side=0, fire_events=false) =>
 -- @number sideB
 -- @treturn bool
 -- @usage enemy_flag = wesmere.is_enemy(1, 3)
-is_enemy = (sideA, sideB) ->
+is_enemy = (sideA, sideB) =>
 
     wesmere.wsl_error("wesmere.is_enemy: sideA not a number") unless sideA or type(sideA) != "number"
     wesmere.wsl_error("wesmere.is_enemy: sideB not a number") unless sideB or type(sideB) != "number"
-    wesmere.wsl_error("wesmere.is_enemy: sideA not valid") if sideA < 1 or sideA > #wesmere.sides
-    wesmere.wsl_error("wesmere.is_enemy: sideB not valid") if sideB < 1 or sideB > #wesmere.sides
+    wesmere.wsl_error("wesmere.is_enemy: sideA not valid") if sideA < 1 or sideA > #@sides
+    wesmere.wsl_error("wesmere.is_enemy: sideB not valid") if sideB < 1 or sideB > #@sides
 
     -- We're not enemy of ourselves
     return false if sideA == sideB
-    teamsA = Set(wesmere.sides[sideA].team_name)
-    teamsB = Set(wesmere.sides[sideB].team_name)
+    teamsA = Set(@sides[sideA].team_name)
+    teamsB = Set(@sides[sideB].team_name)
     -- We're friendly with any side we share a team with
     return (teamsA * teamsB)\isempty!
+
 
 ----
 -- Matches a side against a given StandardSideFilter.
 -- @function wesmere.match_side
+-- @number side
+-- @tab filter
 -- @usage wesmere.message(tostring(wesmere.match_side(1, {{"has_unit", { type: "Troll" }}})))
-match_side = (side, filter) ->
+match_side = (side, filter) =>
+    assert(side)
+    assert(filter)
+
+    if true return true
 
     ----
     --
     --
     check_side_number = (side, range) ->
 
+    return false if side_in = filter.side_in and not check_side_number(side, filter.side_in)
 
-    -- if (cfg_.has_attribute("side_in")) {
-    --     if (!check_side_number(t,cfg_["side_in"])) {
-    --         return false;
-    --     }
-    -- }
-    return false if filter.side_in and not check_side_number(side, filter.side_in)
+    return false if side = filter.side and not check_side_number(side, filter.side)
 
-    -- if (cfg_.has_attribute("side")) {
-    --     if (!check_side_number(t,cfg_["side"])) {
-    --         return false;
-    --     }
-    -- }
-    return false if filter.side and not check_side_number(side, filter.side)
-
+    --- @todo
     -- if (!side_string_.empty()) {
     --     if (!check_side_number(t,side_string_)) {
     --         return false;
@@ -183,30 +153,21 @@ match_side = (side, filter) ->
     --         ufilter_.reset(new unit_filter(ufilt_cfg, fc_, flat_));
     --     bool found = false;
     --     BOOST_FOREACH(const unit &u, fc_->get_disp_context().units()) {
-    --         if (u.side() != t.side()) {
-    --             continue;
-    --         }
+    --         if (u.side() != t.side()) continue;
     --         if (ufilter_->matches(u)) {
     --             found = true;
     --             break;
-    --         }
-    --     }
     --     if(!found && ufilt_cfg["search_recall_list"].to_bool(false)) {
     --         BOOST_FOREACH(const unit_const_ptr & u, t.recall_list()) {
     --             scoped_recall_unit this_unit("this_unit", t.save_id(),t.recall_list().find_index(u->id()));
     --             if(ufilter_->matches(*u)) {
     --                 found = true;
     --                 break;
-    --             }
-    --         }
-    --     }
     --     if (!found) {
     --         return false;
-    --     }
-    -- }
     if unit_filter = filter.has_unit
         found = false
-        for map_unit in *wesmere.units
+        for map_unit in *@units
             continue if map_unit.side != side.side
             if map_unit\matches(unit_filter)
                 found = true
@@ -227,13 +188,11 @@ match_side = (side, filter) ->
     --     BOOST_FOREACH(const int side, teams) {
     --         if(!(fc_->get_disp_context().teams())[side - 1].is_enemy(t.side()))
     --             return false;
-    --     }
-    -- }
     if enemy_of = filter.enemy_of
-        enemies = wesmere.get_sides(enemy_of)
+        enemies = wesmere.get_sides(@, enemy_of)
         return false if #sides == 0
         for enemy in enemies
-            return false if wesmere.is_enemy(side, enemy)
+            return false if wesmere.is_enemy(@, side, enemy)
 
     -- const vconfig& allied_with = cfg_.child("allied_with");
     -- if(!allied_with.null()) {
@@ -244,8 +203,6 @@ match_side = (side, filter) ->
     --     BOOST_FOREACH(const int side, teams) {
     --         if((fc_->get_disp_context().teams())[side - 1].is_enemy(t.side()))
     --             return false;
-    --     }
-    -- }
     if allied_filter = filter.allied_with
         allies = wesmere.get_sides(allied_filter)
         return false if #allies == 0
@@ -260,13 +217,9 @@ match_side = (side, filter) ->
     --     bool found = false;
     --     BOOST_FOREACH(const int side, teams) {
     --         if((fc_->get_disp_context().teams())[side - 1].is_enemy(t.side()))
-    --         {
     --             found = true;
     --             break;
-    --         }
-    --     }
     --     if (!found) return false;
-    -- }
     if enemy_filter = filter.has_enemy
         enemies = wesmere.get_sides(enemy_filter)
         found = false
@@ -284,13 +237,9 @@ match_side = (side, filter) ->
     --     bool found = false;
     --     BOOST_FOREACH(const int side, teams) {
     --         if(!(fc_->get_disp_context().teams())[side - 1].is_enemy(t.side()))
-    --         {
     --             found = true;
     --             break;
-    --         }
-    --     }
     --     if (!found) return false;
-    -- }
     if ally_filter = filter.has_ally
         allies = wesmere.get_sides(ally_filter)
         found = false
@@ -302,23 +251,13 @@ match_side = (side, filter) ->
 
     -- const config::attribute_value cfg_controller = cfg_["controller"];
     -- if (!cfg_controller.blank())
-    -- {
     --     if (network::nconnections() > 0 && synced_context::is_synced()) {
     --         ERR_NG << "ignoring controller= in SSF due to danger of OOS errors" << std::endl;
-    --     }
     --     else {
     --         bool found = false;
     --         BOOST_FOREACH(const std::string& controller, utils::split(cfg_controller))
-    --         {
-    --             if(t.controller().to_string() == controller) {
-    --                 found = true;
-    --             }
-    --         }
-    --         if(!found) {
-    --             return false;
-    --         }
-    --     }
-    -- }
+    --             if(t.controller().to_string() == controller) found = true;
+    --         if(!found) return false;
     if controller = filter.controller
         found = false
         for each in *controller
@@ -329,20 +268,48 @@ match_side = (side, filter) ->
 
     return true
 
+
+----
+-- Returns a table array containing tables for these sides matching the passed StandardSideFilter.
+-- @function wesmere.get_sides
+-- @tab filter StandardSideFilter
+-- @treturn {Side,...} Array containing the matching sides.
+-- @usage
+-- -- set gold to 0 for all sides with a leader
+-- sides = wesmere.get_sides
+--     has_unit:
+--         can_recruit: true
+-- for side in *sides
+--     side.gold = 0
+get_sides = (filter) =>
+    if side = filter.side
+        if match_side(side, filter)
+            return {@sides[side]}
+        else return {}
+
+    -- @todo check for filter.side and preselect
+    return for side in *@sides
+        if match_side(side, filter)
+            side
+        else continue
+
+
 ----
 -- Returns the starting location of the given side.
 -- @function wesmere.get_starting_location
 -- @usage loc = wesmere.get_starting_location(1)
--- wesmere.message(string.format("side 1 starts at (%u, %u)", loc[1], loc[2]))
-get_starting_location = (side) ->
-    return wesmere.sides[side].starting_location
+-- wesmere.message "side 1 starts at (#{loc[1]}, #{loc[2]})"
+get_starting_location = (side) =>
+    return @sides[side].starting_location
+
 
 ----
 -- Returns an iterator over sides that can be used in a for-in loop.
 -- @function helper.all_sides
 -- @usage for side in helper.all_sides() do side.gold = 200
-all_sides = () ->
-    return sides
+all_sides = () =>
+    return @sides
+
 
 ----
 -- Stub text
@@ -356,9 +323,9 @@ get_village_owner = (x, y) =>
     return @board.villages[x][y]
 
 
+
 {
     :sides
-    :add_side
     :get_sides
     :get_village_owner
     :set_village_owner
