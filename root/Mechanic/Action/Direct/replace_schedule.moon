@@ -4,7 +4,8 @@ wsl_action
     description: "Replace the time of day schedule of the entire scenario."
 
     action: (cfg) ->
-        print("'replace_schedule' not implemented yet.")
+        if schedule = cfg.schedule
+            wesmere.set_schedule(schedule)
 
     scheme:
         schedule:
