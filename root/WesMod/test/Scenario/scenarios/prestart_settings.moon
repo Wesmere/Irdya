@@ -24,12 +24,13 @@ GENERIC_UNIT_TEST "set_gold_in_prestart_two", ->
     event
         name:"Prestart"
         command: ->
-            gold:
-            amount:566
+            gold
+                amount:566
+
     event
         name:"Side1Turn1"
         command: ->
-            store_side:
+            store_side
                 side:1
                 variable:"temp"
             RETURN VARIABLE_CONDITIONAL "temp.gold", "equals", 666
