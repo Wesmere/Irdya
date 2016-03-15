@@ -100,7 +100,7 @@ is_enemy = (sideA, sideB) =>
 -- @function wesmere.match_side
 -- @number side
 -- @tab filter
--- @usage wesmere.message(tostring(wesmere.match_side(1, {{"has_unit", { type: "Troll" }}})))
+-- @usage wesmere.message(tostring(wesmere.match_side(1, { has_unit: { type: "Troll" } } )))
 match_side = (side, filter) =>
     assert(side)
     assert(filter)
