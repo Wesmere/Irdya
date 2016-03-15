@@ -5,7 +5,14 @@ wsl_action
 
     action: (cfg) ->
 
-        print "'store_side' not implemented yet."
+        var = cfg.variable or "side"
+
+        sides = wesmere.get_sides(cfg)
+        if #sides == 1
+            sides = sides[1]
+        wesmere.set_variable(var, sides)
+
+        return sides
 
         -- writer = utils.vwriter.init(cfg, "side")
         -- for t, side_number in helper.get_sides(cfg)
