@@ -2,8 +2,9 @@ wsl_action
     id: "gold"
     description: "Gives sides gold."
 
-    action: (cfg, wesmere) ->
-        sides = wesmere.get_sides(cfg.filter_side)
+    action: (cfg) ->
+        assert(cfg.amount)
+        sides = wesmere.get_sides(cfg)
         for side in *sides
             side.gold += cfg.amount
 
