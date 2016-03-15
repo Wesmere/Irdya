@@ -58,13 +58,13 @@ set_village_owner = (x, y, side=0, fire_events=false) =>
     if (new_side == old_side or new_side < 0 or
         new_side > static_cast<int>(teams().size()) or
         board().team_is_defeated(teams()[new_side]))
-            return false;
+            return false
 
     if old_side
-        @sides[old_side].lose_village(loc);
+        @sides[old_side].lose_village(loc)
 
-    if new_side
-        @sides[new_side].get_village(loc, old_side, (fire_events ? &gamedata() : NULL) );
+    -- if new_side
+    --     @sides[new_side].get_village(loc, old_side, (fire_events ? &gamedata() : NULL) )
 
     if new_side
         @board.village[x][y] = new_side
@@ -112,9 +112,9 @@ match_side = (side, filter) =>
     --
     check_side_number = (side, range) ->
 
-    return false if side_in = filter.side_in and not check_side_number(side, filter.side_in)
+    return false if filter.side_in and not check_side_number(side, filter.side_in)
 
-    return false if side = filter.side and not check_side_number(side, filter.side)
+    return false if filter.side and not check_side_number(side, filter.side)
 
     --- @todo
     -- if (!side_string_.empty()) {
