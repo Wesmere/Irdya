@@ -36,7 +36,10 @@
 --get_time_of_day = (for_turn=wesmere.current.turn_number, [ {x, y, [consider_illuminates]} ]) ->
 get_time_of_day = (for_turn, more) =>
     unless for_turn then for_turn = @current.turn_number
-    return @time[for_turn]
+
+    index = for_turn % #@time
+
+    return @time[index]
 
 ----
 -- Creates a new time area.
