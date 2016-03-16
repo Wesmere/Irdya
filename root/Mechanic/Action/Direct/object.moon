@@ -5,6 +5,16 @@ wsl_action
 
     action: (cfg) ->
 
+
+        check_key = (val, key, tag, convert_spaces) ->
+            unless val then return nil
+            if convert_spaces
+                val = tostring(val)\gsub(' ', '_')
+            unless val\match('^[a-zA-Z0-9_]+$')
+                wesmere.wml_error("Invalid " .. key .. "= in [" .. tag .. "]")
+            return val
+
+
         -- helper = wesmere.require "lua/helper.lua"
         -- utils = wesmere.require "lua/wsl-utils.lua"
         -- T = helper.set_wsl_tag_metatable {}
@@ -17,7 +27,7 @@ wsl_action
         context = wesmere.current.event_context
 
         -- If this item has already been used
-        obj_id = utils.check_key(cfg.id, "id", "object", true)
+        obj_id = check_key(cfg.id, "id", "object", true)
         if obj_id and used_items[obj_id] then return
 
         local unit, command_type, text
@@ -49,7 +59,7 @@ wsl_action
 
         -- Default to silent if object has no description
         silent = cfg.silent
-        if silent == nil then silent = (text:len() == 0)
+        if silent == nil then silent = (text\len! == 0)
 
         if not silent
             wsl_actions.redraw{}
