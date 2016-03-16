@@ -95,7 +95,11 @@ wsl_conditionals = {}
 -- disallow_undo = () ->
 --	wesmere.wsl_actions.event { name: wesmere.current.event_context.name }
 -- Which should then be called from every on_event callback which changes the gamestate.
-game_events = {}
+
+
+-- game_events = {}
+
+
 
 --stack_depth = 0
 ----
@@ -261,8 +265,8 @@ set_wsl_action_metatable = () ->
 -- Interrupts the @current execution and displays a chat message that looks like a WSL error.
 -- @function helper.wsl_error
 -- @usage names = cfg.name or helper.wsl_error("clear_variable() missing required name: key.")
-wsl_error = (message) ->
-    error(message)
+--wsl_error = (message) ->
+--    error(message)
 
 ----
 -- Returns the __literal field of its argument if it is a userdata, the argument itself otherwise. This function is meant to be called when a WSL action handler can be called indifferently from WSL (hence receiving a userdata) or from Lua (hence possibly receiving a table).
@@ -300,7 +304,7 @@ shallow_parsed = (config) ->
     :eval_conditional
     :tovconfig
 -- helper.set_wml_action_metatable
-    :wsl_error
+--    :wsl_error
 -- helper.literal
 -- helper.parsed
 -- helper.shallow_literal
