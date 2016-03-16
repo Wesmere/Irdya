@@ -24,7 +24,7 @@ wsl_action
             wesmere.debug wesmere.sides
             side = wesmere.sides[side]
             assert(side)
-            modify_side(wesmere.sides[side])
+            modify_side(side)
 
     scheme:
         side:
