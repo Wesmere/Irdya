@@ -18,6 +18,7 @@ install:
   - luarocks install https://luarocks.org/manifests/olivine-labs/busted-2.0.rc11-0.rockspec
   - luarocks install loadkit
   - luarocks install moonscript
+  - luarocks install bit32
   - #luarocks make
 
 script: cd lua/wesmere; busted
