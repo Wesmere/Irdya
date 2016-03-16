@@ -27,15 +27,20 @@
 --     -- @table time_of_day
 --     time_of_day: {}
 
---     ----
---     -- @function wesmere.get_time_of_day
---     -- @number[opt=turn_number] for_turn First parameter (optional) is the turn number for which to return the information, if unspecified: the current turn (turn_number).
---     -- @tparam[opt] {number,number,bool=false} Second argument is an optional table. If present, first and second fields must be valid on-map coordinates and all current time_areas in the scenario are taken into account (if a time area happens to contain the passed hex). If the table isn't present, the scenario main schedule is returned. The table has an optional third parameter (boolean). If true (default: false), time of day modifying units and terrain (such as Mages of Light or lava) are taken into account (if the passed hex happens to be affected). The units' placement being considered is always the current one.
---     -- @treturn time_of_day The function returns a time of day table.
---     -- @usage wesmere.get_time_of_day(2, { 37, 3, true })
+----
+-- @function wesmere.get_time_of_day
+-- @number[opt=turn_number] for_turn First parameter (optional) is the turn number for which to return the information, if unspecified: the current turn (turn_number).
+-- @tparam[opt] {number,number,bool=false} Second argument is an optional table. If present, first and second fields must be valid on-map coordinates and all current time_areas in the scenario are taken into account (if a time area happens to contain the passed hex). If the table isn't present, the scenario main schedule is returned. The table has an optional third parameter (boolean). If true (default: false), time of day modifying units and terrain (such as Mages of Light or lava) are taken into account (if the passed hex happens to be affected). The units' placement being considered is always the current one.
+-- @treturn time_of_day The function returns a time of day table.
+-- @usage wesmere.get_time_of_day(2, { 37, 3, true })
 --get_time_of_day = (for_turn=wesmere.current.turn_number, [ {x, y, [consider_illuminates]} ]) ->
 get_time_of_day = (for_turn, more) =>
-    unless for_turn then for_turn = @current.turn_number
+    assert(@)
+    assert(@time)
+    unless for_turn then for_turn = @current.event_context.turn_number
+    assert(for_turn)
+
+    return nil if #@time == 0
 
     index = for_turn % #@time
 
@@ -51,6 +56,7 @@ get_time_of_day = (for_turn, more) =>
 -- @bool cfg.remove Indicates whether the specified time_area should be removed. Requires an identifier. If no identifier is used, however, all time_areas are removed.
 -- @number cfg.current_time The time slot number (starting with one) active at the creation of the area.
 add_time_area = (cfg) =>
+    assert(@)
     assert(cfg)
     index = table.insert(@area, cfg)
     if id = cfg.id
