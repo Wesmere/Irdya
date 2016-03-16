@@ -325,20 +325,6 @@ Scenario = (scenario, extra_config) ->
     }
 
 
-
-load_scenario = (scenario, extra_config) ->
-    assert(scenario, "Missing first arguement")
-    log.trace("Scenario started:" .. scenario.id)
-
-    ----
-    -- @todo check if every used terrain type is known
-    -- Side setup
-    assert(scenario.side)
-    sides = wrapInArray(scenario.side)
-    for side in *sides
-        add_side(side)
-
-
 load_test = (scenario, extra_config) ->
     assert(scenario, "Missing first arguement")
     switch type scenario
