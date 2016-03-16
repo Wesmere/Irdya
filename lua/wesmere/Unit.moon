@@ -107,8 +107,8 @@ class Unit extends HasGetters
     -- @param self
     -- @param cfg
     new: (state, cfg) =>
-        assert(state)
-        assert(cfg)
+        assert(state, "Unit Constructor: Missing 'state' argument.")
+        assert(cfg, "Unit Constructor: Missing 'cfg' argument.")
 
         @state = state
 

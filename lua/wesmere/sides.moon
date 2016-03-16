@@ -103,7 +103,7 @@ is_enemy = (sideA, sideB) =>
 -- @usage wesmere.message(tostring(wesmere.match_side(1, { has_unit: { type: "Troll" } } )))
 match_side = (side, filter) =>
     assert(side)
-    assert(filter)
+    assert(filter, "match_side: Missing 'filter' argument.")
 
     if true return true
 

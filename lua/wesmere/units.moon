@@ -382,8 +382,8 @@ put_unit = (unit, x, y) =>
         do: ->
             loc = Loc(x,y)
         catch: (err) ->
-            assert(unit.x)
-            assert(unit.y)
+            assert(unit.x, "put_unit: Missing x-coordinate")
+            assert(unit.y, "put_unit: Missing y-coordinate")
             loc = Loc(unit.x, unit.y)
 
     unless type(unit) == Unit
