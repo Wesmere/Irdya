@@ -1,6 +1,8 @@
 ----
 -- @submodule wesmere
 
+Location = require "Location"
+
 -- LuaWSL:Sides
 -- This page describes the LuaWSL functions and helpers for handling sides and villages.
 
@@ -47,13 +49,14 @@
 -- @treturn number|bool side number of the former owner
 -- @usage wesmere.set_village_owner(12, 15, 1)
 set_village_owner = (x, y, side=0, fire_events=false) =>
+    assert(@)
 
 	new_side = side
 
 	loc = Location(x,y)
 	return false unless is_village(@board.map[loc.x][loc.y])
 
-    old_side = wesmere.board.village[x][y]
+    old_side = @board.village[x][y]
 
     if (new_side == old_side or new_side < 0 or
         new_side > static_cast<int>(teams().size()) or
@@ -319,6 +322,7 @@ all_sides = () =>
 -- @treturn number the side that owns the village at the given location.
 -- @usage owned_by_side_1 = wesmere.get_village_owner(12, 15) == 1
 get_village_owner = (x, y) =>
+    assert(@)
     -- @todo rename to get_tile_owner to make it less wesnoth specific
     return @board.villages[x][y]
 
