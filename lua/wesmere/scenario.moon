@@ -192,6 +192,7 @@ Scenario = (scenario, extra_config) ->
                 debug: require("moon").p
                 wsl_error: error
             } --require "init"
+            :type
             :ipairs
             :error
             :assert
@@ -249,6 +250,10 @@ Scenario = (scenario, extra_config) ->
         state.sides[i] = side
         unless side.gold
             state.sides[i].gold = 0
+        if unit = side.unit
+            units = wrapInArray(unit)
+            for unit in *units
+                put_unit(state, unit)
 
     -- public functions
     set_next_scenario = (id) ->
