@@ -118,7 +118,7 @@ class Unit extends HasGetters
         @name = cfg.name or generate_name(cfg)
         @side = cfg.side or 1
 
-        wsl_error("Unit without type.") unless cfg.type
+        error("Unit without type.") unless cfg.type
         @type = cfg.type
         unit_type = unit_types[@type]
         unless unit_type
