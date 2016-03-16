@@ -133,11 +133,15 @@ load_cfg_file = (file, env) ->
         :file_path
         :assert
         :table
+        :type
 
     env.file_name = file_basename
     env.file_path = file_path
     env.assert = assert
     env.table = table
+    env.type = type
+    env.pairs = pairs
+    env.error = error
     for key, thing in pairs env
         if type(thing) == "function"
             --- @todo clean up
