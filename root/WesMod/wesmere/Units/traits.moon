@@ -235,3 +235,70 @@ TRAIT_AGED =
             apply_to: "attack"
             range: "melee"
             increase_damage: -1
+
+-- Traits for use by the Elementals
+
+TRAIT_RUBY =
+-- like trait strong
+    trait:
+        id: "ruby"
+        male_name: _"ruby"
+        female_name: _"female^ruby"
+        effect:
+            apply_to: "attack"
+            range: "melee"
+            increase_damage: 1
+        effect:
+            apply_to: "hitpoints"
+            increase_total: 1
+
+TRAIT_EMERALD =
+-- like trait quick, but instead -5% hp  it has -1 hp
+    trait:
+        id: "emerald"
+        male_name: _"emerald"
+        female_name: _"female^emerald"
+        effect:
+            apply_to: "movement"
+            increase: 1
+        effect:
+            apply_to: "hitpoints"
+            increase_total: -1
+
+TRAIT_SAPPHIRE =
+-- like trait intelligent
+    trait:
+        id: "sapphire"
+        male_name: _"sapphire"
+        female_name: _"female^sapphire"
+        effect:
+            apply_to: "max_experience"
+            increase: "-20%"
+
+TRAIT_DIAMOND =
+-- like trait resilient
+    trait:
+        id: "diamond"
+        male_name: _"diamond"
+        female_name: _"female^diamond"
+        effect:
+            apply_to: "hitpoints"
+            increase_total: 4
+        effect:
+            apply_to: "hitpoints"
+            times: "per level"
+            increase_total: 1
+
+TRAIT_AMETHYST =
+-- like trait dextrous, but with -1hp
+    trait:
+        id: "amethyst"
+        male_name: _"amethyst"
+        female_name: _"female^amethyst"
+        effect:
+            apply_to: "attack"
+            range: "ranged"
+            increase_damage: 1
+        effect:
+            apply_to: "hitpoints"
+            increase_total: -1
