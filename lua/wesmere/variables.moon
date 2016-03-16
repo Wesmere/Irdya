@@ -9,20 +9,38 @@
 -- Argument 2, if true, prevents the recursive conversion when the name points to an object; a fresh empty table is returned in this case. This is mainly used for writing proxy objects, e.g. in #helper.set_wsl_var_metatable.
 -- Note that, if the variable name happens to designate a sequence of WSL objects, only the first one (index 0) is fetched. If all the WSL objects with this name should have been returned, use #helper.get_variable_array instead.
 -- @function wesmere.get_variable
--- @usage wesmere.fire("store_unit", { variable="my_unit", { "filter", { id="hero" } } })
+-- @usage wesmere.fire("store_unit", { variable:"my_unit", filter: { id:"hero" } } )
 -- heros_hp = wesmere.get_variable("my_unit[0].hitpoints")
 -- wesmere.message(string.format("The 'hero' unit has %d hitpoints.", heros_hp))
 get_variable = (var_name) =>
-    -- assert(@current.event_context[var_name], debug.traceback!)
-    return @current.event_context[var_name]
+    assert(@)
+    assert(var_name)
+    local value
+    set_value = (val) ->
+        value = val
+    @current.event_context._set_value = set_value
+    fun, err = load("_set_value(#{var_name})", "get_variable:", "t", @current.event_context)
+    unless fun
+        error(err)
+    else fun!
+    return value
+
 
 ----
--- Converts and stores a Lua object (argument 2) to a WSL variable (argument 1). A WSL object is created for a table, an attribute otherwise.
+-- Stores a Lua value (argument 2) to a WSL variable (argument 1).
 -- Setting a WSL variable to nil erases it.
 -- @function wesmere.set_variable
 -- @usage wesmere.set_variable("my_unit.hitpoints", heros_hp + 10)
 set_variable = (var_name, value) =>
-    @current.event_context[var_name] = value
+    assert(@)
+    assert(@current.event_context)
+    @current.event_context._value = value
+    assert(var_name, "wesmere.set_variable: Missing 'var_name' argument.")
+    fun, err = load("#{var_name} = _value", "set_variable:", "t", @current.event_context)
+    unless fun
+        error(err)
+    else fun!
+
 
 ----
 -- Returns all the WSL variables currently set in form of a WSL table.
