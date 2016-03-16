@@ -5,6 +5,8 @@
 moon  = require "moon"
 HasGetters = require "HasGetters"
 
+bitwise = require "bitwise"
+
 ----
 -- The fields of the Location table
 -- @table self
@@ -67,7 +69,7 @@ class Location extends HasGetters
     -- @tparam Location self
     -- @treturn {[direction]=Location} The 6 adjacent hex field locations.
     adjacents: () =>
-        foo = @x & 1
+        foo = bitwise.band(@x, 1)
         bar = 1 - foo
         return {
             NORTH: Location(@x, @y - 1)
