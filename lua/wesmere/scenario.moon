@@ -68,14 +68,15 @@ log =
 
 Scenario = (scenario, extra_config) ->
 
-    modified_turn_number = false
     -- private fields
+    modified_turn_number = false
     turn_number = 0
     turn_side = 0
     turn_limit = -1
     end_level_data = false
     turn_ended = false
 
+    -- used as self for all the wesmere methods
     state =
         board: -- all childs are accessed like board.thing[x][y]
             units: {} -- id -> loc and [x][y] -> Unit
@@ -91,6 +92,10 @@ Scenario = (scenario, extra_config) ->
         current:
             event_context: {}
             event_handlers: {}
+
+    --- @todo move to time.moon ?
+    set_schedule = (schedule) ->
+        state.time = schedule
 
     get_turn = () ->
         return turn_number
@@ -136,6 +141,7 @@ Scenario = (scenario, extra_config) ->
 
     -- Setup
     turn_limit = scenario.turns
+    time = scenario.time
 
     -- Let's load the map.
     if map_data = scenario.map_data
@@ -148,7 +154,7 @@ Scenario = (scenario, extra_config) ->
         import set_variable, get_variable from require "variables"
         import get_unit, get_units, put_unit, erase_unit from require "units"
         import get_locations, get_terrain from require "map"
-        import match_side, get_village_owner from require "sides"
+        import match_side, get_village_owner, get_sides from require "sides"
         import add_time_area, remove_time_area, get_time_of_day from require "time"
         assert match_side
         assert get_village_owner
@@ -157,10 +163,13 @@ Scenario = (scenario, extra_config) ->
 
         env = {
             wesmere: {
+                get_sides: (...) -> get_sides(state, ...)
                 sides: state.sides
+                get_turn: -> return turn_number
                 :set_turn
                 :set_turn_limit
                 :get_turn_limit
+                :set_schedule
                 current: state.current
                 add_time_area: (cfg) -> add_time_area(state,cfg)
                 get_time_of_day: (...) -> get_time_of_day(state, ...)
@@ -193,6 +202,8 @@ Scenario = (scenario, extra_config) ->
             :try
             Loc: require "Location"
         }
+
+
 
         -- Make the wsl_actions ready and insert in event_context
         for key, action in pairs content.Mechanic.wsl_action
@@ -233,7 +244,11 @@ Scenario = (scenario, extra_config) ->
                         command: event
                     }
 
-    state.sides = wrapInArray(scenario.side)
+    sides = wrapInArray(scenario.side)
+    for i, side in ipairs sides
+        state.sides[i] = side
+        unless side.gold
+            state.sides[i].gold = 0
 
     -- public functions
     set_next_scenario = (id) ->
