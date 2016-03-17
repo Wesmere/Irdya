@@ -2,14 +2,23 @@ wsl_action
     id: "move_unit"
     description: "works like the MOVE_UNIT macro."
 
-    action: (cfg, kernel) ->
+    action: (cfg) ->
         coordinate_error = "invalid coordinate in [move_unit]"
-        to_x = tostring(cfg.to_x or helper.wsl_error(coordinate_error))
-        to_y = tostring(cfg.to_y or helper.wsl_error(coordinate_error))
+
+        local to_x, to_y
+        if loc = cfg.to_loc
+            loc = Loc(loc)
+            to_x = tostring(loc.x or error(coordinate_error))
+            to_y = tostring(loc.y or error(coordinate_error))
+        else
+            to_x = tostring(cfg.to_x or error(coordinate_error))
+            to_y = tostring(cfg.to_y or error(coordinate_error))
+
+
         fire_event = cfg.fire_event
         muf_force_scroll = cfg.force_scroll
         check_passability = cfg.check_passability or true
-        cfg = helper.literal(cfg)
+        -- cfg = helper.literal(cfg)
         cfg.to_x, cfg.to_y, cfg.fire_event = nil, nil, nil
         units = wesmere.get_units(cfg)
 
