@@ -6,20 +6,24 @@ wsl_action
 Time areas matter; illumination does not. If this is omitted, the global (location-independent) time is stored."
 
     action: (cfg) ->
-        turn = cfg.turn or wesmere.current.turn
+        turn = cfg.turn or wesmere.get_turn!
+        assert(turn)
         illumination = cfg.illumination
 
-        local time, loc
-        try
-            do: ->
-                loc = Loc(cfg)
-            catch: (err) ->
-                time = wesmere.get_time_of_day(turn)
-            finally: ->
-                time = wesmere.get_time_of_day(turn, {loc.x, loc.y, illumination})
+        -- local time, loc
+        -- try
+        --     do: ->
+        --         loc = Loc(cfg)
+        --     catch: (err) ->
+        --         time = wesmere.get_time_of_day(turn)
+        --     finally: ->
+        --         time = wesmere.get_time_of_day(turn, {loc.x, loc.y, illumination})
 
-        if variable = cfg.variable
-            wesmere.set_variable(cfg.variable, time)
+        time = wesmere.get_time_of_day(turn)
+        assert(time)
+
+        variable = cfg.variable or "time_of_day"
+        wesmere.set_variable(variable, time)
         return time
 
     scheme:
