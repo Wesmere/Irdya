@@ -286,7 +286,7 @@ match_side = (side, filter) =>
 --     side.gold = 0
 get_sides = (filter) =>
     if side = filter.side
-        if match_side(side, filter)
+        if match_side(@, side, filter)
             return {@sides[side]}
         else return {}
 
