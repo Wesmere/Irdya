@@ -31,7 +31,6 @@ describe "actions", ->
 
         it "MyEvent", ->
             fired, err = actions.fire_event state, "MyEvent"
-            print err
             assert(fired, err)
 
 
