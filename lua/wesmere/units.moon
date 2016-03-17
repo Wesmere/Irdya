@@ -137,11 +137,11 @@ match_unit = (unit, filter, other_unit) ->
 -- @number y
 -- @see Unit:erase
 erase_unit = (x, y) =>
-    local loc
+    local loc, u
     try
         do: ->
             loc = Loc(x, y)
-            u = wesmere.get_unit(loc.x, loc.y)
+            u = get_unit(@,loc.x, loc.y)
         catch: (err) -> error "wesmere.erase_unit: bad arguments - #{err}"
         finally: ->
             return u\erase!
