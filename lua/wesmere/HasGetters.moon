@@ -6,6 +6,9 @@
 -- Classes deriving from HasGetters can be extended to
 class HasGetters
     getters: {}
+    -- setters: {}
+
+
     __inherited: (cls) =>
         old_init = cls.__init
         cls.__init = (...) =>
@@ -13,6 +16,7 @@ class HasGetters
 
             mt = getmetatable @
             old_index = mt.__index
+            -- old_newindex = mt.__newindex
 
             mt.__index = (name) =>
 
@@ -42,3 +46,10 @@ class HasGetters
                     old_index @, name
                 else
                     old_index[name]
+
+            -- mt.__newindex = (name) =>
+
+            --     old_index_is_function = type(old_newindex) == "function"
+
+            --     if name == "setters"
+            --         if old_index_is_function
