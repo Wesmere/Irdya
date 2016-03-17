@@ -5,7 +5,7 @@ wsl_action
 
     action: (cfg) ->
 
-        assert(cfg)
+        assert(cfg, "have_unit WSLAction: Missing argument table.")
         --- @todo support count and search_recall_list
 
         -- found = 0
