@@ -59,9 +59,12 @@ class Location extends HasGetters
             when Location
                 return x.x, x.y
             when "table"
+                if loc = x.loc
+                    return process_args(loc)
                 if x.x and x.y
                     return x.x, x.y
                 return x[1], x[2]
+            else error "Location: arguement type #{moon.type(x)} not supported"
 
 
     ----
