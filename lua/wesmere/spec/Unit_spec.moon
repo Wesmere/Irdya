@@ -2,6 +2,8 @@
 Unit = require "Unit"
 Loc = require "Location"
 
+unit_types = require("units").unit_types
+
 loc = Loc(12,8)
 
 state =
@@ -9,32 +11,32 @@ state =
         units:
             Kalenz: loc
 
-unit_types =
-    ["Elvish Fighter"]:
+unit_types["Elvish Fighter"] =
         id: "Elvish Fighter"
         hitpoints: 28
 
 describe "Unit", ->
 
-    cfg = {
+    cfg =
         id: "Kalenz"
         type: "Elvish Fighter"
-    }
-
-    unit = Unit(cfg)
 
     describe "get unit.type", ->
 
         it "Elvish Fighter", ->
+            unit = Unit(state, cfg)
             assert.are.equal "Elvish Fighter", unit.type
 
     describe "getters", ->
 
         it "unit.x", ->
+            unit = Unit(state, cfg)
             assert.are.equal loc.x, unit.x
 
         it "unit.y", ->
+            unit = Unit(state, cfg)
             assert.are.equal loc.y, unit.y
 
         it "unit.loc", ->
+            unit = Unit(state, cfg)
             assert.are.equal loc, unit.loc
