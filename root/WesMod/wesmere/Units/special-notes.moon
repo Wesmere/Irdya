@@ -63,3 +63,11 @@ SPECIAL_NOTES_FIRSTSTRIKE = _ " The length of this unit’s weapon allows it to 
 SPECIAL_NOTES_POISON = _ " The victims of this unit’s poison will continually take damage until they can be cured in town or by a unit which cures."
 
 SPECIAL_NOTES_DEFENSE_CAP = _ " This unit has a defense cap on certain terrain types — it cannot achieve a higher defense rating on mixed terrains with such terrain types."
+
+SPECIAL_NOTES_FORESTHOME = _" Whenever this unit is in a forested area, it will regenerate 3 HP per turn."
+
+SPECIAL_NOTES_MTNHOME = _" Whenever this unit is in a mountainous area, it will regenerate 3 HP per turn."
+
+SPECIAL_NOTES_DESERT_HOME = _" Whenever this unit is in desert-like area, it will regenerate 3 HP per turn."
+
+SPECIAL_NOTES_WATERHOME = _" Whenever this unit is in an aquatic area, it will regenerate 3 HP per turn."

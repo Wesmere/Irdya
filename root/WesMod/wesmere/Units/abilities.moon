@@ -416,3 +416,48 @@ ABILITY_FEEDING =
                 apply_to: "hitpoints"
                 increase_total: 1
                 increase: 1
+
+-- Definitions of the regeneration abilities used by the Elementals
+ABILITY_FORESTHOME =
+    regenerate:
+        filter_self:
+            filter_location:
+                terrain: {"Gs^Fp", "Gg^Fet", "Gs^Ft", "Aa^Fpa"}
+        value: 3
+        id: "foresthome"
+        name: _"foresthome"
+        description: _"This unit will regenerate 3 HP when in forest."
+        affect_self: true
+
+ABILITY_WATERHOME =
+    regenerate:
+        filter_self:
+            filter_location:
+                terrain: {"Wo", "Ww"}
+        value: 3
+        id: "waterhome"
+        name: _"waterhome"
+        description: _"This unit will regenerate 3 HP when in deep or shallow water."
+        affect_self: true
+
+ABILITY_DESERTHOME =
+    regenerate:
+        filter_self:
+            filter_location:
+                terrain: {"Dd", "Ds"}
+        value: 3
+        id: "deserthome"
+        name: _"deserthome"
+        description: _"This unit will regenerate 3 HP when in desert or sand."
+        affect_self: true
+
+ABILITY_MTNHOME =
+    regenerate:
+        filter_self:
+            filter_location:
+                terrain: {"Mm"}
+        value: 3
+        id: "mountainhome"
+        name: _"mountainhome"
+        description: _"This unit will regenerate 3 HP when on mountains."
+        affect_self: true
