@@ -19,6 +19,11 @@ NOT_ON_RECALL_LIST = {
 -- Place a unit with embedded WSL specified.
 --
 UNIT = (SIDE, TYPE, X, Y, WSL) ->
+    assert(SIDE)
+    assert(TYPE)
+    assert(X)
+    assert(Y)
+    assert(type(WSL == "table"))
     with WSL
         .side = SIDE
         .type = TYPE
