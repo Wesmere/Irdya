@@ -3,36 +3,38 @@
 -- This is intended to be a test of the underlying unit_map object,
 -- but many other things are tested along the way, esp. have_unit:.
 
-ASSERT_NO_9_5 = ->
-    ASSERT not have_unit
-        x:9
-        y:5
-
-ASSERT_YES_9_5 = ->
-    ASSERT have_unit
-        x:9
-        y:5
 
 GENERIC_UNIT_TEST "test_unit_map", ->
+
+    ASSERT_NO_9_5 = ->
+        ASSERT not have_unit
+            x:9
+            y:5
+
+    ASSERT_YES_9_5 = ->
+        ASSERT have_unit
+            x:9
+            y:5
+
     event
-        name:"start"
+        name:"Start"
         command: ->
             ASSERT_NO_9_5!
-            unit UNIT 2, "Spearman", 9, 5, {id:"steve1"}
+            unit UNIT 2, "Elvish Archer", 9, 5, {id:"steve1"}
             ASSERT_YES_9_5!
             kill
                 x:9
                 y:5
             ASSERT_NO_9_5!
 
-            unit UNIT 2, "Spearman", 9, 5, {id:"steve2"}
+            unit UNIT 2, "Elvish Archer", 9, 5, {id:"steve2"}
             ASSERT_YES_9_5!
             move_unit
                 loc:{9,5}
                 to_loc:{10,5}
             ASSERT_NO_9_5!
 
-            unit UNIT 2, "Spearman", 9, 5, {id:"steve3"}
+            unit UNIT 2, "Elvish Archer", 9, 5, {id:"steve3"}
             ASSERT_YES_9_5!
             do_command
                 move:
@@ -40,7 +42,7 @@ GENERIC_UNIT_TEST "test_unit_map", ->
                     y:{5,5}
             ASSERT_NO_9_5!
 
-            unit UNIT 2, "Spearman", 9, 5, {id:"steve4"}
+            unit UNIT 2, "Elvish Archer", 9, 5, {id:"steve4"}
             ASSERT_YES_9_5!
             store_unit
                 filter:
@@ -49,7 +51,7 @@ GENERIC_UNIT_TEST "test_unit_map", ->
                 kill:true
             ASSERT_NO_9_5!
 
-            unit UNIT 2, "Spearman", 9, 5, {id:"steve5"}
+            unit UNIT 2, "Elvish Archer", 9, 5, {id:"steve5"}
             ASSERT_YES_9_5!
             store_unit
                 filter:
@@ -63,7 +65,7 @@ GENERIC_UNIT_TEST "test_unit_map", ->
                 amount:100
             ASSERT_NO_9_5!
 
-            unit UNIT 2, "Spearman", 9, 5, {id:"steve6"}
+            unit UNIT 2, "Elvish Archer", 9, 5, {id:"steve6"}
             ASSERT_YES_9_5!
             store_unit
                 filter:
@@ -93,7 +95,7 @@ GENERIC_UNIT_TEST "test_unit_map", ->
                     destination:{9,5}
             ASSERT_NO_9_5!
 
-            unit UNIT 2, "Spearman", 9, 5, {id:"steve7"}
+            unit UNIT 2, "Elvish Archer", 9, 5, {id:"steve7"}
             ASSERT_YES_9_5!
             do_command
                 attack:
