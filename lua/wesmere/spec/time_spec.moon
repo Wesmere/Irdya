@@ -24,7 +24,10 @@ describe "time", ->
             DAWN
             MORNING
         }
-        current: {}
+        current: {
+            event_context:
+                turn_number: 3
+        }
 
     describe "add_time_area", ->
 
@@ -48,7 +51,7 @@ describe "time", ->
 
             tod = time.get_time_of_day(state)
             assert(tod, "No time table returned")
-            assert.are.equals "morning", tod.id
+            assert.are.equals "dawn", tod.id
 
         it "global turn 5", ->
 
