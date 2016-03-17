@@ -3,14 +3,22 @@ sides = require "sides"
 
 describe "sides", ->
 
+    state =
+        board:
+            map: {}
+            village: {}
 
     describe "get_village_owner", ->
 
-        sides.set_village_owner(state, loc.x, loc.y, 2)
+        pending "@(5,4)", ->
 
-        owner = sides.get_village_owner(loc.x, loc.y)
+            loc = { x: 5, y:4 }
 
-        assert.are.equals 2, owner
+            sides.set_village_owner(state, loc.x, loc.y, 2)
+
+            owner = sides.get_village_owner(state, loc.x, loc.y)
+
+            assert.are.equals 2, owner
 
     describe "set_village_owner", ->
 
