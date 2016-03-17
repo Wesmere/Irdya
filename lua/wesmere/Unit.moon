@@ -122,7 +122,7 @@ class Unit extends HasGetters
         @type = cfg.type
         unit_type = unit_types[@type]
         unless unit_type
-            wsl_error("Unit Type '#{@type}' is unknown.")
+            error("Unit Type '#{@type}' is unknown.")
 
         @max_hitpoints = unit_type.hitpoints
         @hitpoints = cfg.hitpoints or @max_hitpoints
