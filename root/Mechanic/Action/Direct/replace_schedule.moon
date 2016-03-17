@@ -5,6 +5,7 @@ wsl_action
 
     action: (cfg) ->
         if schedule = cfg.schedule
+            assert #schedule > 0
             wesmere.set_schedule(schedule)
 
     scheme:
