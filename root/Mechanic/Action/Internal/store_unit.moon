@@ -1,10 +1,10 @@
 
 wsl_action
     id: "store_unit"
-    description: "Stores details about units into a container variable. When a unit is stored, all keys and tags in the unit definition may be manipulated, including some others, with [set_variable]. A sample list of these tags and keys can be found at InternalActionsWSLUnitTags.
+    description: [[Stores details about units into a container variable. When a unit is stored, all keys and tags in the unit definition may be manipulated, including some others, with [set_variable]. A sample list of these tags and keys can be found at InternalActionsWSLUnitTags.
 If you have a doubt about what keys are valid or what the valid value range is for each key, code a [store_unit] event, save the game, and examine what keys are in the file (or just examine the [unit] tag(s) in any save file). One can also use the :inspect command or the [inspect] tag to open a game-state inspector dialog, which can be used to view unit properties.
 Common usage is to manipulate a unit by using [store_unit] to store it into a variable, followed by manipulation of the variable, and then [unstore_unit] to re-create the unit with the modified variables.
-Note: stored units also exist on the field, and modifying the stored variable will not automatically change the stats of the units. You need to use [unstore_unit]. See also [unstore_unit] and FOREACH."
+Note: stored units also exist on the field, and modifying the stored variable will not automatically change the stats of the units. You need to use [unstore_unit]. See also [unstore_unit] and FOREACH.]]
 
     action: (cfg) ->
         filter = cfg.filter or
@@ -28,8 +28,8 @@ Note: stored units also exist on the field, and modifying the stored variable wi
         --         table.insert(result, u)
         --         if kill_units
         --             wesmere.erase_unit(u)
-
-        wesmere.set_variable(cfg.variable, result)
+        if variable = cfg.variable
+            wesmere.set_variable(variable, result)
         return result
 
     scheme:
