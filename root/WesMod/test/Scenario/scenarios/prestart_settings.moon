@@ -33,7 +33,7 @@ GENERIC_UNIT_TEST "set_gold_in_prestart_two", ->
             store_side
                 side:1
                 variable:"temp"
-            RETURN VARIABLE_CONDITIONAL "temp.gold", "equals", 666
+            RETURN VARIABLE_CONDITIONAL "temp.gold", "equals", 566
 
 
 GENERIC_UNIT_TEST "modify_turns_one", ->
