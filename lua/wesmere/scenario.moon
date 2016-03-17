@@ -5,6 +5,7 @@ import fire_event, wsl_error, add_event_handler, register_wsl_action from requir
 import content, ENV from require "wesmods"
 import try, wrapInArray from require "misc"
 import add_side from require "sides"
+import put_unit from require "units"
 
 import setfenv, getfenv from require "pl.utils"
 
@@ -201,6 +202,8 @@ Scenario = (scenario, extra_config) ->
             :print
             :wrapInArray
             :try
+            :string
+            :tonumber
             Loc: require "Location"
         }
 
@@ -250,6 +253,10 @@ Scenario = (scenario, extra_config) ->
         state.sides[i] = side
         unless side.gold
             state.sides[i].gold = 0
+
+        if side.type
+            put_unit(state, side)
+
         if unit = side.unit
             units = wrapInArray(unit)
             for unit in *units
