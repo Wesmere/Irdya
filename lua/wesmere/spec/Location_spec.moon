@@ -2,7 +2,7 @@ require "moonscript"
 Location = require "Location"
 
 -- source: moonscript_spec.moon
-describe "Location", ->
+describe "#Location", ->
 
     describe "(1/1)", ->
 
@@ -49,6 +49,11 @@ describe "Location", ->
 
 
     describe "Constructor tests", ->
+
+        it "Location({loc:{5,19}})", ->
+            loc = Location({loc:{5,19}})
+            assert.are.equal 5, loc.x
+            assert.are.equal 19, loc.y
 
         it "Location(5, 10)", ->
             loc = Location(5, 10)
