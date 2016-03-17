@@ -21,7 +21,6 @@ wsl_action
             for side in *sides
                 modify_side(side)
         else
-            wesmere.debug wesmere.sides
             side = wesmere.sides[side]
             assert(side)
             modify_side(side)
