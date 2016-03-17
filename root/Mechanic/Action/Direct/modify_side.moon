@@ -16,8 +16,8 @@ wsl_action
                     .gold = gold
 
         side = cfg.side or 1
-        if cfg.filter_side
-            sides = wesmere.get_sides(cfg.filter_side)
+        if filter = cfg.filter_side
+            sides = wesmere.get_sides(filter)
             for side in *sides
                 modify_side(side)
         else
@@ -34,6 +34,7 @@ wsl_action
             description: "with a StandardSideFilter as argument"
             type: "table"
             table: "SSF"
+            inline: true
         income:
             description: "the income given at the begining of each turn."
 
