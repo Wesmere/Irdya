@@ -3,8 +3,11 @@ wsl_action
     id: "kill"
     description: "Removes all units (including units in a recall list) that match the filter from the game."
 
-    action: (cfg, kernel) ->
-        wesmere.kill(cfg)
+    action: (cfg) ->
+
+
+
+        wesmere.erase_unit(cfg)
 
     scheme:
         filter:
