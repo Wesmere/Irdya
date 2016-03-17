@@ -66,9 +66,10 @@ wsl_action
             name = tostring(cfg.name or "")
             wesmere.show_popup_dialog(name, text, cfg.image)
 
-        for cmd in *cfg.command_type
-            action = utils.handle_event_commands(cmd, "conditional")
-            break if action ~= "none"
+        if command_type = cfg.command_type
+            for cmd in *command_type
+                action = utils.handle_event_commands(cmd, "conditional")
+                break if action ~= "none"
 
         -- old_on_load = wesmere.game_events.on_load
         -- function wesmere.game_events.on_load(cfg)
