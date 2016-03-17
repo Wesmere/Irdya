@@ -1,4 +1,5 @@
 TURN_UNIT = (ID, DIRECTION) ->
+    assert DIRECTION
     modify_unit
         filter:
             id:ID
@@ -40,10 +41,7 @@ GENERIC_UNIT_TEST "modify_unit_facing", ->
         name: "Side1Turn7"
         command: -> SUCCEED!
 
-    -- event
-    --     name: "SideTurn"
-    --     first_time_only: false
-    --     command: -> end_turn!
-
-
-
+    event
+        name: "SideTurn"
+        first_time_only: false
+        command: -> end_turn!
