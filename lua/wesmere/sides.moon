@@ -285,6 +285,8 @@ match_side = (side, filter) =>
 -- for side in *sides
 --     side.gold = 0
 get_sides = (filter) =>
+    assert(@)
+    assert(filter)
     if side = filter.side
         if match_side(@, side, filter)
             return {@sides[side]}
