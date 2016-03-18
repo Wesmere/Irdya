@@ -71,3 +71,5 @@ The development of Irdya is currently discussed in the Wesnoth forums:
 
 ### Wesnoth Campaign 'An Orcish Incursion'
 
+The campaign is meant to be the first interactive test case later.
+It is already an example how Irdya's campaign files look like.
