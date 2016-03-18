@@ -9,7 +9,7 @@ describe "WSL Test Suite", ->
 
     for key, test in pairs wesmere.content.Scenario.test
 
-        pending "running ##{test.id}", ->
+        it "running ##{test.id}", ->
 
             test_scenario = wesmere.load_test(key)
             test_scenario.start!
