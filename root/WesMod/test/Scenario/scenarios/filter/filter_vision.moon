@@ -8,50 +8,50 @@ TEST_FILTER_VISION_SCEN = (ID, EVENTS) ->
         name: "Unit Test #{ID}"
         map_data:"move_skip_sighted"
         turns:3
-        id:{ID}
+        id:ID
         random_start_time:false
 
         time:{DAWN}
 
         side:
-            side=1
-            controller=human
-            name = "Alice"
-            type = Elvish Archer
-            id=alice
-            fog=yes
-            team_name=West
-			share_vision=shroud
+            side:1
+            controller:"human"
+            name: "Alice"
+            type: "Elvish Archer"
+            id:"alice"
+            fog:true
+            team_name:"West"
+			share_vision:"shroud"
 
         side:
-            side=2
-            controller=human
-            name = "Bob"
-            type = Orcish Grunt
-            id=bob
-            fog=yes
-            team_name=East
-			share_vision=shroud
+            side:2
+            controller:"human"
+            name: "Bob"
+            type: "Orcish Grunt"
+            id:"bob"
+            fog:true
+            team_name:"East"
+			share_vision:"shroud"
 
         side:
-            side=3
-            controller=human
-            name = "Dave"
-            type = Dwarvish Fighter
-            id=dave
-            fog=yes
-            team_name=East
-			share_vision=shroud
+            side:3
+            controller:"human"
+            name: "Dave"
+            type: "Dwarvish Fighter"
+            id:"dave"
+            fog:true
+            team_name:"East"
+			share_vision:"shroud"
 
         side:
-            side=4
-            controller=human
-            name = "Charlie"
-            type = Chocobone
-            id=charlie
-            fog=yes
-            team_name=West
-			share_vision=shroud
+            side:4
+            controller:"human"
+            name: "Charlie"
+            type: "Chocobone"
+            id:"charlie"
+            fog:true
+            team_name:"West"
+			share_vision:"shroud"
 
         Prestart:EVENTS
 
