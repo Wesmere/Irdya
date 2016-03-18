@@ -53,7 +53,7 @@ Running it means to start a bunch of test scenarios covering a subset of the gam
 #### Contribute
 
 You can already help and contribute to the development of Irdya.
-Have a look at the test suite README.
+Have a look at the test suite [README](https://github.com/Wesmere/Irdya/blob/master/lua/wesmere/README.md).
 
 When you got the test suite running, pick a still failing test, implement or fix it and do a git merge request.
 Thank you very much! :-)
