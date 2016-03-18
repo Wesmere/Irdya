@@ -91,7 +91,7 @@ TEST_SIGHTED_EVENTS_SCEN = (ID, BOB_CONDITION, SET_FLAG) ->
         --This makes the sides pass their turns, when the other events have taken place.
         SideTurn:
             first_time_only:false
-            command: end_turn
+            command: -> end_turn!
 
 TEST_SIGHTED_EVENTS_SCEN "sighted_events", true, true
 TEST_SIGHTED_EVENTS_SCEN "sighted_events_fail", true, false
