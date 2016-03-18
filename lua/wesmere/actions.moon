@@ -170,21 +170,14 @@ fire_event = (event_name, x1, y1, x2, y2, first_weapon, second_weapon) =>
         .y1 = y1
         .x2 = x2
         .y2 = y2
-        -- @todo
-        -- .weapon =; -- .second_weapon =
-        -- .unit_x = ; .unit_y =
-
-    ENV = @current.event_context
-    with ENV
-        .side_number = @current.side
-        .x1 = x1
-        .y1 = y1 -- position of primary unit
-        .x2 = x2
-        .y2 = y2 -- position of secondary unit
         .Unit = unit
         .Second_Unit = second_unit -- primary unit; secondary_unit
-        -- .damage_inflicted = 0 -- @todo
-
+        -- @todo
+        -- .weapon =
+        -- .second_weapon =
+        -- .unit_x
+        -- .unit_y =
+        -- .damage_inflicted = 0
 
     modified = false
 
@@ -195,7 +188,7 @@ fire_event = (event_name, x1, y1, x2, y2, first_weapon, second_weapon) =>
 
     for event in *handlers
         fired, err = execute_event_handler event, primary_unit,
-            secondary_unit, first_weapon, second_weapon, ENV
+            secondary_unit, first_weapon, second_weapon, event_context
         if fired
             modified = fired
         else print "err"
