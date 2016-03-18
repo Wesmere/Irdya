@@ -85,74 +85,74 @@ scenario
         RECALL_ADVISOR!
         MODIFY_UNIT {side:1}, "facing", "nw"
 
-    event:
-        name:"start"
-
-        message:
+    Start: ->
+        message
             role:"advisor"
             message: _ "The trail leads straight to this place, my lord."
 
-        message:
+        message
             speaker:"Erlornas"
             message: _ "There is a keep ahead of us. How comes it that we know nothing of it? I thought our borders were watched more carefully."
 
-        message:
+        message
             role:"advisor"
             message: _ "I... I know not, my lord. For ages there was no one in these lands that could build such a thing save us. I fear we have fallen prey a false sense of security that has injured the vigilance of our scouts."
 
-        message:
+        message
             speaker:"Erlornas"
             message: _ "When the fighting ends, I’ll have some answers. But for now—"
 
-        message:
+        message
             speaker:"Gharlsa"
             message: _ "Gharlsa sees elves... yes... Fresh meat for wolves. Yes, yes..."
 
-        message:
+        message
             speaker:"Erlornas"
             message: _ "— let’s focus on the task at hand."
 
-        message:
+        message
             role:"advisor"
             message: _ "Does that demented creature truly believe he can kill us?"
 
-        message:
+        message
             speaker:"Erlornas"
             message: _ "Appearances can be deceiving. Tell the men to be cautious."
 
-    event:
-        name:"attack"
+
+    Attack:
         filter:
             type:"Orcish Assassin"
 
-        message:
-            speaker:"Gharlsa"
-            message: _ "Yes... yes... Slay them!"
+        command: ->
+            message
+                speaker:"Gharlsa"
+                message: _ "Yes... yes... Slay them!"
 
-    event:
-        name:"last breath"
+    LastBreath:
         filter:
+            --- @todo this can't work. Should be a bug in wesnoth
             speaker:"Gharlsa"
 
-        message:
-            speaker:"unit"
-            message: _ "Hurts... failed... Rualsha gonna be angry..."
+        command: ->
+            message
+                speaker:"unit"
+                message: _ "Hurts... failed... Rualsha gonna be angry..."
 
-    event:
-        name:"die"
+    Die:
         filter:
             id:"Gharlsa"
 
-        message:
-            speaker:"Erlornas"
-            message: _ "This... ‘Rualsha’ again. We need to forge ahead; the answers we seek are not here. Perhaps we will find them further north."
+        command: ->
+            message
+                speaker:"Erlornas"
+                message: _ "This... ‘Rualsha’ again. We need to forge ahead; the answers we seek are not here. Perhaps we will find them further north."
 
-        message:
-            speaker:"Erlornas"
-            message: _ "Destroy this place and let the forest take the ruins. We don’t want any more undesirables to use it."
+            message
+                speaker:"Erlornas"
+                message: _ "Destroy this place and let the forest take the ruins. We don’t want any more undesirables to use it."
 
-        endlevel: NEW_GOLD_CARRYOVER 40
-            result:"victory"
-            bonus:true
+            endlevel: NEW_GOLD_CARRYOVER 40
+                result:"victory"
+                bonus:true
 
     Prestart: HERODEATH_ERLORNAS
