@@ -28,7 +28,7 @@ TEST_GRUNT_DAMAGE = (ID, X, Y, EXPECTED_DAMAGE) ->
     ASSERT VARIABLE_CONDITIONAL "damage", "equals", EXPECTED_DAMAGE
 
 
-test:
+test
     name:"Unit Test test_grunt_tod_damage"
     map_data:"test_grunt_tod_damage"
     turns:7
