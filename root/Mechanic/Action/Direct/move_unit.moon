@@ -36,8 +36,10 @@ wsl_action
                 while true do
                     x = tonumber(x) or helper.wsl_error(coordinate_error)
                     y = tonumber(y) or helper.wsl_error(coordinate_error)
-                    unless (x == prevX and y == prevY) then x, y = wesmere.find_vacant_tile(x, y, pass_check)
-                    unless x or not y then helper.wsl_error("Could not find a suitable hex near to one of the target hexes in [move_unit].")
+                    unless (x == prevX and y == prevY)
+                        x, y = wesmere.find_vacant_tile(x, y, pass_check)
+                    unless x or not y
+                        error("Could not find a suitable hex near to one of the target hexes in [move_unit].")
                     move_string_x = string.format("%s,%u", move_string_x, x)
                     move_string_y = string.format("%s,%u", move_string_y, y)
                     next_x, next_y = xs(), ys()
