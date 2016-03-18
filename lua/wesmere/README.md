@@ -27,6 +27,7 @@ On a debian/ubuntu linux system:
 ```bash
 sudo apt-get install luarocks
 sudo luarocks install busted
+sudo luarocks install moonscript
 cd Irdya/lua/wesmere
 busted
 ```
