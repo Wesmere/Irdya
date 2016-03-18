@@ -1,12 +1,13 @@
 GENERIC_UNIT_TEST "test_role_1", ->
     event
         name: "Prestart"
-        -- create a bunch of units in side 1 recall list
-        UNIT 1, "Ghost", "recall", "recall", {id:"wrong_0"}
-        UNIT 1, "Shadow", "recall", "recall", {id:"wrong_1"}
-        UNIT 1, "Spectre", "recall", "recall", {id:"correct"}
-        UNIT 1, "Wraith", "recall", "recall", {id:"wrong_2"}
-        UNIT 1, "Nightgaunt", "recall", "recall", {id:"wrong_3"}
+        command: ->
+            -- create a bunch of units in side 1 recall list
+            unit UNIT 1, "Ghost", "recall", "recall", {id:"wrong_0"}
+            unit UNIT 1, "Shadow", "recall", "recall", {id:"wrong_1"}
+            unit UNIT 1, "Spectre", "recall", "recall", {id:"correct"}
+            unit UNIT 1, "Wraith", "recall", "recall", {id:"wrong_2"}
+            unit UNIT 1, "Nightgaunt", "recall", "recall", {id:"wrong_3"}
 
     event
         name: "Start"
@@ -25,11 +26,11 @@ GENERIC_UNIT_TEST "test_role_1", ->
                 role:"advisor"
 
             ASSERT have_unit
-                    side:1
-                    role:"advisor"
-                    type:"Spectre"
-                    id:"correct"
-                    search_recall_list:false
+                side:1
+                role:"advisor"
+                type:"Spectre"
+                id:"correct"
+                search_recall_list:false
 
             SUCCEED!
 
