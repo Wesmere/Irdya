@@ -5,7 +5,9 @@ wesmere = require "init"
 describe "WSL Test Suite", ->
 
     wesmere.load_wesmod_by_path("../../root")
-    wesmere.load_wesmod_by_path("../../root/WesMod/test")
+    wesmere.load_wesmod_by_path("../../root/WesMod/wesmere")
+    wesmere.load_wesmod_by_path("../../root/WesMod/wesmere/WesMod/test")
+
 
     for key, test in pairs wesmere.content.Scenario.test
 
