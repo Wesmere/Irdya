@@ -273,6 +273,7 @@ Scenario = (scenario, extra_config) ->
     local check_end_turn
     new_side_turn = ->
         turn_side += 1
+        state.current.event_context.side_number = turn_side
         assert state.sides[turn_side]
         fire_event(state, "SideTurn")
         fire_event(state, "Side#{turn_side}Turn")
@@ -293,6 +294,8 @@ Scenario = (scenario, extra_config) ->
             modified_turn_number = false
         else
             turn_number += 1
+        state.current.event_context.turn_number = turn_number
+
         turn_side = 0
 
         if turn_number >= turn_limit
@@ -361,5 +364,3 @@ load_multiplayer = () ->
 --     :start_test
 --     :start_scenario
 }
-
--- return Scenario
