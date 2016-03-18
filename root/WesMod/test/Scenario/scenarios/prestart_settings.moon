@@ -25,6 +25,7 @@ GENERIC_UNIT_TEST "set_gold_in_prestart_two", ->
         name:"Prestart"
         command: ->
             gold
+                side:1
                 amount:566
 
     event
