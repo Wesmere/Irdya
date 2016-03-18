@@ -1,16 +1,16 @@
-race:
+race
     id: "elemental"
     name: _"race^Elemental"
     female_name: _"race+female^Elemental"
     plural_name: _"race^Elementals"
     num_traits: 2
     ignore_global_traits: true
-    TRAIT_ELEMENTAL
+    trait:TRAIT_ELEMENTAL
 
     description: _"The Elementals are the guardians of the World, spirits of the elements that incarnate themselves to fight. They are reclusive, but can be quite fierce and brutal, for as it is said, there is nothing more ruthless than nature."
 
-movetype:
-    name: "furnacefoot"
+move_type
+    id: "furnacefoot"
     movement_costs:
         deep_water: UNREACHABLE
         shallow_water: 5
@@ -54,8 +54,8 @@ movetype:
         cold: 130
         arcane: 100
 
-movetype:
-    name: "rockfoot"
+move_type
+    id: "rockfoot"
     movement_costs:
         deep_water: UNREACHABLE
         shallow_water: 3
@@ -99,8 +99,8 @@ movetype:
         cold: 90
         arcane: 100
 
-movetype:
-    name: "firefly"
+move_type
+    id: "firefly"
     flies: "true"
     movement_costs:
         deep_water: 3
@@ -144,8 +144,8 @@ movetype:
         cold: 150
         arcane: 100
 
-movetype:
-    name: "windfly"
+move_type
+    id: "windfly"
     flies: "true"
     movement_costs:
         deep_water: 1
@@ -189,8 +189,8 @@ movetype:
         cold: 90
         arcane: 100
 
-movetype:
-    name: "water"
+move_type
+    id: "water"
     movement_costs:
         deep_water: 1
         shallow_water: 1

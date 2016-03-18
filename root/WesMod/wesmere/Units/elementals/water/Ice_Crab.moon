@@ -1,12 +1,14 @@
-unit_type:
+unit_type
     id: "Ice Crab"
     name: _"Ice Crab"
     race: "elemental"
     gender: "female"
-    TRAIT_EMERALD
-    TRAIT_SAPPHIRE
-    TRAIT_SAPPHIRE
-    TRAIT_DIAMOND
+    trait:{
+        TRAIT_EMERALD
+        TRAIT_SAPPHIRE
+        TRAIT_SAPPHIRE
+        TRAIT_DIAMOND
+    }
     hitpoints: 43
     movement_type: "smallfoot"
     movement: 6

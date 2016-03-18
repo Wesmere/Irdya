@@ -2,10 +2,12 @@ unit_type:
     id: "Brazier Creation"
     name: _"Brazier Creation"
     race: "elemental"
-    TRAIT_RUBY
-    TRAIT_RUBY
-    TRAIT_EMERALD
-    TRAIT_DIAMOND
+    trait:{
+        TRAIT_RUBY
+        TRAIT_RUBY
+        TRAIT_EMERALD
+        TRAIT_DIAMOND
+    }
     hitpoints: 37
     movement_type: "furnacefoot"
     movement: 5

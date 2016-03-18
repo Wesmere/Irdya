@@ -2,10 +2,12 @@ unit_type:
     id: "Animated Rock"
     name: _"Animated Rock"
     race: "elemental"
-    TRAIT_RUBY
-    TRAIT_SAPPHIRE
-    TRAIT_DIAMOND
-    TRAIT_DIAMOND
+    trait: {
+        TRAIT_RUBY
+        TRAIT_SAPPHIRE
+        TRAIT_DIAMOND
+        TRAIT_DIAMOND
+    }
     hitpoints: 36
     movement_type: "rockfoot"
     movement: 4

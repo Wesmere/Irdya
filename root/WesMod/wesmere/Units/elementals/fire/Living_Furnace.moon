@@ -2,10 +2,12 @@ unit_type:
     id: "Living Furnace"
     name: _"Living Furnace"
     race: "elemental"
-    TRAIT_RUBY
-    TRAIT_RUBY
-    TRAIT_EMERALD
-    TRAIT_DIAMOND
+    trait:{
+        TRAIT_RUBY
+        TRAIT_RUBY
+        TRAIT_EMERALD
+        TRAIT_DIAMOND
+    }
     hitpoints: 52
     movement_type: "furnacefoot"
     movement: 5

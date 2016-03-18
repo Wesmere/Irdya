@@ -2,10 +2,12 @@ unit_type:
     id: "Vine Beast"
     name: _"Vine Beast"
     race: "elemental"
-    TRAIT_RUBY
-    TRAIT_EMERALD
-    TRAIT_SAPPHIRE
-    TRAIT_AMETHYST
+    trait:{
+        TRAIT_RUBY
+        TRAIT_EMERALD
+        TRAIT_SAPPHIRE
+        TRAIT_AMETHYST
+    }
     hitpoints: 33
     movement_type: "woodland"
     movement: 6

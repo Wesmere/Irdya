@@ -2,10 +2,12 @@ unit_type:
     id: "Fire Ghost"
     name: _"Fire Ghost"
     race: "elemental"
-    TRAIT_RUBY
-    TRAIT_RUBY
-    TRAIT_EMERALD
-    TRAIT_DIAMOND
+    trait:{
+        TRAIT_RUBY
+        TRAIT_RUBY
+        TRAIT_EMERALD
+        TRAIT_DIAMOND
+    }
     hitpoints: 66
     movement_type: "firefly"
     movement: 6
@@ -13,7 +15,7 @@ unit_type:
     level: 3
     alignment: "neutral"
     advances_to: "null"
-    AMLA_DEFAULT
+    -- AMLA_DEFAULT
     cost: 45
     usage: "archer"
     description: _"Fire Wisps take the form of a ghost when they have enough power. These ghosts are composed of the fire element and breathe out fire." .. SPECIAL_NOTES .. SPECIAL_NOTES_DESERT_HOME

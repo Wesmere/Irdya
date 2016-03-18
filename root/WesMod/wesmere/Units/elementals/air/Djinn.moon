@@ -1,11 +1,13 @@
-unit_type:
+unit_type
     id: "Djinn"
     name: _"Djinn"
     race: "elemental"
-    TRAIT_EMERALD
-    TRAIT_SAPPHIRE
-    TRAIT_AMETHYST
-    TRAIT_AMETHYST
+    trait: {
+        TRAIT_EMERALD
+        TRAIT_SAPPHIRE
+        TRAIT_AMETHYST
+        TRAIT_AMETHYST
+    }
     hitpoints: 52
     movement_type: "windfly"
     movement: 6
@@ -13,7 +15,7 @@ unit_type:
     level: 3
     alignment: "neutral"
     advances_to: "null"
-    AMLA_DEFAULT
+    -- AMLA_DEFAULT
     cost: 54
     usage: "archer"
 

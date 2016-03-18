@@ -1,11 +1,13 @@
-unit_type:
+unit_type
     id: "Wind Herder"
     name: _"Wind Herder"
     race: "elemental"
-    TRAIT_EMERALD
-    TRAIT_SAPPHIRE
-    TRAIT_AMETHYST
-    TRAIT_AMETHYST
+    trait:{
+        TRAIT_EMERALD
+        TRAIT_SAPPHIRE
+        TRAIT_AMETHYST
+        TRAIT_AMETHYST
+    }
     hitpoints: 28
     movement_type: "windfly"
     movement: 8

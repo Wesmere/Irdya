@@ -3,10 +3,12 @@ unit_type:
     name: _"Unicorn"
     race: "elemental"
     gender: "female"
-    TRAIT_RUBY
-    TRAIT_EMERALD
-    TRAIT_SAPPHIRE
-    TRAIT_DIAMOND
+    trait:{
+        TRAIT_RUBY
+        TRAIT_EMERALD
+        TRAIT_SAPPHIRE
+        TRAIT_DIAMOND
+    }
     hitpoints: 37
     movement_type: "mounted"
     movement: 7

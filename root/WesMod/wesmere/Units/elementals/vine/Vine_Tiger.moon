@@ -1,11 +1,13 @@
-unit_type:
+unit_type
     id: "Vine Tiger"
     name: _"Vine Tiger"
     race: "elemental"
-    TRAIT_RUBY
-    TRAIT_EMERALD
-    TRAIT_SAPPHIRE
-    TRAIT_AMETHYST
+    trait:{
+        TRAIT_RUBY
+        TRAIT_EMERALD
+        TRAIT_SAPPHIRE
+        TRAIT_AMETHYST
+    }
     hitpoints: 46
     movement_type: "woodland"
     movement: 6
@@ -13,14 +15,15 @@ unit_type:
     level: 2
     alignment: "lawful"
     advances_to: "null"
-    AMLA_DEFAULT
+    -- AMLA_DEFAULT
     cost: 32
     usage: "mixed fighter"
     description: _"The vine beasts grow in size as they live, and the larger forms are called tigers after a beast that they resemble." .. SPECIAL_NOTES .. SPECIAL_NOTES_FORESTHOME .. SPECIAL_NOTES_AMBUSH
 
-    abilities:
+    abilities:{
         ABILITY_AMBUSH
         ABILITY_FORESTHOME
+    }
     resistance:
         fire: 120
         pierce: 80

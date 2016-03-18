@@ -1,11 +1,13 @@
-unit_type:
+unit_type
     id: "Fire Wisp"
     name: _"Fire Wisp"
     race: "elemental"
-    TRAIT_RUBY
-    TRAIT_RUBY
-    TRAIT_EMERALD
-    TRAIT_DIAMOND
+    trait:{
+        TRAIT_RUBY
+        TRAIT_RUBY
+        TRAIT_EMERALD
+        TRAIT_DIAMOND
+    }
     hitpoints: 53
     movement_type: "firefly"
     movement: 6

@@ -1,11 +1,13 @@
-unit_type:
+unit_type
     id: "Razorbird"
     name: _"Razorbird"
     race: "elemental"
-    TRAIT_RUBY
-    TRAIT_EMERALD
-    TRAIT_EMERALD
-    TRAIT_SAPPHIRE
+    trait:{
+        TRAIT_RUBY
+        TRAIT_EMERALD
+        TRAIT_EMERALD
+        TRAIT_SAPPHIRE
+    }
     hitpoints: 32
     movement_type: "fly"
     movement: 9

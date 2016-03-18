@@ -2,10 +2,12 @@ unit_type:
     id: "Rock Golem"
     name: _"Rock Golem"
     race: "elemental"
-    TRAIT_RUBY
-    TRAIT_SAPPHIRE
-    TRAIT_DIAMOND
-    TRAIT_DIAMOND
+    trait: {
+        TRAIT_RUBY
+        TRAIT_SAPPHIRE
+        TRAIT_DIAMOND
+        TRAIT_DIAMOND
+    }
     hitpoints: 46
     movement_type: "rockfoot"
     movement: 4

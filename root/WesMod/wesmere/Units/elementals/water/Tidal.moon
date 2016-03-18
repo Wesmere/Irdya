@@ -1,12 +1,14 @@
-unit_type:
+unit_type
     id: "Tidal"
     name: _"Tidal"
     race: "elemental"
     gender: "female"
-    TRAIT_EMERALD
-    TRAIT_SAPPHIRE
-    TRAIT_SAPPHIRE
-    TRAIT_DIAMOND
+    trait:{
+        TRAIT_EMERALD
+        TRAIT_SAPPHIRE
+        TRAIT_SAPPHIRE
+        TRAIT_DIAMOND
+    }
     hitpoints: 25
     movement_type: "water"
     movement: 6

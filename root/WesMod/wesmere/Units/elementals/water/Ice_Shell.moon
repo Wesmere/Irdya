@@ -3,10 +3,12 @@ unit_type:
     name: _"Ice Shell"
     race: "elemental"
     gender: "female"
-    TRAIT_EMERALD
-    TRAIT_SAPPHIRE
-    TRAIT_SAPPHIRE
-    TRAIT_DIAMOND
+    trait:{
+        TRAIT_EMERALD
+        TRAIT_SAPPHIRE
+        TRAIT_SAPPHIRE
+        TRAIT_DIAMOND
+    }
     hitpoints: 55
     movement_type: "smallfoot"
     movement: 6
@@ -14,7 +16,7 @@ unit_type:
     level: 3
     alignment: "neutral"
     advances_to: "null"
-    AMLA_DEFAULT
+    -- AMLA_DEFAULT
     cost: 35
     usage: "fighter"
     description: _"Once ice crabs gather enough elemental power from the cold, they evolve into a more stronger and taller sort of creature. Having icicle spikes for hands, they prefer to thrive in the coldest regions of the world." .. SPECIAL_NOTES .. SPECIAL_NOTES_SLOW

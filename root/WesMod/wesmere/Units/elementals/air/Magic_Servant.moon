@@ -1,11 +1,13 @@
-unit_type:
+unit_type
     id: "Magic Servant"
     name: _"Magic Servant"
     race: "elemental"
+    trait:{
     TRAIT_EMERALD
     TRAIT_EMERALD
     TRAIT_SAPPHIRE
     TRAIT_AMETHYST
+    }
     hitpoints: 18
     movement_type: "windfly"
     movement: 8

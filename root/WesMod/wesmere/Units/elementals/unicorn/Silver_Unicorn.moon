@@ -3,10 +3,12 @@ unit_type:
     name: _"Silver Unicorn"
     race: "elemental"
     gender: "female"
-    TRAIT_RUBY
-    TRAIT_EMERALD
-    TRAIT_SAPPHIRE
-    TRAIT_DIAMOND
+    trait:{
+        TRAIT_RUBY
+        TRAIT_EMERALD
+        TRAIT_SAPPHIRE
+        TRAIT_DIAMOND
+    }
     hitpoints: 46
     movement_type: "mounted"
     movement: 7
@@ -14,7 +16,7 @@ unit_type:
     level: 2
     alignment: "lawful"
     advances_to: "null"
-    AMLA_DEFAULT
+    -- AMLA_DEFAULT
     cost: 38
     usage: "healer"
     description: _"Gleaming with light, these exotic creatures bear a magical silvery horn in the middle of their foreheads which can shoot rays of pure light. Composed by light and life forces, they are so full of them that its mere presence heals allied units around them." .. SPECIAL_NOTES .. SPECIAL_NOTES_CHARGE .. SPECIAL_NOTES_CURES .. SPECIAL_NOTES_MAGICAL .. SPECIAL_NOTES_ARCANE
