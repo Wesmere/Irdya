@@ -1,5 +1,3 @@
-
-
 wsl_action
     id: "store_time_of_day"
     description: "Stores time of day information from the current scenario into a WSL variable container.
@@ -20,7 +18,7 @@ Time areas matter; illumination does not. If this is omitted, the global (locati
         --         time = wesmere.get_time_of_day(turn, {loc.x, loc.y, illumination})
 
         time = wesmere.get_time_of_day(turn)
-        assert(time)
+        assert(time, "WSLAction store_time_of_day: got nil for turn #{turn}")
 
         variable = cfg.variable or "time_of_day"
         wesmere.set_variable(variable, time)
