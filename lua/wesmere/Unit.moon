@@ -299,7 +299,7 @@ class Unit extends HasGetters
     -- @tparam Unit self
     -- @treturn string "id: <unit_id>"
     __tostring: =>
-        return("id: " .. @data.id)
+        return("id: " .. @id)
 
     ----
     -- Compare function
