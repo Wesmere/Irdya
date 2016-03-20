@@ -195,17 +195,17 @@ have_file = (filename) ->
 -- })
 -- wesmere.message(wesmere.debug(vconfig))
 -- wesmere.message(wesmere.debug(vconfig.__literal))
-debug = (wsl_table) ->
-    ilevel = 0
-    indent = (a, b)->
-        steps, fn = if b
-            a, b
-        else
-            1, a
-        ilevel += steps
-        fn!
-        ilevel -= steps
-    writeindent = -> io.write "   "\rep ilevel
+-- debug = (wsl_table) ->
+--     ilevel = 0
+--     indent = (a, b)->
+--         steps, fn = if b
+--             a, b
+--         else
+--             1, a
+--         ilevel += steps
+--         fn!
+--         ilevel -= steps
+--     writeindent = -> io.write "   "\rep ilevel
 
 -- debug_write = =>
 --   visited = {}
@@ -341,11 +341,25 @@ random = (m, n) ->
 -- @func[opt] random_function
 --helper.shuffle = (array, random_function) ->
 
+
+errorHandler = debug.traceback
 ----
--- Lifted from MoonScript@GitHub
---
+-- Try/Catch style exception handling
+-- Lifted from https://github.com/leafo/moonscript/wiki/Exception-handling
+-- @tab t
+-- @func t.do The guarded code.
+-- @func t.catch Called iff 'do' fails.
+-- @func[opt] t.finally Called iff 'do' succeeds.
+-- @usage
+-- try
+--     do: ->
+--         <guarded code chunk>
+--     catch: (err) ->
+--         <error handling>
+--     finally: ->
+--         <reached only on success>
 try = (t) ->
-    ok,err = pcall t["do"]
+    ok,err = xpcall(t["do"], errorHandler)
     t.catch err unless ok
     t.finally! if t.finally
 
