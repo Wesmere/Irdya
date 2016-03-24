@@ -473,7 +473,7 @@ ABILITY_PROTECTION_LEVEL_2 =
         description: _"Adjacent units of lower level from this side receive a +20% bonus to all resistances (up to a maximum of 50%)."
         affect_self: false
         affect_adjacent:
-            adjacent: {"n", "ne", "se", "s", "sw", nw"}
+            adjacent: {"n", "ne", "se", "s", "sw", "nw"}
             filter:
                 level: 0
                 or:
@@ -489,7 +489,7 @@ ABILITY_PROTECTION_LEVEL_3
         description: _"Adjacent units of lower level from this side receive a +20% bonus to all resistances (up to a maximum of 50%)."
         affect_self: false
         affect_adjacent:
-            adjacent: {"n", "ne", "se", "s", "sw", nw"}
+            adjacent: {"n", "ne", "se", "s", "sw", "nw"}
             filter:
                 level: 0
                 or:
@@ -507,7 +507,7 @@ ABILITY_PROTECTION_LEVEL_4 =
         description: _"Adjacent units of lower level from this side receive a +20% bonus to all resistances (up to a maximum of 50%)."
         affect_self: false
         affect_adjacent:
-            adjacent: {"n", "ne", "se", "s", "sw", nw"}
+            adjacent: {"n", "ne", "se", "s", "sw", "nw"}
             filter:
                 level: 0
                 or:
