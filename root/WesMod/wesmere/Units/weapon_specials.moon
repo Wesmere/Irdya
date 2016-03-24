@@ -119,3 +119,20 @@ WEAPON_SPECIAL_POISON =
         name: _ "poison"
         description: _ "This attack poisons living targets. Poisoned units lose 8 HP every turn until they are cured or are reduced to 1 HP. Poison can not, of itself, kill a unit."
 
+-- attack specials used by the Aragwaithi units
+WEAPON_SPECIAL_ATTACK_ONLY =
+    damage:
+        id: "attack_only"
+        name: _"attack only"
+        description: _"This weapon will never be used on defense."
+        multiply: 0
+        active_on: "defense"
+
+WEAPON_SPECIAL_PRECISION =
+    chance_to_hit:
+        id: "precision"
+        name: _"precision"
+        description: _"When used offensively, this attack always has at least a 50% chance to hit."
+        value: 50
+        cumulative: true
+        active_on: "offense"

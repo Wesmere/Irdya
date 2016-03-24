@@ -461,3 +461,58 @@ ABILITY_MTNHOME =
         name: _"mountainhome"
         description: _"This unit will regenerate 3 HP when on mountains."
         affect_self: true
+
+-- abilities used by the Aragwaithi units
+ABILITY_PROTECTION_LEVEL_2 =
+    resistance:
+        id: "protection"
+        add: 20
+        max_value: 50
+        -- apply_to: {"blade", "pierce", "impact", "fire", "cold", "arcane"}
+        name: _"protection"
+        description: _"Adjacent units of lower level from this side receive a +20% bonus to all resistances (up to a maximum of 50%)."
+        affect_self: false
+        affect_adjacent:
+            adjacent: {"n", "ne", "se", "s", "sw", nw"}
+            filter:
+                level: 0
+                or:
+                    level: 1
+
+ABILITY_PROTECTION_LEVEL_3
+    resistance:
+        id: "protection"
+        add: 20
+        max_value: 50
+        -- apply_to: {"blade", "pierce", "impact", "fire", "cold", "arcane"}
+        name: _"protection"
+        description: _"Adjacent units of lower level from this side receive a +20% bonus to all resistances (up to a maximum of 50%)."
+        affect_self: false
+        affect_adjacent:
+            adjacent: {"n", "ne", "se", "s", "sw", nw"}
+            filter:
+                level: 0
+                or:
+                    level: 1
+                or:
+                    level: 2
+
+ABILITY_PROTECTION_LEVEL_4 =
+    resistance:
+        id: "protection"
+        add: 20
+        max_value: 50
+        -- apply_to: {"blade", "pierce", "impact", "fire", "cold", "arcane"}
+        name: _"protection"
+        description: _"Adjacent units of lower level from this side receive a +20% bonus to all resistances (up to a maximum of 50%)."
+        affect_self: false
+        affect_adjacent:
+            adjacent: {"n", "ne", "se", "s", "sw", nw"}
+            filter:
+                level: 0
+                or:
+                    level: 1
+                or:
+                    level: 2
+                or:
+                    level: 3
