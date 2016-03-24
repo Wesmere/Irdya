@@ -1,4 +1,4 @@
-race:
+race
     id: "aragwaith"
     male_name: _"race^Aragwaith"
     female_name: _"race+female^Aragwaith"
@@ -13,7 +13,7 @@ It has been since then rumored that they came from the Vast Sea to settle in Wes
 
 Albeit being humans, many of their customs and racial features are incredibly different to the standards, to the point it puts them close to elves in terms of their dexterity with bows. Their wisemen have a mastery of magic not to be underestimated in the battlefield, for it has surprised and overseded the best magi often.]]
 
-movetype:
+move_type
     name: "aragwaithfoot"
     movement_costs:
         deep_water: 99
@@ -56,7 +56,7 @@ movetype:
         cold: 100
         arcane: 80
 
-movetype:
+move_type
     name: "aragwaithmounted"
     movement_costs:
         deep_water: 99

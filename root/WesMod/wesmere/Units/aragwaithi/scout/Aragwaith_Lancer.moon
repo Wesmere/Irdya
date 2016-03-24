@@ -1,4 +1,4 @@
-unit_type:
+unit_type
     id: "Aragwaith Lancer"
     name: _"Lancer"
     race: "aragwaith"
