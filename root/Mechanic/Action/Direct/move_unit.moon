@@ -51,13 +51,13 @@ wsl_action
                 elseif current_unit.x > x then current_unit.facing = "sw"
 
                 wesmere.extract_unit(current_unit)
-                current_unit_cfg = current_unit.__cfg
+                -- current_unit_cfg = current_unit.__cfg
                 wsl_actions.move_unit_fake
-                    type: current_unit_cfg.type
-                    gender: current_unit_cfg.gender
-                    variation: current_unit_cfg.variation
+                    type: current_unit.type
+                    gender: current_unit.gender
+                    variation: current_unit.variation
                     image_mods: current_unit.image_mods
-                    side: current_unit_cfg.side
+                    side: current_unit.side
                     x: move_string_x
                     y: move_string_y
                     force_scroll: muf_force_scroll
