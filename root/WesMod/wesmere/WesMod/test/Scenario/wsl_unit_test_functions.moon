@@ -13,6 +13,7 @@ RETURN = (X) ->
             result:"defeat"
             linger_mode:true
 
+
 ASSERT = (X) ->
     unless X
         test_condition
@@ -21,6 +22,12 @@ ASSERT = (X) ->
         endlevel
             result:"defeat"
             linger_mode:true
+
+
+FAIL = -> RETURN false
+
+SUCCEED = -> RETURN true
+
 
 GENERIC_UNIT_TEST = (NAME, CONTENT) ->
 
@@ -65,8 +72,3 @@ GENERIC_UNIT_TEST = (NAME, CONTENT) ->
 
     test scenario
 
-FAIL = ->
-    RETURN false
-
-SUCCEED = ->
-	RETURN true
