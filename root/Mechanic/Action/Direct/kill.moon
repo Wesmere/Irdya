@@ -4,9 +4,6 @@ wsl_action
     description: "Removes all units (including units in a recall list) that match the filter from the game."
 
     action: (cfg) ->
-
-
-
         wesmere.erase_unit(cfg)
 
     scheme:
@@ -23,6 +20,6 @@ wsl_action
             type: "bool"
             default: "false"
         secondary_unit:
+            description: "Has an effect only if fire_event: true. The first on-map unit matching the filter becomes second_unit in any fired die and last breath events. If an on-map unit matches and if there are several units killed with a single 'kill' table, second_unit is this same unit for all of them. If no on-map unit matches or 'secondary_unit' isn't present, the variable second_unit in each of the die and last breath events is always the same as the variable unit (the dying unit)."
             type: "table"
             table: "StandardUnitFilter"
-            description: "Has an effect only if fire_event: true. The first on-map unit matching the filter becomes second_unit in any fired die and last breath events. If an on-map unit matches and if there are several units killed with a single 'kill' table, second_unit is this same unit for all of them. If no on-map unit matches or 'secondary_unit' isn't present, the variable second_unit in each of the die and last breath events is always the same as the variable unit (the dying unit)."
