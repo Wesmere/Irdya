@@ -1,7 +1,6 @@
 wsl_action
     id: "do_command"
-    description: [[(Version 1.13.0 and later only)
-Executes a command, specified using the same syntax as a [command] tag in ReplayWSL. Not all [command]'s are valid: only these are accepted
+    description: [[Executes a command, specified using the same syntax as a [command] tag in ReplayWSL. Not all [command]'s are valid: only these are accepted
 [attack]
 [move]
 [recruit]
@@ -13,5 +12,5 @@ The tags corresponding to player actions generally use the same codepath as if a
 One purpose of this tag is to allow scripting of noninteractive scenarios -- without a tag like this, this might require elaborate mechanisms to coerce ais in order to test these code paths.
 This command should always be replay safe.]]
 
-    action: (cfg, kernel) ->
-        kernel\execute_command(cfg)
+    action: (func) ->
+        wesmere.execute_command(func)
