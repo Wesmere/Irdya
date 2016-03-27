@@ -97,11 +97,6 @@ wsl_conditionals = {}
 -- Which should then be called from every on_event callback which changes the gamestate.
 
 
--- game_events = {}
-
-
-
---stack_depth = 0
 ----
 -- Fires all the WSL events with the given name. Optional parameters allow passing two locations and two tables. These parameters will be matched against the [filter], [filter_second], [filter_attack], and [filter_second_attack] of any event handler, and are used to fill the WSL variables "unit", "second_unit", "weapon", and "second_weapon". These parameters can also be read through current.event_context.
 -- @function wesmere.fire_event
@@ -133,26 +128,34 @@ fire_event = (event_name, x1, y1, x2, y2, first_weapon, second_weapon) =>
     -- @tab _ENV Using the pragma of how Lua handles the global namespace to sandbox all event wml execution.
     execute_event_handler = (handler, primary, second, first_weapon, second_weapon, ENV) ->
         return false, "handler disabled" if handler.remove
-        return false, "failed side filter" if handler.filter_side and not wesmere.match_side(side_number, handler.filter_side)
-        return false, "failed condition" if handler.filter_condition and not wesmere.eval_conditional(handler.filter_condition)
-        if filter = handler.filter
-            return false, "no unit thus no filtering" unless unit
-            return false, "unit does not match filter" unless unit\matches(filter)
-        if filter = handler.filter_second
-            return false, "no second unit thus no filtering" unless second_unit
-            return false, "second unit does not match filter" unless second_unit\matches(filter)
-        -- @todo filter_attack
+        -- return false, "failed side filter" if handler.filter_side and not wesmere.match_side(ENV.side_number, handler.filter_side)
+        -- return false, "failed condition" if handler.filter_condition and not wesmere.eval_conditional(handler.filter_condition)
+        -- if filter = handler.filter
+        --     return false, "no unit thus no filtering" unless unit
+        --     return false, "unit does not match filter" unless unit\matches(filter)
+        -- if filter = handler.filter_second
+        --     return false, "no second unit thus no filtering" unless second_unit
+        --     return false, "second unit does not match filter" unless second_unit\matches(filter)
+        -- -- @todo filter_attack
+        -- if filter = handler.filter_attack
+        --     first_weapon
+
         -- @todo filter_second_attack
 
         -- @todo delayed_variable_substitution ?
-        log.trace("Executing " .. handler.name)
+        log.trace("Executing: #{handler.name}")
 
         if handler.first_time_only
             handler.remove = true
 
         setfenv(handler.command, ENV)
 
-        handler.command(primary, secondary)
+        try
+            do: ->
+                handler.command(primary, secondary)
+            catch: (err) ->
+                error "Error executing handler command: #{err}"
+
         return true
 
 
@@ -194,6 +197,12 @@ fire_event = (event_name, x1, y1, x2, y2, first_weapon, second_weapon) =>
         else print "err"
 
     return modified
+
+-- fire_event = (event_name, x1, y1, x2, y2, first_weapon, second_weapon) =>
+--     try
+--         do: -> fire_event_(@, event_name, x1, y1, x2, y2, first_weapon, second_weapon)
+--         catch: (err) -> error "fire_event_wrapper"
+
 
 
 ----
@@ -238,14 +247,16 @@ remove_event_handler = (id) ->
 --        numerical_equals: "old_counter"
 eval_conditional = (conditional_table) ->
 
+
 ----
 -- Converts a WSL table into a proxy object which performs variable substitution on the fly.
 -- @function wesmere.tovconfig
 tovconfig = (config) ->
 -- @usage wesmere.set_variable("varname", "to_be_deleted")
--- wesmere.wsl_actions.clear_variable { name: "to_be_deleted" }              -- correct
+-- wesmere.wsl_actions.clear_variable { name: "to_be_deleted" }               -- correct
 -- wesmere.wsl_actions.clear_variable { name: "$varname" }                    -- error: try to delete a variable literally called "$varname"
 -- wesmere.wsl_actions.clear_variable(wesmere.tovconfig { name: "$varname" }) -- correct: "$varname" is replaced by "to_be_deleted" at the right time
+
 
 ----
 -- @function helper.set_wsl_action_metatable
@@ -254,12 +265,14 @@ set_wsl_action_metatable = () ->
 -- @usage W = helper.set_wsl_action_metatable {}
 -- W.message { speaker = "narrator", message = "?" }
 
+
 ----
 -- Interrupts the @current execution and displays a chat message that looks like a WSL error.
 -- @function helper.wsl_error
 -- @usage names = cfg.name or helper.wsl_error("clear_variable() missing required name: key.")
 --wsl_error = (message) ->
 --    error(message)
+
 
 ----
 -- Returns the __literal field of its argument if it is a userdata, the argument itself otherwise. This function is meant to be called when a WSL action handler can be called indifferently from WSL (hence receiving a userdata) or from Lua (hence possibly receiving a table).
@@ -270,15 +283,18 @@ set_wsl_action_metatable = () ->
 --     wesmere.message(tostring(cfg.value))
 literal = (config) ->
 
+
 ----
 -- Returns the __parsed field of its argument if it is a userdata, the argument itself otherwise. See also #helper.literal.
 -- @function helper.parsed
 parsed = (config) ->
 
+
 ----
 -- Returns the __shallow_literal field of its argument if it is a userdata, the argument itself otherwise. See also #helper.literal.
 -- @function helper.shallow_literal
 shallow_literal = (config) ->
+
 
 ----
 -- Returns the __shallow_parsed field of its argument if it is a userdata, the argument itself otherwise. See also #helper.literal.
