@@ -7,6 +7,7 @@ Set = require "pl.Set"
 
 Loc = require "Location"
 HasGetters = require "HasGetters"
+UnitMap = require "unit_map"
 
 import wrapInArray from require "misc"
 import wsl_error from require "actions"
@@ -79,11 +80,13 @@ unit_types = require("wesmods").content.Units.unit_type
 -- @tfield {tab,...} modifications.object an object the unit has. Same format as [object], DirectActionsWSL.
 -- @tfield {tab,...} modifications.advance an advancement the unit has. Same format as [advancement], UnitTypeWSL. Might be used if the unit type has some advancements, but this particular one is supposed to have some of them already taken. (Version 1.13.2 and later only) In 1.13.2 and later this has been renamed to [advancement], to match the UnitTypeWSL tag of the same name.
 
+unit_number = 0
 generate_id = (cfg) ->
-    return cfg.unit_type
+    unit_number += 1
+    return "#{cfg.unit_type}-#{unit_number}"
 
 generate_name = (cfg) ->
-
+    return "Unit_Name"
 
 ----
 -- Unit
@@ -92,25 +95,27 @@ class Unit extends HasGetters
     getters: (key) =>
         switch key
             when "x"
-                if loc = @state.board.units[@id]
+                if loc = @unit_map\get_loc(@id)
                     return loc.x
             when "y"
-                if loc = @state.board.units[@id]
+                if loc = @unit_map\get_loc(@id)
                     return loc.y
             when "loc"
-                return @state.board.units[@id]
+                return @unit_map\get_loc(@id)
             else
                 return unit_types[@type][key]
+
 
     ----
     -- Constructor
     -- @param self
     -- @param cfg
-    new: (state, cfg) =>
-        assert(state, "Unit Constructor: Missing 'state' argument.")
+    new: (unit_map, cfg) =>
+        assert(unit_map, "Unit Constructor: Missing 'unit_map' argument.")
         assert(cfg, "Unit Constructor: Missing 'cfg' argument.")
 
-        @state = state
+        assert(moon.type(unit_map) == UnitMap, "arguement unit_map is not a 'UnitMap' object.")
+        @unit_map = unit_map
 
         @gender = cfg.gender
 
@@ -122,6 +127,7 @@ class Unit extends HasGetters
         @type = cfg.type
         unit_type = unit_types[@type]
         unless unit_type
+            moon.p(unit_types)
             error("Unit Type '#{@type}' is unknown.")
 
         @max_hitpoints = unit_type.hitpoints
@@ -130,11 +136,13 @@ class Unit extends HasGetters
         @max_experience = cfg.max_experience or unit_type.experience
         @experience = cfg.experience or 0
 
+
     ----
     -- Prints the table containing all the unit's data
     -- @param self
     debug: =>
         moon.p(@)
+
 
     ----
     -- Get the defense propability value
@@ -144,6 +152,7 @@ class Unit extends HasGetters
     defense: (terrain) =>
         log.warn("Not implemented yet")
 
+
     ----
     -- Get the movement consts
     -- @param self
@@ -152,11 +161,13 @@ class Unit extends HasGetters
     movement_cost: (terrain) =>
         log.warn("Not implemented yet")
 
+
     ----
     -- Return the terrain the unit is currenty on
     -- @param self
     terrain: =>
         log.warn("Not implemented yet")
+
 
     ----
     -- Returns true if the given unit matches the WSL filter passed as the second argument. If other_unit is specified, it is used for the $other_unit auto-stored variable in the filter. Otherwise, this variable is not stored for the filter.
@@ -214,11 +225,13 @@ class Unit extends HasGetters
     -- wesmere.put_unit(1, 1, wesmere.get_units({ can_recruit: true })[1])
     to_map: (x, y) =>
 
+
     ----
     -- Erases the unit from the map.
     -- After calling this on a unit, the unit is no longer valid.
     -- @tparam Unit self
     erase: () =>
+
 
     ----
     -- Places a unit on a recall list. This unit is described either by a WSL table or by a proxy unit. The side of the recall list is given by the second argument, or by the side of the unit if missing.
@@ -226,12 +239,14 @@ class Unit extends HasGetters
     -- @number[opt] side the list is inserted into
     to_recall: (side) =>
 
+
     ----
     -- Advances the unit (and shows the advance unit dialog if needed) if the unit has enough xp. This function should be called after modifying the units experience directly. A similar function is called by wesmere internally after unit combat. The second argument is a boodean value that specifies whether the advancement should be animated. The third agrument is a boodean value that specifies whether advancement related events should be fired.
     -- @tparam Unit self
     -- @bool animate whether the advancement should be animated.
     -- @bool fire_events whether advancement related events should be fired.
     advance: (animate, fire_events) =>
+
 
     ----
     -- Modifies the unit.
@@ -241,11 +256,13 @@ class Unit extends HasGetters
     -- @bool[opt] write_to_mods
     add_modification: (type, effects, write_to_mods) =>
 
+
     ----
     -- j
     -- @tparam Unit self
     -- @string terrain_code
     movement: (terrain_code) =>
+
 
     ----
     -- blah
@@ -253,11 +270,13 @@ class Unit extends HasGetters
     -- @string terrain_code
     vision: (terrain_code) =>
 
+
     ----
     -- foo
     -- @tparam Unit self
     -- @string terrain_code
     jamming: (terrain_code) =>
+
 
     ----
     -- bar
