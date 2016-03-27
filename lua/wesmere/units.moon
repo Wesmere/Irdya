@@ -1,12 +1,13 @@
 ----
 -- @submodule wesmere
 
-import board from require "map"
-import current, try from require "misc"
-
+-- external dependencies
 import type from require "moon"
 
+-- internal dependencies
 Loc = require "Location"
+import board from require "map"
+import current, try from require "misc"
 
 
 -- LuaWSL:Units
@@ -94,10 +95,10 @@ get_unit = (x, y) =>
         do: ->
             loc = Loc(x,y)
         catch: (err) ->
-            print debug.traceback("get_unit stacktrace")
             error "get_unit: Invalid arguments #{err}"
         finally: ->
-            return @board.units[loc.x][loc.y]
+            unit = @units\get_unit_at(loc.x, loc.y)
+            return unit
 
 
 ----
@@ -107,11 +108,8 @@ get_unit = (x, y) =>
 -- @usage leaders_on_side_two = get_units { side: 2, can_recruit: true }
 -- name_of_leader = leaders_on_side_two[1].name
 get_units = (filter) =>
-    return for id, loc in pairs @units
-        assert(loc.x)
-        assert(loc.y)
-        if unit = get_unit(@,loc.x,loc.y)
-            unit if unit\matches(filter)
+    return for unit in @units\iter!
+        unit if unit\matches(filter)
 
 
 ----
@@ -135,16 +133,20 @@ match_unit = (unit, filter, other_unit) ->
 -- @function wesmere.erase_unit
 -- @number x
 -- @number y
+-- @treturn bool iff the unit was erased.
 -- @see Unit:erase
 erase_unit = (x, y) =>
     local loc, u
     try
         do: ->
             loc = Loc(x, y)
-            u = get_unit(@,loc.x, loc.y)
         catch: (err) -> error "wesmere.erase_unit: bad arguments - #{err}"
         finally: ->
-            return u\erase!
+            u = get_unit(@,loc.x, loc.y)
+            return false unless u
+            -- @units[u.id] = nil
+            -- @board.units[loc.x][loc.y] = nil
+            --return u\erase!
 
 ----
 -- Returns an array of all the units on the recall lists matching the WSL filter passed as the first argument.
@@ -197,7 +199,6 @@ copy_unit = (unit) ->
     return unit\clone!
 
 
-
 ----
 -- Removes a unit from the map or from a recall list and makes it private.
 -- @function wesmere.extract_unit
@@ -209,8 +210,15 @@ copy_unit = (unit) ->
 --     table.insert(l, u.__cfg)
 -- helper.set_variable_array("player_recall_list", l)
 -- Note: if the unit is on the map, it is just a shortcut for calling #wesmere.copy_unit and then #wesmere.put_unit without a unit. It is, however, the only way for removing a unit from a recall list without putting it on the map.
-extract_unit = (unit) ->
-    unit\extract!
+extract_unit = (unit) =>
+    moon = require "moon"
+    assert(unit, "Missing argument 'unit'")
+    unit_type = moon.type(unit)
+    assert(unit_type == "Unit", "wesmere.extract_unit: argument is not of type 'Unit' but #{unit_type}")
+    loc = Loc(unit)
+    @units.remove_unit(unit.id)
+    --unit\extract!
+
 
 ----
 -- Advances the unit (and shows the advance unit dialog if needed) if the unit has enough xp. This function should be called after modifying the units experience directly. A similar function is called by wesmere internally after unit combat.
@@ -360,12 +368,11 @@ transform_unit = (unit, to_type) ->
 
 
 ----
--- Places a unit on the map. This unit is described either by a WSL table or by a proxy unit. Coordinates can be passed as the first two arguments, otherwise the table is expected to have two fields x and y, which indicate where the unit will be placed. If the function is called with coordinates only, the unit on the map at the given coordinates is removed instead. (Version 1.13.2 and later only) This use is now deprecated; use wesmere.erase_unit instead.
+-- Places a unit on the map. This unit is described either by a WSL table or by a Unit object. Coordinates can be passed as optional arguments, otherwise the table is expected to contain them.
 -- @function wesmere.put_unit
 -- @tparam Unit|tab unit
--- @number x
--- @number y
--- wesmere.put_unit(unit, x, y)
+-- @tparam number|Location|tab x
+-- @number[opt] y
 -- @see Unit.to_map
 -- @usage -- create a unit with random traits, then erase it
 -- wesmere.put_unit({ type: "Elvish Lady" }, 17, 42)
@@ -374,8 +381,9 @@ transform_unit = (unit, to_type) ->
 -- @usage -- move the leader back to the top-left corner
 -- wesmere.put_unit(wesmere.get_units({ can_recruit: true })[1], 1, 1)
 put_unit = (unit, x, y) =>
-    assert @
-    assert unit
+    assert @, "wesmere.put_unit: Missing 'self' argument"
+    assert unit, "wesmere.put_unit: Missing 'unit argument'"
+    -- assert(unit.id, )
     Unit = require "Unit"
     local loc
     try
@@ -384,15 +392,21 @@ put_unit = (unit, x, y) =>
         catch: (err) ->
             -- assert(unit.x, "put_unit: Missing x-coordinate")
             -- assert(unit.y, "put_unit: Missing y-coordinate")
-            loc = Loc(unit)
+            try
+                do: -> loc = Loc(unit)
+                catch: (err) ->
+                    error "wesmere.put_unit: No coordinates in arguments."
 
     unless type(unit) == Unit
-        unit = Unit(@, unit)
+        unit = Unit(@units, unit)
 
-    assert(unit.id)
-    @units[unit.id] = loc
-    @board.units[loc.x][loc.y] = unit
+    moon = require "moon"
+    assert(moon.type(unit) == Unit )
 
+    assert(loc, "wesmere.put_unit: No location provided.")
+    assert(unit.id, "wesmere.put_unit: Unit without id.")
+    if @units\place_unit(unit, loc.x, loc.y)
+        fire_event("UnitPlaced", loc.x, loc,y)
 
 
 {
