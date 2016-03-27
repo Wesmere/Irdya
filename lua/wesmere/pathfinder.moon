@@ -59,6 +59,8 @@ find_path = (x1, y1, x2, y2, path_options_or_cost_function) ->
 -- wesmere.put_unit(dst_x, dst_y, ut)
 find_vacant_tile = (x, y, unit) ->
     loc = Loc(x,y)
+    --- @todo do the real implementation.
+    return loc.x, loc.y
 
 --    while not found
 --    for loc\adjacent_tiles(false)
