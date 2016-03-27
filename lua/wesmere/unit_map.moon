@@ -9,7 +9,25 @@ Loc = require "Location"
 class UnitMap -- extends HasGetters
 
     ----
-    --
+    -- Iterator over all units on the board.
+    -- The order is based on growing internal id numbers.
+    -- Although units may have left the board and thus the nth returny is not bound to the internal id n.
+    -- @function iter
+    -- @tparam UnitMap self
+    -- @treturn func the iterator
+    iter: =>
+        i = 0
+        return ->
+            local unit
+            while unit == nil
+                i += 1
+                return nil if i > #@ids
+                unit = @get_unit_by_internal_id(i)
+            return unit
+
+
+    ----
+    -- Getter for a unit when you know its id.
     -- @function get_unit
     -- @string id the requested unit's id
     -- @treturn Unit the
