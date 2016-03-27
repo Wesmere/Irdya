@@ -26,7 +26,7 @@ class HasGetters
                     if old_index_is_function
                         return old_index @, "getters"
                     else
-                        return old_index.getters
+                        return rawget(old_index, "getters")
 
                 getters = if old_index_is_function
                     old_index @, "getters"
@@ -45,7 +45,7 @@ class HasGetters
                 if old_index_is_function
                     old_index @, name
                 else
-                    old_index[name]
+                    rawget(old_index, name)
 
             -- mt.__newindex = (name) =>
 
