@@ -9,7 +9,6 @@ moon = require "moon"
 path = require "pl.path"
 dir = require "pl.dir"
 utils = require "pl.utils"
-tablex = require "pl.tablex"
 
 wsl_error = error
 -- import wsl_error from require "actions"
@@ -44,7 +43,7 @@ wsl_handler_loader = (cfg) ->
             content[cfg.scope] = {}
             ENV.folders[cfg.scope]["_"] = (str) -> return str
         env = ENV.folders[cfg.scope]
-        wsl_error("Folder unknown: " .. cfg.scope) unless env
+        error("Folder unknown: " .. cfg.scope) unless env
         dest = content[cfg.scope]
         unless env[cfg.id]
             env[cfg.id] = {}
@@ -72,7 +71,7 @@ wsl_handler_loader = (cfg) ->
         assert(file_name)
 
         unless config.id
-            wsl_error("No id key in '#{cfg.id}' from #{path}/#{file}")
+            error("No id key in '#{cfg.id}' from #{path}/#{file}")
 
         if entry = Registry[cfg.id][config.id]
 
@@ -135,13 +134,14 @@ load_cfg_file = (file, env) ->
         :table
         :type
 
-    env.file_name = file_basename
-    env.file_path = file_path
-    env.assert = assert
-    env.table = table
-    env.type = type
-    env.pairs = pairs
-    env.error = error
+    with env
+        .file_name = file_basename
+        .file_path = file_path
+        .assert = assert
+        .table = table
+        .type = type
+        .pairs = pairs
+        .error = error
     for key, thing in pairs env
         if type(thing) == "function"
             --- @todo clean up
