@@ -1,50 +1,51 @@
 wsl_action
     id: "role"
     description: [[Tries to find a unit to assign a role to.
-This is useful if you want to choose a non-major character to say some things during the game. Once a role is assigned, you can use role= in a unit filter to identify the unit with that role (See FilterWSL).
-However, there is no guarantee that roles will ever be assigned. You can use [have_unit] (see Condition Tags) to see whether a role was assigned. This tag uses a StandardUnitFilter (without [filter]) with the modification to order the search by type, mark only the first unit found with the role, and the role attribute is not used in the search. If for some reason you want to search for units that have or don't have existing roles, you can use one or more [not] filters. The will check recall lists in addition to units on the map. In normal use, you will probably want to include a side attribute to force the unit to be on a particular side.]]
+This is useful if you want to choose a non-major character to say some things during the game. Once a role is assigned, you can use role: in a unit filter to identify the unit with that role (See FilterWSL).
+However, there is no guarantee that roles will ever be assigned. You can use have_unit() (see ConditionWSL) to see whether a role was assigned. This table uses a StandardUnitFilter (without [filter]) with the modification to order the search by type, mark only the first unit found with the role, and the role attribute is not used in the search. If for some reason you want to search for units that have or don't have existing roles, you can use one or more not: filters. The will check recall lists in addition to units on the map. In normal use, you will probably want to include a 'side' key to force the unit to be on a particular side.]]
 
     action: (cfg, wesmere) ->
 
         -- role= and type= are handled differently than in other tags,
         -- so we need to remove them from the filter
-        role = cfg.role
-        filter = helper.shallow_literal(cfg)
+        -- role = cfg.role
+        -- filter = cfg
 
-        types = {}
+        -- types = {}
 
-        if cfg.type
-            for value in utils.split(cfg.type)
-                table.insert(types, utils.trim(value))
+        -- if cfg.type
+        --     for value in utils.split(cfg.type)
+        --         table.insert(types, utils.trim(value))
 
-        filter.role, filter.type = nil, nil
+        -- filter.role, filter.type = nil, nil
 
         -- first attempt to match units on the map
-        i = 1
-        -- repeat
-        --     -- give precedence based on the order specified in type=
-        --     if #types > 0 then filter.type = types[i]
-        --     unit = wesmere.get_units(filter)[1]
-        --     if unit
-        --         unit.role = role
-        --         return
-
-        --     i += 1
-        -- until #types == 0 or i > #types
-
-        -- -- then try to match units on the recall lists
         -- i = 1
         -- repeat
-        --     if #types > 0 then filter.type = types[i]
-        --     unit = wesmere.get_recall_units(filter)[1]
-        --     if unit
-        --         unit.role = role
-        --         return
-        --     i += 1
+        -- a = 5
+        -- give precedence based on the order specified in type=
+        -- if (#types > 0)
+        --     filter.type = types[i]
+        -- unit = wesmere.get_units(filter)[1]
+        -- if unit
+        --     unit.role = role
+        --     return
+        -- i += 1
+        -- until #types == 0 or i > #types
+
+        -- then try to match units on the recall lists
+        -- i = 1
+        -- repeat
+            -- if #types > 0 then filter.type = types[i]
+            -- unit = wesmere.get_recall_units(filter)[1]
+            -- if unit
+            --     unit.role = role
+            --     return
+            -- i += 1
         -- until #types == 0 or i > #types
 
         -- no matching unit found, issue a warning
-        wesmere.message("WSL", "No matching units found in 'role'")
+        -- wesmere.message("WSL", "No matching units found in 'role'")
 
 
             -- role = cfg.role
