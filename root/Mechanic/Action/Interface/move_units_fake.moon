@@ -2,6 +2,9 @@ wsl_action
     id: "move_units_fake"
     description: "moves multiple images of units along paths on the map. These units are moved in lockstep."
 
+    action: ->
+        error "'move_units_fake' Not implemented yet."
+
     scheme:
         fake_unit:
             description: "A fake unit to move"

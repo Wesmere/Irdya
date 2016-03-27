@@ -5,6 +5,9 @@ wsl_action
 
     description: "Uses an animation of a unit to animate it on screen (if the unit has the corresponding animation)."
 
+    action: ->
+        error "'animate_unit' Not implemented yet."
+
 
     scheme:
 

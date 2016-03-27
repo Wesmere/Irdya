@@ -6,7 +6,8 @@ wsl_action
 
     description: [[Creates a sound source. "Sound sources" is a general name for a mechanism which makes possible for map elements to emit sounds according to some rules, where "map elements" can be specific locations or terrain types. For now, only sound sources tied to locations are supported.]]
 
-    action:
+    action: ->
+        error "'sound_source' Not implemented yet."
 
     scheme:
 

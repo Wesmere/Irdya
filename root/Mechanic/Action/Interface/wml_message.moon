@@ -2,6 +2,10 @@ wsl_action
     id: "wsl_message"
     description: "Outputs a message to Wesmere's console output. Intended for campaign designers to output silent text to the console, without annoying the player; then, that text might contain information useful for later bug-reporting. The log domain for it is wsl, and the debug/dbg log level is available for use with the logger attribute. Depending on the current log level (error by default), which may be changed with the in-game :log command, or the --log-<level>=wsl command line switch, the messages are echoed to the in-game chat."
 
+    action: ->
+        error "'wsl_message_source' Not implemented yet."
+
+
     scheme:
         message: "the message to show."
         logger: [[the Wesmere engine output logger that should catch the text; this might be 'err' (the errors log level), 'warn'/'wrn' (the warnings log level) or anything else (the information log level). Not all information will be displayed depending on the log level chosen when starting Wesmere.

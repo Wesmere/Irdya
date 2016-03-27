@@ -3,6 +3,9 @@ wsl_action
 
     description: "Tints the color of the screen."
 
+    action: ->
+        error "'color_adjust' Not implemented yet."
+
     scheme:
         red: {}
         green: {}
