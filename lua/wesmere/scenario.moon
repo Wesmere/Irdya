@@ -1,70 +1,23 @@
 ----
--- wesmere = require "init"
+-- @todo
+--
 
+-- external dependencies
+import setfenv, getfenv from require "pl.utils"
+
+-- internal dependencies
+UnitMap = require "unit_map"
 import fire_event, wsl_error, add_event_handler, register_wsl_action from require "actions"
 import content, ENV from require "wesmods"
 import try, wrapInArray from require "misc"
-import add_side from require "sides"
 import put_unit from require "units"
-
-import setfenv, getfenv from require "pl.utils"
-
-map = require "map"
+import load_map from require "map"
 
 
 log =
     trace: -> --print
     error: error
     info: print
-
--- 1 Predefined Events Without Filters
--- 1.1 preload okay
--- 1.2 prestart okay
--- 1.3 start okay
--- 1.4 new turn okay
--- 1.5 turn end okay
--- 1.6 turn X end okay
--- 1.7 side turn okay
--- 1.8 ai turn todo
--- 1.9 turn refresh okay
--- 1.10 turn X okay
--- 1.11 side X turn Y okay
--- 1.12 side X turn okay
--- 1.13 side turn X okay
--- 1.14 side X turn Y refresh okay
--- 1.15 side X turn refresh okay
--- 1.16 turn X refresh okay
--- 1.17 side turn end okay
--- 1.18 time over okay
--- 1.19 enemies defeated todo
--- 1.20 victory todo
--- 1.21 defeat todo
-
--- 2 Predefined Events With Filters
--- 2.1 moveto
--- 2.2 sighted
--- 2.3 enter_hex
--- 2.4 exit_hex
--- 2.5 attack
--- 2.6 attack end
--- 2.7 attacker hits
--- 2.8 attacker misses
--- 2.9 defender hits
--- 2.10 defender misses
--- 2.11 petrified
--- 2.12 last breath
--- 2.13 die
--- 2.14 capture
--- 2.15 recruit
--- 2.16 prerecruit
--- 2.17 recall
--- 2.18 prerecall
--- 2.19 advance
--- 2.20 pre advance
--- 2.21 post advance
--- 2.22 select
--- 2.23 menu item X
--- 2.24 unit placed (Version 1.13.3 and later only)
 
 
 Scenario = (scenario, extra_config) ->
@@ -79,15 +32,16 @@ Scenario = (scenario, extra_config) ->
 
     -- used as self for all the wesmere methods
     state =
+
+        units: {}
+
         board: -- all childs are accessed like board.thing[x][y]
-            units: {} -- id -> loc and [x][y] -> Unit
             villages: {}
             map:
                 width: 0
                 height: 0
                 border_size: 0
         sides: {}
-        units: {} -- holds the units id -> Unit
         time: {}
         area: {}
         current:
@@ -96,7 +50,11 @@ Scenario = (scenario, extra_config) ->
 
     --- @todo move to time.moon ?
     set_schedule = (schedule) ->
+        assert(schedule)
+        assert(#schedule != 0)
         state.time = schedule
+        assert(state.time)
+        assert(#state.time != 0)
 
     get_turn = () ->
         return turn_number
@@ -107,8 +65,8 @@ Scenario = (scenario, extra_config) ->
     set_turn_limit = (new_limit) ->
         turn_limit = new_limit
 
-    get_turn_limit = () -> return turn_limit
-
+    get_turn_limit = () ->
+        return turn_limit
 
     is_regular_game_end = () ->
         return end_level_data != false
@@ -124,7 +82,7 @@ Scenario = (scenario, extra_config) ->
 
     end_level = (cfg) ->
         -- ignore when the game is already stopped?
-        if is_regular_game_end! --play_controller_.is_regular_game_end()
+        if is_regular_game_end!
             return false
 
         data =
@@ -140,23 +98,17 @@ Scenario = (scenario, extra_config) ->
         set_end_level_data(data)
         return true
 
-    -- Setup
-    turn_limit = scenario.turns
-    time = scenario.time
+    execute_command = ->
+        print "execute_command not implemented yet."
 
-    -- Let's load the map.
-    if map_data = scenario.map_data
-        map.load_map(state, map_data, scenario.border_size)
-    elseif map_id = scenario.map
-        map.load_map(state, map_id, scenario.border_size)
-
-    do
+    setup_event_context = ->
         import fire_event, add_event_handler from require "actions"
         import set_variable, get_variable from require "variables"
-        import get_unit, get_units, put_unit, erase_unit from require "units"
+        import get_unit, get_units, put_unit, erase_unit, extract_unit from require "units"
         import get_locations, get_terrain from require "map"
         import match_side, get_village_owner, get_sides from require "sides"
         import add_time_area, remove_time_area, get_time_of_day from require "time"
+        import find_vacant_tile from require "pathfinder"
         assert match_side
         assert get_village_owner
 
@@ -164,6 +116,8 @@ Scenario = (scenario, extra_config) ->
 
         env = {
             wesmere: {
+                :find_vacant_tile
+                :execute_command
                 get_sides: (...) -> get_sides(state, ...)
                 sides: state.sides
                 get_turn: -> return turn_number
@@ -172,23 +126,24 @@ Scenario = (scenario, extra_config) ->
                 :get_turn_limit
                 :set_schedule
                 current: state.current
-                add_time_area: (cfg) -> add_time_area(state,cfg)
+                add_time_area: (cfg) -> add_time_area(state, cfg)
                 get_time_of_day: (...) -> get_time_of_day(state, ...)
-                remove_time_area: (id) -> remove_time_area(state,id)
+                remove_time_area: (id) -> remove_time_area(state, id)
                 :wsl_actions --: content.Mechanic.wsl_action
-                erase_unit: (x, y) -> erase_unit(state, x, y)
-                put_unit: (unit, x, y) -> put_unit(state, unit, x, y)
+                erase_unit: (...) -> erase_unit(state, ...)
+                put_unit: (...) -> put_unit(state, ...)
+                extract_unit: (...) -> extract_unit(state, ...)
                 :end_turn
                 :end_level
-                fire_event: (name, x1, y1, x2, y2, w1, w2) -> fire_event(state, name, x1, y1, x2, y2, w1, w2)
+                fire_event: (...) -> fire_event(state, ...)
                 add_event_handler: (cfg) -> add_event_handler(state, cfg)
                 get_locations: (cfg) -> get_locations(state, cfg)
-                get_terrain: (x, y) -> get_terrain(state, x, y)
-                get_village_owner: (x, y) -> get_village_owner(state, x, y)
+                get_terrain: (...) -> get_terrain(state, ...)
+                get_village_owner: (...) -> get_village_owner(state, ...)
                 -- :end_level_data
                 get_units: (filter) -> get_units(state, filter)
-                get_unit: (x, y) -> get_unit(state, x, y)
-                set_variable: (name, value) -> set_variable(state, name, value)
+                get_unit: (...) -> get_unit(state, ...)
+                set_variable: (...) -> set_variable(state, ...)
                 get_variable: (name) -> get_variable(state, name)
                 debug: require("moon").p
                 wsl_error: error
@@ -198,7 +153,7 @@ Scenario = (scenario, extra_config) ->
             :error
             :assert
             :tostring
-            :debug
+            :debug --- @todo this might be a fatal security problem
             :print
             :wrapInArray
             :try
@@ -207,8 +162,6 @@ Scenario = (scenario, extra_config) ->
             Loc: require "Location"
         }
 
-
-
         -- Make the wsl_actions ready and insert in event_context
         for key, action in pairs content.Mechanic.wsl_action
             if func = action.action
@@ -216,58 +169,76 @@ Scenario = (scenario, extra_config) ->
                     setfenv(func, env)
                     wsl_actions[key] = func
                     state.current.event_context[key] = func
-                -- else print "function not table bah in #{action.id}"
-            -- else print "No 'action' function in #{action.id}"
+                else print "action is not a function in #{action.id}"
+            else print "No 'action' function in #{action.id}"
 
+    setup = ->
+        turn_limit = scenario.turns or -1
+        if time = scenario.time
+            state.time = time
+        -- assert scenario.time
+        -- state.time = scenario.time
 
-    -- merge the Scenario environment into the event_context
-    --- @todo maybe that can be solved better
-    for key, thing in pairs ENV.folders.Scenario
+        -- Let's load the map.
+        if map_data = scenario.map_data
+            load_map(state, map_data, scenario.border_size)
+        elseif map_id = scenario.map
+            load_map(state, map_id, scenario.border_size)
 
-        if type(thing) == "function"
-            setfenv(thing, state.current.event_context)
+        width = state.board.map.width
+        -- assert width > 0
+        height = state.board.map.height
+        -- assert height > 0
+        state.units = UnitMap(width, height)
 
-        state.current.event_context[key] = thing
-        --- @todo do validation here?
+        setup_event_context!
 
+        -- merge the Scenario environment into the event_context
+        --- @todo maybe that can be solved better
+        for key, thing in pairs ENV.folders.Scenario
 
-    -- setup the toplevel events
-    for key, events in pairs scenario
-        char = key\sub(1,1)
-        unless char\match("%u")
-            continue
-        events = wrapInArray(events)
-        for event in *events
-            switch type(event)
-                when "table"
-                    event.name = key
-                    add_event_handler(state, event)
-                when "function"
-                    add_event_handler state, {
-                        name: key
-                        command: event
-                    }
+            if type(thing) == "function"
+                setfenv(thing, state.current.event_context)
 
-    sides = wrapInArray(scenario.side)
-    for i, side in ipairs sides
-        state.sides[i] = side
-        unless side.gold
-            state.sides[i].gold = 0
+            state.current.event_context[key] = thing
+            --- @todo do validation here?
 
-        if side.type
-            put_unit(state, side)
+        -- setup the toplevel events
+        for key, events in pairs scenario
+            char = key\sub(1,1)
+            unless char\match("%u")
+                continue
+            events = wrapInArray(events)
+            for event in *events
+                switch type(event)
+                    when "table"
+                        event.name = key
+                        add_event_handler(state, event)
+                    when "function"
+                        add_event_handler state, {
+                            name: key
+                            command: event
+                        }
 
-        if unit = side.unit
-            units = wrapInArray(unit)
-            for unit in *units
-                put_unit(state, unit)
+        sides = wrapInArray(scenario.side)
+        for i, side in ipairs sides
+            state.sides[i] = side
+            unless side.gold
+                state.sides[i].gold = 0
+
+            -- if side.type
+            --     put_unit(state, side)
+
+            -- if unit = side.unit
+            --     units = wrapInArray(unit)
+            --     for unit in *units
+            --         put_unit(state, unit)
 
     -- public functions
     set_next_scenario = (id) ->
 
     check_end_level = ->
         return false unless is_regular_game_end!
-
         return true
 
     local check_end_turn
@@ -324,13 +295,17 @@ Scenario = (scenario, extra_config) ->
         else
             new_side_turn!
 
-
     start = ->
         fire_event(state, "Preload") -- should be fired every time a scenario got reloaded
         fire_event(state, "Prestart") -- before anything is on the screen
         fire_event(state, "Start")
         unless check_end_level!
             new_turn!
+
+    try
+        do: -> setup!
+        catch: (err) ->
+            error "Scenario Setup: #{err}"
 
     {
         :get_turn
@@ -364,3 +339,53 @@ load_multiplayer = () ->
 --     :start_test
 --     :start_scenario
 }
+
+
+-- 1 Predefined Events Without Filters
+-- 1.1 preload okay
+-- 1.2 prestart okay
+-- 1.3 start okay
+-- 1.4 new turn okay
+-- 1.5 turn end okay
+-- 1.6 turn X end okay
+-- 1.7 side turn okay
+-- 1.8 ai turn todo
+-- 1.9 turn refresh okay
+-- 1.10 turn X okay
+-- 1.11 side X turn Y okay
+-- 1.12 side X turn okay
+-- 1.13 side turn X okay
+-- 1.14 side X turn Y refresh okay
+-- 1.15 side X turn refresh okay
+-- 1.16 turn X refresh okay
+-- 1.17 side turn end okay
+-- 1.18 time over okay
+-- 1.19 enemies defeated todo
+-- 1.20 victory todo
+-- 1.21 defeat todo
+
+-- 2 Predefined Events With Filters
+-- 2.1 moveto
+-- 2.2 sighted
+-- 2.3 enter_hex
+-- 2.4 exit_hex
+-- 2.5 attack
+-- 2.6 attack end
+-- 2.7 attacker hits
+-- 2.8 attacker misses
+-- 2.9 defender hits
+-- 2.10 defender misses
+-- 2.11 petrified
+-- 2.12 last breath
+-- 2.13 die
+-- 2.14 capture
+-- 2.15 recruit
+-- 2.16 prerecruit
+-- 2.17 recall
+-- 2.18 prerecall
+-- 2.19 advance
+-- 2.20 pre advance
+-- 2.21 post advance
+-- 2.22 select
+-- 2.23 menu item X
+-- 2.24 unit placed (Version 1.13.3 and later only)
