@@ -9,9 +9,11 @@ describe "UnitMap", ->
     unit_types["Elvish Fighter"] =
         id: "Elvish Fighter"
         hitpoints: 24
+        experience: 5
 
     fighter =
         type: "Elvish Fighter"
+        experience_modifier: 100
 
     describe "Constructor", ->
 
