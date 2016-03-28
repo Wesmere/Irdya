@@ -4,9 +4,11 @@
 
 -- external dependencies
 import setfenv, getfenv from require "pl.utils"
+moon = require "moon"
 
 -- internal dependencies
 UnitMap = require "unit_map"
+Location = require "Location"
 import fire_event, wsl_error, add_event_handler, register_wsl_action from require "actions"
 import content, ENV from require "wesmods"
 import try, wrapInArray from require "misc"
@@ -47,6 +49,10 @@ Scenario = (scenario, extra_config) ->
         current:
             event_context: {}
             event_handlers: {}
+
+
+    debug = ->
+        moon.p(state)
 
     --- @todo move to time.moon ?
     set_schedule = (schedule) ->
@@ -173,23 +179,54 @@ Scenario = (scenario, extra_config) ->
             else print "No 'action' function in #{action.id}"
 
     setup = ->
-        turn_limit = scenario.turns or -1
-        if time = scenario.time
-            state.time = time
-        -- assert scenario.time
-        -- state.time = scenario.time
+
+        state.experience_modifier = scenario.experience_modifier or 100
+
+        -- setup sides before the map, to store starting_locations.
+        sides = wrapInArray(scenario.side)
+        for i, side in ipairs sides
+            state.sides[i] = side
+            unless side.gold
+                state.sides[i].gold = 0
 
         -- Let's load the map.
+        --- @TODO support inline maps.
         if map_data = scenario.map_data
             load_map(state, map_data, scenario.border_size)
         elseif map_id = scenario.map
             load_map(state, map_id, scenario.border_size)
-
         width = state.board.map.width
         -- assert width > 0
         height = state.board.map.height
         -- assert height > 0
         state.units = UnitMap(width, height)
+
+        for side in *state.sides
+            unless side.no_leader
+                if side.type
+                    local loc
+                    try
+                        do: -> loc = Location(side)
+                        catch: (err) ->
+                            if loc = side.starting_location
+                                put_unit(state, side, loc.x, loc.y)
+                        finally: ->
+                            if loc
+                                put_unit(state, side, loc.x, loc.y)
+                            elseif side.starting_location
+                                loc = side.starting_location
+                                put_unit(state, side, loc.x, loc.y)
+
+            if unit = side.unit
+                units = wrapInArray(unit)
+                for unit in *units
+                    put_unit(state, unit)
+
+        turn_limit = scenario.turns or -1
+        if time = scenario.time
+            state.time = time
+        -- assert scenario.time
+        -- state.time = scenario.time
 
         setup_event_context!
 
@@ -219,20 +256,6 @@ Scenario = (scenario, extra_config) ->
                             name: key
                             command: event
                         }
-
-        sides = wrapInArray(scenario.side)
-        for i, side in ipairs sides
-            state.sides[i] = side
-            unless side.gold
-                state.sides[i].gold = 0
-
-            -- if side.type
-            --     put_unit(state, side)
-
-            -- if unit = side.unit
-            --     units = wrapInArray(unit)
-            --     for unit in *units
-            --         put_unit(state, unit)
 
     -- public functions
     set_next_scenario = (id) ->
@@ -308,6 +331,7 @@ Scenario = (scenario, extra_config) ->
             error "Scenario Setup: #{err}"
 
     {
+        :debug
         :get_turn
         :get_end_level_data
         :is_regular_game_end
