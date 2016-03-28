@@ -33,7 +33,7 @@ GENERIC_UNIT_TEST = (NAME, CONTENT) ->
 
     scenario =
         name:"Generic Unit Test #{Name}"
-        map_data:"generic_unit_test"
+        map:"generic_unit_test"
         turns: -1
         id:NAME
 
