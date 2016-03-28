@@ -108,6 +108,17 @@ get_unit = (x, y) =>
 -- @usage leaders_on_side_two = get_units { side: 2, can_recruit: true }
 -- name_of_leader = leaders_on_side_two[1].name
 get_units = (filter) =>
+    local loc
+    try
+        do: -> loc = Loc(filter)
+        catch: (err) ->
+        finally: ->
+            if loc
+                unit = get_unit(@, loc.x, loc.y)
+                if unit
+                    return {unit} if unit\matches(filter)
+                else return {}
+
     return for unit in @units\iter!
         unit if unit\matches(filter)
 
@@ -397,6 +408,7 @@ put_unit = (unit, x, y) =>
                 catch: (err) ->
                     error "wesmere.put_unit: No coordinates in arguments."
 
+    unit.experience_modifier = @experience_modifier
     unless type(unit) == Unit
         unit = Unit(@units, unit)
 
