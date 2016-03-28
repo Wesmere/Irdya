@@ -7,7 +7,8 @@ GENERIC_UNIT_TEST "xp_mod_1", ->
                 filter:
                     id:"alice"
 
-            RETURN VARIABLE_CONDITIONAL "foo[0].max_experience", "equals", 44
+            RETURN VARIABLE_CONDITIONAL "foo[1].max_experience", "equals", 44
+
 
 GENERIC_UNIT_TEST "xp_mod_2",
     experience_modifier: 50
@@ -18,7 +19,7 @@ GENERIC_UNIT_TEST "xp_mod_2",
             filter:
                 id:"alice"
 
-        RETURN VARIABLE_CONDITIONAL "foo[0].max_experience", "equals", 22
+        RETURN VARIABLE_CONDITIONAL "foo[1].max_experience", "equals", 22
 
 
 GENERIC_UNIT_TEST "xp_mod_3",
@@ -30,4 +31,4 @@ GENERIC_UNIT_TEST "xp_mod_3",
             filter:
                 id:"alice"
 
-        RETURN VARIABLE_CONDITIONAL "foo[0].max_experience", "equals", 33
+        RETURN VARIABLE_CONDITIONAL "foo[1].max_experience", "equals", 33
