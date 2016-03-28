@@ -39,11 +39,19 @@ load_map = (id, border_size=BORDER_SIZE) =>
 
     if map = content.Scenario.map[id]
         @board.map = parse_map_string(map.map_data)
+        if starting_locations = map.starting_location
+            for start_loc in *starting_locations
+                location = Location(start_loc)
+                side = start_loc.side
+                assert(side, "No side in starting_location")
+                if starting_side = @sides[side]
+                    starting_side.starting_location = location
+
+
     else
         error("Map with id '#{id}' not found")
 
-    @board.units = array2d.new(@board.map.width, @board.map.height, false)
-    @board.villages = array2d.new(@board.map.width, @board.map.height, false)
+    @board.villages = array2d.new(@board.map.width, @board.map.height) -- , false)
 
 
 ----
