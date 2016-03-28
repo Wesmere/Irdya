@@ -66,9 +66,6 @@ class UnitMap -- extends HasGetters
         @height = height
         for w = 1, width
             @board[w] = {}
-            -- row = @board[w]
-            -- for h = 1, height
-                -- row[h] = false
 
 
     ----
@@ -91,7 +88,7 @@ class UnitMap -- extends HasGetters
         old_unit = @units[id]
         error "Tried to add a unit with already known id: #{id}" if old_unit
 
-        if unit = @get_unit_at(x, y)
+        if old_unit = @get_unit_at(x, y)
             error "Hex field at #{x},#{y} is already occupied."
         else
             table.insert(@ids, id)
