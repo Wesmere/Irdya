@@ -14,45 +14,45 @@ STR_FEEDING_EFFECT = "bar"
 STR_FEEDING_DESCRIPTION = "baz"
 
 
-TEST_FEEDING = (ID, EXPECTED_INCREASE) ->
-
-    store_unit
-        filter:
-            id: ID
-        variable: "Killer"
-
-    VARIABLE "victim_x", Killer.x
-    VARIABLE_OP "victim_x", "sub", 1
-    VARIABLE "victim_y", Killer.y
-
-    VARIABLE "victim_side", 3
-    VARIABLE_OP "victim_side", "sub", Killer.side
-
-    VARIABLE "Killer_start_hp", Killer.hitpoints
-
-    terrain
-        x:victim_x
-        y:victim_y
-        terrain: _"Xv"
-    unit UNIT victim_side, "Elvish Archer", victim_x, victim_y, {hitpoints:1}
-    do_command
-        attack:
-            weapon: 0
-            defender_weapon: 0
-            source:{Killer.x,Killer.y}
-            destination:{victim_x,victim_y}
-
-    store_unit
-        filter:
-            id: ID
-        variable:"Killer"
-
-    VARIABLE_OP Killer_start_hp, "add", EXPECTED_INCREASE
-
-    ASSERT VARIABLE_CONDITIONAL, "Killer.hitpoints", "equals", Killer_start_hp
-
-
 GENERIC_UNIT_TEST "feeding", ->
+
+    TEST_FEEDING = (ID, EXPECTED_INCREASE) ->
+
+        store_unit
+            filter:
+                id: ID
+            variable: "Killer"
+
+        VARIABLE "victim_x", Killer.x
+        VARIABLE_OP "victim_x", "sub", 1
+        VARIABLE "victim_y", Killer.y
+
+        VARIABLE "victim_side", 3
+        VARIABLE_OP "victim_side", "sub", Killer.side
+
+        VARIABLE "Killer_start_hp", Killer.hitpoints
+
+        terrain
+            x:victim_x
+            y:victim_y
+            terrain: _"Xv"
+        unit UNIT victim_side, "Elvish Archer", victim_x, victim_y, {hitpoints:1}
+        do_command
+            attack:
+                weapon: 0
+                defender_weapon: 0
+                source:{Killer.x,Killer.y}
+                destination:{victim_x,victim_y}
+
+        store_unit
+            filter:
+                id: ID
+            variable:"Killer"
+
+        VARIABLE_OP Killer_start_hp, "add", EXPECTED_INCREASE
+
+        ASSERT VARIABLE_CONDITIONAL, "Killer.hitpoints", "equals", Killer_start_hp
+
     event
         id: "ability_feeding_die"
         name: "Die"
