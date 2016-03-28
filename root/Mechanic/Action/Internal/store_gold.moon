@@ -1,10 +1,11 @@
 wsl_action
     id: "store_gold"
-    description: [[Stores a side's gold into a variable.]]
+
+    description: "Stores a side's gold into a variable."
 
     action: (cfg) ->
         side = wesmere.get_sides(cfg)[1]
-        --note: This function can't easily (without deprecation) be extended to store an array,
+        -- note: This function can't easily (without deprecation) be extended to store an array,
         -- since the gold is stored in a scalar variable, not a container (there's no key).
         if side
             gold = side.gold
