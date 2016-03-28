@@ -100,9 +100,15 @@ GENERIC_UNIT_TEST "modify_turns_four", ->
 
 
 GENERIC_UNIT_TEST "replace_schedule_prestart", ->
+
+    DUSK =
+        id: "dusk"
+
     event
         name:"Prestart"
-        command: -> replace_schedule({DUSK})
+        command: ->
+            assert DUSK
+            replace_schedule({DUSK})
     event
         name:"Side1Turn1"
         command: ->
