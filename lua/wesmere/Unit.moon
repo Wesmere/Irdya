@@ -15,7 +15,7 @@ import board from require "map"
 unit_types = require("wesmods").content.Units.unit_type
 
 
----
+----
 -- @table this
 -- @tfield number hitpoints
 -- @tfield number advances_to
@@ -114,7 +114,8 @@ class Unit extends HasGetters
         assert(unit_map, "Unit Constructor: Missing 'unit_map' argument.")
         assert(cfg, "Unit Constructor: Missing 'cfg' argument.")
 
-        assert(moon.type(unit_map) == UnitMap, "arguement unit_map is not a 'UnitMap' object.")
+        assert moon.type(unit_map) == UnitMap,
+            "arguement unit_map is not a 'UnitMap' object."
         @unit_map = unit_map
 
         @gender = cfg.gender
@@ -133,7 +134,8 @@ class Unit extends HasGetters
         @max_hitpoints = unit_type.hitpoints
         @hitpoints = cfg.hitpoints or @max_hitpoints
 
-        @max_experience = cfg.max_experience or unit_type.experience
+        @max_experience = (cfg.max_experience or unit_type.experience) *
+            (cfg.experience_modifier or 100) / 100
         @experience = cfg.experience or 0
 
 
@@ -197,20 +199,22 @@ class Unit extends HasGetters
 --special ones
     -- defense: current defense of the unit on current tile
     -- (chance to hit %, like in movement type definitions)
-        if filter.defense
-            return false if Set(filter.defense)[@defense!]
-        if filter.movement_cost
-            return false if Set(filter.movement_cost)[@movement_cost!]
+        -- if filter.defense
+        --     return false if Set(filter.defense)[@defense!]
+        -- if filter.movement_cost
+        --     return false if Set(filter.movement_cost)[@movement_cost!]
     --find_in: name of an array or container variable; if present, the unit will not match unless it is also found stored in the variable
-        items = { id: true, speaker: true, type: true }
-        if id = wrapInArray(filter.id)
-            return false if Set(id)[@id]
-        if filter.speaker
-            return false if Set(filter.speaker)[@id]
-        if filter.type
-            return false if Set(filter.type)[@type]
+        -- items = { id: true, speaker: true, type: true }
+        if id = filter.id
+            ids = wrapInArray(id)
+            return false unless Set(ids)[@id]
+        if speaker = filter.speaker
+            return false unless Set(speaker)[@id]
+        if type = filter.type
+            return false unless Set(filter.type)[@type]
         -- TODO implement table filter
         return true
+
 
     ----
     -- Places a unit on the map. This unit is described either by a WSL table or by a proxy unit. Coordinates can be passed as the first two arguments, otherwise the table is expected to have two fields x and y, which indicate where the unit will be placed. If the function is called with coordinates only, the unit on the map at the given coordinates is removed instead. (Version 1.13.2 and later only) This use is now deprecated; use wesmere.erase_unit instead.
