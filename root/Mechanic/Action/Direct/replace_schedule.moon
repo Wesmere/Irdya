@@ -5,7 +5,7 @@ wsl_action
 
     action: (cfg) ->
         if schedule = cfg.schedule
-            assert #schedule > 0
+            assert(#schedule > 0, "WSLAction replace_schedule with empty one")
             wesmere.set_schedule(schedule)
 
     scheme:
@@ -14,5 +14,5 @@ wsl_action
             description: "the new schedule."
 
         current_time:
-            description: "The time slot number (starting with zero) active at schedule replacement."
+            description: "The time slot number (starting with one) active at schedule replacement."
 
