@@ -8,16 +8,18 @@ unit_types = require("units").unit_types
 loc = Loc(12,8)
 unit_map = UnitMap(25,25)
 
-unit_types["Elvish Fighter"] =
-        id: "Elvish Fighter"
-        hitpoints: 28
-
 
 describe "Unit", ->
+
+    unit_types["Elvish Fighter"] =
+        id: "Elvish Fighter"
+        hitpoints: 28
+        experience: 100
 
     cfg =
         id: "Kalenz"
         type: "Elvish Fighter"
+        experience_modifier: 80
 
     describe "get unit.type", ->
 
@@ -42,3 +44,27 @@ describe "Unit", ->
             unit = Unit(unit_map, cfg)
             -- assert unit_map\place_unit(unit, loc.x, loc.y)
             assert.are.equal loc, unit.loc
+
+    describe "matches", ->
+
+        describe "id:", ->
+
+            it "Kalenz", ->
+                unit = Unit(unit_map, cfg)
+                assert(unit\matches({id: "Kalenz"}))
+
+            it "notKalenz", ->
+                unit = Unit(unit_map, cfg)
+                assert(not unit\matches({id: "notKalenz"}))
+
+            it "Kalenz, Rudolph, Adolf, Stalin", ->
+                unit = Unit(unit_map, cfg)
+                assert(unit\matches({id: {"Kalenz", "Rudolph", "Adolf", "Stalin"} }))
+
+            it "notKalenz, Rudolph, Adolf, Stalin", ->
+                unit = Unit(unit_map, cfg)
+                assert(not unit\matches({id: {"notKalenz", "Rudolph", "Adolf", "Stalin"} }))
+
+
+
+
