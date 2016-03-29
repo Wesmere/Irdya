@@ -9,17 +9,16 @@ Note: stored units also exist on the field, and modifying the stored variable wi
     action: (cfg) ->
         filter = cfg.filter or
             wesmere.wsl_error "store_unit missing required filter key"
-        kill_units = cfg.kill
 
         --cache the needed units here, since the filter might reference the to-be-cleared variable(s)
         units = wesmere.get_units(filter)
         -- recall_units = wesmere.get_recall_units(filter)
 
         result = units
-        -- result = for u in *units
-        --     -- if kill_units
-        --     --     wesmere.erase_unit(u)
-        --     u
+
+        if kill_units = cfg.kill
+            for u in *units
+                wesmere.erase_unit(u.x, u.y)
 
         -- if (not filter.x or filter.x == "recall") and (not filter.y or filter.y == "recall")
         --     for u in *recall_units
