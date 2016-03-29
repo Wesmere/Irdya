@@ -125,7 +125,7 @@ fire_event = (event_name, x1, y1, x2, y2, first_weapon, second_weapon) =>
     -- @param second
     -- @param first_weapon
     -- @param second_weapon
-    -- @tab _ENV Using the pragma of how Lua handles the global namespace to sandbox all event wml execution.
+    -- @tab ENV the environment that will be the context the handler gets executed in.
     execute_event_handler = (handler, primary, second, first_weapon, second_weapon, ENV) ->
         return false, "handler disabled" if handler.remove
         -- return false, "failed side filter" if handler.filter_side and not wesmere.match_side(ENV.side_number, handler.filter_side)
