@@ -343,6 +343,7 @@ random = (m, n) ->
 
 
 errorHandler = debug.traceback
+-- errorHandler = debug.debug
 ----
 -- Try/Catch style exception handling
 -- Lifted from https://github.com/leafo/moonscript/wiki/Exception-handling
@@ -360,8 +361,12 @@ errorHandler = debug.traceback
 --         <reached only on success>
 try = (t) ->
     ok,err = xpcall(t["do"], errorHandler)
-    t.catch err unless ok
-    t.finally! if t.finally
+    if ok
+        t.finally! if t.finally
+    else
+        t.catch err
+
+
 
 
 ----
