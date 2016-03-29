@@ -155,9 +155,8 @@ erase_unit = (x, y) =>
         finally: ->
             u = get_unit(@,loc.x, loc.y)
             return false unless u
-            -- @units[u.id] = nil
-            -- @board.units[loc.x][loc.y] = nil
-            --return u\erase!
+            return @units\remove_unit(u.id)
+
 
 ----
 -- Returns an array of all the units on the recall lists matching the WSL filter passed as the first argument.
