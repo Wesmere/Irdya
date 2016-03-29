@@ -83,7 +83,7 @@ unit_types = require("wesmods").content.Units.unit_type
 unit_number = 0
 generate_id = (cfg) ->
     unit_number += 1
-    return "#{cfg.unit_type}-#{unit_number}"
+    return "#{cfg.type}-#{unit_number}"
 
 generate_name = (cfg) ->
     return "Unit_Name"
