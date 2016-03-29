@@ -7,11 +7,7 @@
 -- LuaWSL:Time
 -- LuaWSL functions revolving around Time of Day schedule functionality, including time areas.
 
-
-
-
 --areas = {}
-
 
 -- {
 --     ----
@@ -35,12 +31,15 @@
 -- @usage wesmere.get_time_of_day(2, { 37, 3, true })
 --get_time_of_day = (for_turn=wesmere.current.turn_number, [ {x, y, [consider_illuminates]} ]) ->
 get_time_of_day = (for_turn, more) =>
-    assert(@)
-    assert(@time)
-    unless for_turn then for_turn = @current.event_context.turn_number
+    assert(@, "Missing state argument")
+    assert(@time, "GameState.time is nil")
+    unless for_turn
+        for_turn = @current.event_context.turn_number
     assert(for_turn)
 
-    return nil if #@time == 0
+    -- Think about empty time of day schedules.
+    -- Some gameplay might simply not rely on this concept.
+    error "wesmere.get_time_of_day: schedule is empty" if #@time == 0
 
     index = for_turn % #@time
 
