@@ -71,13 +71,13 @@ import current, try from require "misc"
 -- @table unit
 
 
-
 ----
 -- Returns the unit with the given underlying ID.
 -- @function wesmere.get_unit
 -- @number underlying_id
 -- @treturn Unit with the underlying_id
 -- @usage unit = wesmere.get_unit("kalenz")
+-- @todo
 
 ----
 -- Returns the unit at the given location
@@ -418,6 +418,7 @@ put_unit = (unit, x, y) =>
     assert(loc, "wesmere.put_unit: No location provided.")
     assert(unit.id, "wesmere.put_unit: Unit without id.")
     if @units\place_unit(unit, loc.x, loc.y)
+        import fire_event from require "actions"
         fire_event("UnitPlaced", loc.x, loc,y)
 
 
