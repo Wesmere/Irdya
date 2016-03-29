@@ -419,7 +419,7 @@ put_unit = (unit, x, y) =>
     assert(unit.id, "wesmere.put_unit: Unit without id.")
     if @units\place_unit(unit, loc.x, loc.y)
         import fire_event from require "actions"
-        fire_event("UnitPlaced", loc.x, loc,y)
+        fire_event(@, "UnitPlaced", loc.x, loc,y)
 
 
 {
