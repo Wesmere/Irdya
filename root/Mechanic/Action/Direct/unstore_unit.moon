@@ -1,14 +1,20 @@
 wsl_action
     id: "unstore_unit"
-    description: "Creates a unit from a game variable, and activates it on the playing field. This must be a specific variable describing a unit, and may not be an array -- to unstore an entire array, iterate over it. The variable is not cleared. See also [store_unit], [while] and [clear_variable].
-Units can be unstored with negative (or zero) hit points. This can be useful if modifying a unit in its last_breath event (as the unit's death is already the next step), but tends to look wrong in other cases. In particular, it is possible to have units with negative hit points in play. Such units are aberrations, subject to unusual behavior as the game compensates for them. (For example, such units are currently automatically hit–and killed–in combat.) The details of the unusual behavior are subject to change between stable releases without warning."
+    description: "Creates a unit from a game variable, and activates it on the playing field. This must be a specific variable describing a unit, and may not be an array -- to unstore an entire array, iterate over it. The variable is not cleared. See also store_unit(), while() and clear_variable().
+Units can be unstored with negative (or zero) hit points. This can be useful if modifying a unit in its LastBreath event (as the unit's death is already the next step), but tends to look wrong in other cases. In particular, it is possible to have units with negative hit points in play. Such units are aberrations, subject to unusual behavior as the game compensates for them. (For example, such units are currently automatically hit–and killed–in combat.) The details of the unusual behavior are subject to change between stable releases without warning."
 
     action: (cfg) ->
+        assert(cfg.variable, "WSLAction unstore_unit: Missing 'variable' key.")
         unit = wesmere.get_variable(cfg.variable)
+        assert(Unit)
+        assert(type(unit) == Unit, "WSLAction unstore_unit: variable '#{cfg.variable}' isn't of type 'Unit'")
         local loc
         try
             do: -> loc = Loc(cfg)
             catch: (err) ->
+
+
+
 
         -- if find_vacant
         --    if check_passability
