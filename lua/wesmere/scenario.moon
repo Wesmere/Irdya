@@ -47,7 +47,10 @@ Scenario = (scenario, extra_config) ->
         time: {}
         area: {}
         current:
-            event_context: {}
+            event_context: {
+                UnitType: require "Unit"
+                moon_type: require("moon").type
+            }
             event_handlers: {}
 
 
@@ -154,7 +157,7 @@ Scenario = (scenario, extra_config) ->
                 debug: require("moon").p
                 wsl_error: error
             } --require "init"
-            :type
+            type: require("moon").type
             :ipairs
             :error
             :assert
