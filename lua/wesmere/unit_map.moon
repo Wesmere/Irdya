@@ -88,12 +88,18 @@ class UnitMap -- extends HasGetters
         old_unit = @units[id]
         error "Tried to add a unit with already known id: #{id}" if old_unit
 
-        if old_unit = @get_unit_at(x, y)
-            error "Hex field at #{x},#{y} is already occupied."
+        if occupied = @get_unit_at(x, y)
+            return false
+            --- @TODO think about error or false or occupied
+            -- return occupied
+            -- error "Hex field at #{x},#{y} is already occupied."
         else
             table.insert(@ids, id)
             @units[id] = Loc(x,y)
             @board[x][y] = unit
+            return true
+
+        assert(false) -- should not be reached.
 
 
     ----
