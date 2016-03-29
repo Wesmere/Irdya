@@ -166,6 +166,7 @@ Scenario = (scenario, extra_config) ->
             :string
             :tonumber
             Loc: require "Location"
+            Unit: require "Unit"
         }
 
         -- Make the wsl_actions ready and insert in event_context
