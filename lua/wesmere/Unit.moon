@@ -103,6 +103,7 @@ class Unit extends HasGetters
             else
                 return unit_types[@type][key]
 
+
     generate_id = (cfg, internal_id) ->
         return "#{cfg.type}-#{internal_id}"
 
