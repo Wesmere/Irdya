@@ -9,7 +9,7 @@ Loc = require "Location"
 HasGetters = require "HasGetters"
 UnitMap = require "unit_map"
 
-import wrapInArray from require "misc"
+import try, wrapInArray from require "misc"
 import wsl_error from require "actions"
 import board from require "map"
 unit_types = require("wesmods").content.Units.unit_type
@@ -80,10 +80,6 @@ unit_types = require("wesmods").content.Units.unit_type
 -- @tfield {tab,...} modifications.object an object the unit has. Same format as [object], DirectActionsWSL.
 -- @tfield {tab,...} modifications.advance an advancement the unit has. Same format as [advancement], UnitTypeWSL. Might be used if the unit type has some advancements, but this particular one is supposed to have some of them already taken. (Version 1.13.2 and later only) In 1.13.2 and later this has been renamed to [advancement], to match the UnitTypeWSL tag of the same name.
 
-unit_number = 0
-generate_id = (cfg) ->
-    unit_number += 1
-    return "#{cfg.type}-#{unit_number}"
 
 generate_name = (cfg) ->
     return "Unit_Name"
@@ -91,6 +87,8 @@ generate_name = (cfg) ->
 ----
 -- Unit
 class Unit extends HasGetters
+
+    @count: 0
 
     getters: (key) =>
         switch key
@@ -105,12 +103,19 @@ class Unit extends HasGetters
             else
                 return unit_types[@type][key]
 
+    generate_id = (cfg, internal_id) ->
+        return "#{cfg.type}-#{internal_id}"
+
 
     ----
     -- Constructor
     -- @param self
     -- @param cfg
     new: (unit_map, cfg) =>
+
+        @@count += 1
+        @internal_id = @@count
+
         assert(unit_map, "Unit Constructor: Missing 'unit_map' argument.")
         assert(cfg, "Unit Constructor: Missing 'cfg' argument.")
 
@@ -120,7 +125,7 @@ class Unit extends HasGetters
 
         @gender = cfg.gender
 
-        @id = cfg.id or generate_id(cfg)
+        @id = cfg.id or generate_id(cfg, @internal_id)
         @name = cfg.name or generate_name(cfg)
         @side = cfg.side or 1
 
@@ -193,6 +198,15 @@ class Unit extends HasGetters
 
         if not_filter = filter["not"]
             return false if @filter(not_filter)
+
+        return false unless try
+            do: -> return Loc(filter)
+            catch: (err) -> return true
+            finally: (loc) ->
+                return false unless loc.x == @x
+                return false unless loc.y == @y
+                return true
+
 
         -- @todo log.warn("filtering the unit with the id: #{@.id}")
 
