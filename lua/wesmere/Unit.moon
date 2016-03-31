@@ -81,9 +81,6 @@ unit_types = require("wesmods").content.Units.unit_type
 -- @tfield {tab,...} modifications.advance an advancement the unit has. Same format as [advancement], UnitTypeWSL. Might be used if the unit type has some advancements, but this particular one is supposed to have some of them already taken. (Version 1.13.2 and later only) In 1.13.2 and later this has been renamed to [advancement], to match the UnitTypeWSL tag of the same name.
 
 
-generate_name = (cfg) ->
-    return "Unit_Name"
-
 ----
 -- Unit
 class Unit extends HasGetters
@@ -107,6 +104,8 @@ class Unit extends HasGetters
     generate_id = (cfg, internal_id) ->
         return "#{cfg.type}-#{internal_id}"
 
+    generate_name = (cfg) ->
+        return "Unit_Name"
 
     ----
     -- Constructor
@@ -114,30 +113,28 @@ class Unit extends HasGetters
     -- @param cfg
     new: (unit_map, cfg) =>
 
-        @@count += 1
-        @internal_id = @@count
-
         assert(unit_map, "Unit Constructor: Missing 'unit_map' argument.")
-        assert(cfg, "Unit Constructor: Missing 'cfg' argument.")
-
         assert moon.type(unit_map) == UnitMap,
             "arguement unit_map is not a 'UnitMap' object."
         @unit_map = unit_map
 
-        @gender = cfg.gender
+        assert(cfg, "Unit Constructor: Missing 'cfg' argument.")
+        error("Unit without type.") unless cfg.type
 
+        @type = cfg.type
+        unit_type = unit_types[@type]
+        unless unit_type
+            error("Unit Type '#{@type}' is unknown.")
+
+        @@count += 1
+        @internal_id = @@count
+
+        -- @gender = cfg.gender
         @id = cfg.id or generate_id(cfg, @internal_id)
         @name = cfg.name or generate_name(cfg)
         @side = cfg.side or 1
 
-        error("Unit without type.") unless cfg.type
-        @type = cfg.type
-        unit_type = unit_types[@type]
-        unless unit_type
-            moon.p(unit_types)
-            error("Unit Type '#{@type}' is unknown.")
-
-        @max_hitpoints = unit_type.hitpoints
+        @max_hitpoints = cfg.max_hitpoints or unit_type.hitpoints
         @hitpoints = cfg.hitpoints or @max_hitpoints
 
         @max_experience = (cfg.max_experience or unit_type.experience) *
@@ -200,13 +197,9 @@ class Unit extends HasGetters
         if not_filter = filter["not"]
             return false if @filter(not_filter)
 
-        return false unless try
-            do: -> return Loc(filter)
-            catch: (err) -> return true
-            finally: (loc) ->
-                return false unless loc.x == @x
-                return false unless loc.y == @y
-                return true
+        if loc = Loc(filter)
+            return false unless loc.x == @x
+            return false unless loc.y == @y
 
 
         -- @todo log.warn("filtering the unit with the id: #{@.id}")
