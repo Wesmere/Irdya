@@ -2,7 +2,10 @@ wsl_action
     id: "unit"
 
     action: (cfg) ->
-        return wesmere.put_unit(cfg)
+        assert(cfg, "WSLAction unit: Missing argument table.")
+        try
+            do: -> wesmere.put_unit(cfg)
+            catch: (err) -> error "WSLAction unit: #{err}"
 
     description: [["This tag, [unit], describes a single unit on the map, for example Konrad. It is different from the [unit_type] in [units], which describes a class of units. However it takes many of the same keys and thus can generally override the inherited properties from the associated [unit_type].
 [unit] can be used inside [side] (SideWML) for units present at start of the scenario, or as DirectActionsWML for units created during the game. (It is also used in save-files.)
