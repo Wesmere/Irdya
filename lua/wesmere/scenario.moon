@@ -111,7 +111,7 @@ Scenario = (scenario, extra_config) ->
         print "execute_command not implemented yet."
 
     setup_event_context = ->
-        import fire_event, add_event_handler from require "actions"
+        import wsl_actions, fire_event, add_event_handler from require "actions"
         import set_variable, get_variable from require "variables"
         import get_unit, get_units, put_unit, erase_unit, extract_unit from require "units"
         import get_locations, get_terrain from require "map"
@@ -121,10 +121,9 @@ Scenario = (scenario, extra_config) ->
         assert match_side
         assert get_village_owner
 
-        wsl_actions = {}
-
         env = {
             wesmere: {
+                :wsl_actions
                 :find_vacant_tile
                 :execute_command
                 get_sides: (...) -> get_sides(state, ...)
