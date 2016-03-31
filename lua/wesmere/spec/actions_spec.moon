@@ -40,6 +40,6 @@ describe "actions", ->
             speaker: "Kalenz"
             message: "Orcs are the best pals."
 
-        pending "the message action", ->
+        it "the message action", ->
 
             actions.fire("message", message)
