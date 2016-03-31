@@ -10,7 +10,7 @@ describe "sides", ->
 
     describe "get_village_owner", ->
 
-        pending "@(5,4)", ->
+        it "@(5,4)", ->
 
             loc = { x: 5, y:4 }
 
