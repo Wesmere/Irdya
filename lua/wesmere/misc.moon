@@ -360,11 +360,12 @@ errorHandler = debug.traceback
 --     finally: ->
 --         <reached only on success>
 try = (t) ->
-    ok,err = xpcall(t["do"], errorHandler)
+    ok, value = xpcall(t["do"], errorHandler)
     if ok
-        t.finally! if t.finally
+        return t.finally value if t.finally
+        return value
     else
-        t.catch err
+        return t.catch value if t.catch
 
 
 
