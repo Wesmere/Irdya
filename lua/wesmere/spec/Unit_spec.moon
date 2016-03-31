@@ -21,6 +21,10 @@ describe "Unit", ->
         type: "Elvish Fighter"
         experience_modifier: 80
 
+    it "Constructor", ->
+        unit = Unit(unit_map, cfg)
+        assert(unit)
+
     describe "get unit.type", ->
 
         it "Elvish Fighter", ->
@@ -64,6 +68,16 @@ describe "Unit", ->
             it "notKalenz, Rudolph, Adolf, Stalin", ->
                 unit = Unit(unit_map, cfg)
                 assert(not unit\matches({id: {"notKalenz", "Rudolph", "Adolf", "Stalin"} }))
+
+        describe "loc:", ->
+
+            it "#{loc.x},#{loc.y}", ->
+                unit = Unit(unit_map, cfg)
+                assert(unit\matches({loc:{loc.x, loc.y}}))
+
+            it "#{loc.x + 1},#{loc.y}", ->
+                unit = Unit(unit_map, cfg)
+                assert(not unit\matches({loc:{loc.x +1, loc.y}}))
 
 
 
