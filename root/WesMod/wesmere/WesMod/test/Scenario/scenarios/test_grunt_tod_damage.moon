@@ -37,18 +37,22 @@ test
 
     time:DEFAULT_SCHEDULE
 
-    side:
-        side:1
-        controller:"human"
-        name:"Alice"
-        type:"Elvish Archer"
-        id:"alice"
-    side:
-        side:2
-        controller:"human"
-        name:"Bob"
-        type:"Orcish Grunt"
-        id:"bob"
+    side: {
+        {
+            side:1
+            controller:"human"
+            name:"Alice"
+            type:"Elvish Archer"
+            id:"alice"
+        }
+        {
+            side:2
+            controller:"human"
+            name:"Bob"
+            type:"Orcish Grunt"
+            id:"bob"
+        }
+    }
 
     --This turn is afternoon.
     Side2Turn3Refresh: ->
@@ -83,18 +87,22 @@ test
 
     time:DEFAULT_SCHEDULE
 
-    side:
-        side:1
-        controller:"human"
-        name:"Alice"
-        type:"Elvish Archer"
-        id:"alice"
-    side:
-        side:2
-        controller:"human"
-        name:"Bob"
-        type:"Orcish Grunt"
-        id:"bob"
+    side: {
+        {
+            side:1
+            controller:"human"
+            name:"Alice"
+            type:"Elvish Archer"
+            id:"alice"
+        }
+        {
+            side:2
+            controller:"human"
+            name:"Bob"
+            type:"Orcish Grunt"
+            id:"bob"
+        }
+    }
 
     Start: ->
         end_turn!
@@ -140,18 +148,22 @@ test
 
     time:DEFAULT_SCHEDULE
 
-    side:
-        side:1
-        controller:"human"
-        name:"Alice"
-        type:"Elvish Archer"
-        id:"alice"
-    side:
-        side:2
-        controller:"human"
-        name:"Bob"
-        type:"Orcish Grunt"
-        id:"bob"
+    side: {
+        {
+            side:1
+            controller:"human"
+            name:"Alice"
+            type:"Elvish Archer"
+            id:"alice"
+        }
+        {
+            side:2
+            controller:"human"
+            name:"Bob"
+            type:"Orcish Grunt"
+            id:"bob"
+        }
+    }
 
     Prestart: ->
         time_area
