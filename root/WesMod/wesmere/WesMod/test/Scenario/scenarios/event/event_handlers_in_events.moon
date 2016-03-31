@@ -4,7 +4,6 @@ GENERIC_UNIT_TEST "event_handlers_in_events_1", ->
         command: ->
             VARIABLE "pass_test", 1
 
-
     event
         name:"Start"
         command: ->
@@ -48,7 +47,6 @@ GENERIC_UNIT_TEST "event_handlers_in_events_3", ->
             RETURN VARIABLE_CONDITIONAL "pass_test", "equals", 1
 
 
-
 GENERIC_UNIT_TEST "event_handlers_in_events_4", ->
     event
         name:"Start"
@@ -66,6 +64,7 @@ GENERIC_UNIT_TEST "event_handlers_in_events_4", ->
                 command: ->
                     VARIABLE "pass_test", 1
 
+
 GENERIC_UNIT_TEST "event_handlers_in_events_5", ->
     event
         name:"Start"
@@ -79,16 +78,14 @@ GENERIC_UNIT_TEST "event_handlers_in_events_5", ->
                 variable:"my_unit"
                 kill:true
 
-            my_unit = my_unit[1]
-
             event
                 name:"PostAdvance"
                 command: ->
                     VARIABLE "pass_test", 1
 
-            -- VARIABLE_OP "my_unit.experience", "add", 50
+            VARIABLE_OP "my_unit[1].experience", "add", 50
             unstore_unit
-                variable:"my_unit"
+                variable:"my_unit[1]"
                 fire_event:true
                 x:1
                 y:1
@@ -148,8 +145,6 @@ GENERIC_UNIT_TEST "event_handlers_in_events_5", ->
 --                 variable:"my_unit"
 --                 kill:true
 
---             my_unit = my_unit[1]
-
 --             set_variables
 --                 name:"ev0"
 --                 value:
@@ -160,15 +155,15 @@ GENERIC_UNIT_TEST "event_handlers_in_events_5", ->
 --                 name:"Test"
 --                 command: ->
 --                     insert_tag
---                     name=event
---                     variable=ev0
+--                         name: "event"
+--                         variable: "ev0"
 
 --             fire_event
 --                 name:"Test"
 
---             -- VARIABLE_OP "my_unit.experience", "add", 50
+--             VARIABLE_OP "my_unit[1].experience", "add", 50
 --             unstore_unit
---                 variable:"my_unit"
+--                 variable:"my_unit[1]"
 --                 fire_event:true
 
 --     event
