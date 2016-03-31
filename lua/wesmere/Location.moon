@@ -50,21 +50,27 @@ class Location extends HasGetters
 
     --
     -- used internally only
-    process_args = (x, y) ->
-        switch moon.type(x)
-            when "number"
-                unless type(y) == "number"
+    process_args = (first, second) ->
+        error "Missing arguement" unless first
+        if second
+            assert type(first)  == "number", "arguement 'x' is not a number"
+            assert type(second) == "number", "arguement 'y' is not a number"
+            return first, second
+        else
+            switch moon.type(first)
+                when "number"
                     error("Missing second arguement 'y'")
-                return x,y
-            when Location
-                return x.x, x.y
-            when "table"
-                if loc = x.loc
-                    return process_args(loc)
-                if x.x and x.y
-                    return x.x, x.y
-                return x[1], x[2]
-            else error "Location: arguement type #{moon.type(x)} not supported"
+                when Location
+                    return first.x, first.y
+                when "table"
+                    if loc = first.loc
+                        return process_args(loc)
+                    if first.x and first.y
+                        return process_args(first.x, first.y)
+                    if first[1] and first[2]
+                        return process_args(first[1], first[2])
+                    return nil, nil
+                else error "Location: arguement type #{moon.type(x)} not supported"
 
 
     ----
@@ -127,8 +133,9 @@ class Location extends HasGetters
     -- @usage Location(other_location)
     new: (x, y) =>
         @x, @y = process_args(x, y)
-        error("Location: X component not a mumber") unless type(@x) == "number"
-        error("Location: Y component not a mumber") unless type(@y) == "number"
+
+        -- error("Location: X component not a mumber") unless type(@x) == "number"
+        -- error("Location: Y component not a mumber") unless type(@y) == "number"
         --- @todo board is no longer a global but private of Scenario objects.
         -- Find a way to make that work.
         -- error("Location: X component greater_than witdh") unless @x > board.map.width
@@ -153,4 +160,9 @@ class Location extends HasGetters
         return true
 
 
-return Location
+return (x, y) ->
+    loc = Location(x, y)
+    if loc.x
+        return loc
+    else
+        return nil
