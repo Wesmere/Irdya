@@ -6,7 +6,7 @@
 --
 -- (Or that a balanced update has occurred and this test wasn't updated... )
 
-TEST_GRUNT_DAMAGE = (ID, X, Y, EXPECTED_DAMAGE) ->
+export TEST_GRUNT_DAMAGE = (ID, X, Y, EXPECTED_DAMAGE) ->
     unit UNIT 2, "Orcish Grunt", X + 1, Y, {random_traits:"false"}
     unit UNIT 1, "Elvish Archer", X, Y, {id:ID}
     do_command
