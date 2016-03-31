@@ -17,20 +17,24 @@ TEST_SIGHTED_EVENTS_SCEN = (ID, BOB_CONDITION, SET_FLAG) ->
 
         time:{DAWN}
 
-        side:
-            side:1
-            controller:"human"
-            name:"Alice"
-            type:"Elvish Archer"
-            id:"alice"
-            fog:true
-        side:
-            side:2
-            controller:"human"
-            name:"Bob"
-            type:"Orcish Grunt"
-            id:"bob"
-            fog:true
+        side: {
+            {
+                side:1
+                controller:"human"
+                name:"Alice"
+                type:"Elvish Archer"
+                id:"alice"
+                fog:true
+            }
+            {
+                side:2
+                controller:"human"
+                name:"Bob"
+                type:"Orcish Grunt"
+                id:"bob"
+                fog:true
+            }
+        }
 
         Prestart: ->
             VARIABLE "sighted_should_trigger", false
