@@ -50,6 +50,12 @@ describe "#Location", ->
 
     describe "Constructor tests", ->
 
+        it "Location({})", ->
+            loc = Location({})
+            moon = require "moon"
+            moon.p(loc)
+            assert.are.equal(nil, loc)
+
         it "Location({loc:{5,19}})", ->
             loc = Location({loc:{5,19}})
             assert.are.equal 5, loc.x
