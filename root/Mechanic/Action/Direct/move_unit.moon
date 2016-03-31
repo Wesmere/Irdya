@@ -3,7 +3,7 @@ wsl_action
     description: "works like the MOVE_UNIT macro."
 
     action: (cfg) ->
-        coordinate_error = "invalid coordinate in [move_unit]"
+        coordinate_error = "invalid coordinate in move_unit()"
 
         local to_x, to_y
         if loc = cfg.to_loc
@@ -23,7 +23,7 @@ wsl_action
         units = wesmere.get_units(cfg)
 
         pattern = "[^%s,]+"
-        for current_unit_index, current_unit in ipairs(units)
+        for current_unit in *units
             unless fire_event or current_unit.valid
                 xs, ys = string.gmatch(to_x, pattern), string.gmatch(to_y, pattern)
                 move_string_x = current_unit.x
