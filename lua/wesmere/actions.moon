@@ -41,7 +41,7 @@ wsl_actions = {}
 fire = (wsl_action_name, wsl_action_table) ->
     if action = wsl_actions[wsl_action_name]
         return wsl_actions[wsl_action_name](wsl_action_table)
-    else wsl_error("WSLAction '#{wsl_action_name}' not known")
+    else error("WSLAction '#{wsl_action_name}' not known")
 
 ----
 -- This is an associative table like wesmere.wsl_actions. You can use it to define new conditional wsl tags that will be recognized in WSL when using [if], [show_if], [while], etc., or more generally when wesmere.eval_conditional is run.
