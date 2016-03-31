@@ -10,95 +10,98 @@ TEST_FILTER_VISION_SCEN = (ID, EVENTS) ->
         turns:3
         id:ID
         random_start_time:false
-
         time:{DAWN}
 
-        side:
-            side:1
-            controller:"human"
-            name: "Alice"
-            type: "Elvish Archer"
-            id:"alice"
-            fog:true
-            team_name:"West"
-			share_vision:"shroud"
-
-        side:
-            side:2
-            controller:"human"
-            name: "Bob"
-            type: "Orcish Grunt"
-            id:"bob"
-            fog:true
-            team_name:"East"
-			share_vision:"shroud"
-
-        side:
-            side:3
-            controller:"human"
-            name: "Dave"
-            type: "Dwarvish Fighter"
-            id:"dave"
-            fog:true
-            team_name:"East"
-			share_vision:"shroud"
-
-        side:
-            side:4
-            controller:"human"
-            name: "Charlie"
-            type: "Chocobone"
-            id:"charlie"
-            fog:true
-            team_name:"West"
-			share_vision:"shroud"
+        side: {
+            {
+                side:1
+                controller:"human"
+                name: "Alice"
+                type: "Elvish Archer"
+                id:"alice"
+                fog:true
+                team_name:"West"
+                share_vision:"shroud"
+            }
+            {
+                side:2
+                controller:"human"
+                name: "Bob"
+                type: "Orcish Grunt"
+                id:"bob"
+                fog:true
+                team_name:"East"
+                share_vision:"shroud"
+            }
+            {
+                side:3
+                controller:"human"
+                name: "Dave"
+                type: "Dwarvish Fighter"
+                id:"dave"
+                fog:true
+                team_name:"East"
+                share_vision:"shroud"
+            }
+            {
+                side:4
+                controller:"human"
+                name: "Charlie"
+                type: "Chocobone"
+                id:"charlie"
+                fog:true
+                team_name:"West"
+                share_vision:"shroud"
+            }
+        }
 
         Prestart:EVENTS
 
 
-chat_if = (X) ->
-    VARIABLE_OP "chat_ctr", "add", 1
-
-    if X
-        chat
-            message:"#{chat_ctr}: true"
-    else
-        chat
-            message:"#{chat_ctr}: false"
-
-
-test_vision_chat = (X, Y) ->
-    X.filter_vision = Y
-    chat_if have_unit X
-
-    X.filter_vision = nil
-    X.filter_location =
-        filter_vision: Y
-    chat_if have_unit X
-
-    delay
-        time: 500
-
-
-assert_test_true = (X, Y) ->
-    X.filter_vision = Y
-    ASSERT have_unit X
-    X.filter_vision = nil
-    X.filter_location =
-        filter_vision: Y
-    ASSERT have_unit X
-
-
-assert_test_false = (X, Y) ->
-    X.filter_vision = Y
-    ASSERT not have_unit X
-    X.filter_vision = nil
-    X.filter_location =
-        filter_vision: Y
-    ASSERT not have_unit X
-
-
 TEST_FILTER_VISION_SCEN "filter_vision", ->
+
+    chat_if = (X) ->
+        VARIABLE_OP "chat_ctr", "add", 1
+
+        if X
+            chat
+                message:"#{chat_ctr}: true"
+        else
+            chat
+                message:"#{chat_ctr}: false"
+
+
+    test_vision_chat = (X, Y) ->
+        X.filter_vision = Y
+        chat_if have_unit X
+
+        X.filter_vision = nil
+        X.filter_location =
+            filter_vision: Y
+        chat_if have_unit X
+
+        delay
+            time: 500
+
+
+    assert_test_true = (X, Y) ->
+        X.filter_vision = Y
+        ASSERT have_unit X
+        X.filter_vision = nil
+        X.filter_location =
+            filter_vision: Y
+        ASSERT have_unit X
+
+
+    assert_test_false = (X, Y) ->
+        X.filter_vision = Y
+        ASSERT not have_unit X
+        X.filter_vision = nil
+        X.filter_location =
+            filter_vision: Y
+        ASSERT not have_unit X
+
+
     event
         name:"Start"
         command: ->
