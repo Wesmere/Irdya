@@ -3,19 +3,18 @@
 -- This is intended to be a test of the underlying unit_map object,
 -- but many other things are tested along the way, esp. have_unit:.
 
+export ASSERT_NO_9_5 = ->
+    ASSERT not have_unit
+        x:9
+        y:5
 
-GENERIC_UNIT_TEST "test_unit_map", ->
+export ASSERT_YES_9_5 = ->
+    ASSERT have_unit
+        x:9
+        y:5
 
-    ASSERT_NO_9_5 = ->
-        ASSERT not have_unit
-            x:9
-            y:5
 
-    ASSERT_YES_9_5 = ->
-        ASSERT have_unit
-            x:9
-            y:5
-
+GENERIC_UNIT_TEST "test_unit_map kill", ->
     event
         name:"Start"
         command: ->
@@ -27,6 +26,13 @@ GENERIC_UNIT_TEST "test_unit_map", ->
                 y:5
             ASSERT_NO_9_5!
 
+            SUCCEED!
+
+
+GENERIC_UNIT_TEST "test_unit_map move_unit", ->
+    event
+        name:"Start"
+        command: ->
             unit UNIT 2, "Elvish Archer", 9, 5, {id:"steve2"}
             ASSERT_YES_9_5!
             move_unit
@@ -34,6 +40,13 @@ GENERIC_UNIT_TEST "test_unit_map", ->
                 to_loc:{10,5}
             ASSERT_NO_9_5!
 
+            SUCCEED!
+
+
+GENERIC_UNIT_TEST "test_unit_map command: move", ->
+    event
+        name:"Start"
+        command: ->
             unit UNIT 2, "Elvish Archer", 9, 5, {id:"steve3"}
             ASSERT_YES_9_5!
             do_command
@@ -42,6 +55,13 @@ GENERIC_UNIT_TEST "test_unit_map", ->
                     y:{5,5}
             ASSERT_NO_9_5!
 
+            SUCCEED!
+
+
+GENERIC_UNIT_TEST "test_unit_map store_unit", ->
+    event
+        name:"Start"
+        command: ->
             unit UNIT 2, "Elvish Archer", 9, 5, {id:"steve4"}
             ASSERT_YES_9_5!
             store_unit
@@ -51,6 +71,13 @@ GENERIC_UNIT_TEST "test_unit_map", ->
                 kill:true
             ASSERT_NO_9_5!
 
+            SUCCEED!
+
+
+GENERIC_UNIT_TEST "test_unit_map harm to death", ->
+    event
+        name:"Start"
+        command: ->
             unit UNIT 2, "Elvish Archer", 9, 5, {id:"steve5"}
             ASSERT_YES_9_5!
             store_unit
@@ -65,6 +92,13 @@ GENERIC_UNIT_TEST "test_unit_map", ->
                 amount:100
             ASSERT_NO_9_5!
 
+            SUCCEED!
+
+
+GENERIC_UNIT_TEST "test_unit_map command: attack and die", ->
+    event
+        name:"Start"
+        command: ->
             unit UNIT 2, "Elvish Archer", 9, 5, {id:"steve6"}
             ASSERT_YES_9_5!
             store_unit
@@ -95,6 +129,13 @@ GENERIC_UNIT_TEST "test_unit_map", ->
                     destination:{9,5}
             ASSERT_NO_9_5!
 
+            SUCCEED!
+
+
+GENERIC_UNIT_TEST "test_unit_map attack and survive", ->
+    event
+        name:"Start"
+        command: ->
             unit UNIT 2, "Elvish Archer", 9, 5, {id:"steve7"}
             ASSERT_YES_9_5!
             do_command
