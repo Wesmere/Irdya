@@ -6,21 +6,21 @@ However, there is no guarantee that roles will ever be assigned. You can use hav
 
     action: (cfg, wesmere) ->
 
-        -- role= and type= are handled differently than in other tags,
+        -- role: and type: are handled differently than in other tags,
         -- so we need to remove them from the filter
-        -- role = cfg.role
-        -- filter = cfg
+        role = cfg.role
+        filter = cfg
 
-        -- types = {}
+        types = {}
 
-        -- if cfg.type
-        --     for value in utils.split(cfg.type)
-        --         table.insert(types, utils.trim(value))
+        if cfg.type
+            for value in utils.split(cfg.type)
+                table.insert(types, utils.trim(value))
 
-        -- filter.role, filter.type = nil, nil
+        filter.role, filter.type = nil, nil
 
         -- first attempt to match units on the map
-        -- i = 1
+        i = 1
         -- repeat
         -- a = 5
         -- give precedence based on the order specified in type=
@@ -34,7 +34,7 @@ However, there is no guarantee that roles will ever be assigned. You can use hav
         -- until #types == 0 or i > #types
 
         -- then try to match units on the recall lists
-        -- i = 1
+        i = 1
         -- repeat
             -- if #types > 0 then filter.type = types[i]
             -- unit = wesmere.get_recall_units(filter)[1]
@@ -45,28 +45,8 @@ However, there is no guarantee that roles will ever be assigned. You can use hav
         -- until #types == 0 or i > #types
 
         -- no matching unit found, issue a warning
-        -- wesmere.message("WSL", "No matching units found in 'role'")
+        wesmere.message("WSL", "No matching units found in 'role'")
 
-
-            -- role = cfg.role
-            -- cfg.role = nil
-
-            -- local unit
-            -- if type = cfg.type
-            --     cfg.type = nil
-            --     type_list = make_list(type)
-            --     for i, ty in ipairs type_list
-            --         cfg.type = ty
-            --         unit = kernel\get_unit(cfg)
-            --         if unit
-            --             break
-            -- else
-            --     unit = kernel\get_unit(cfg)
-
-            -- if unit
-            --     unit.role = role
-
-            -- return unit
 
     scheme:
         role:
@@ -76,7 +56,5 @@ However, there is no guarantee that roles will ever be assigned. You can use hav
         type:
             type: "Unit_type_id"
             description: [[a comma-separated list of possible types the unit can be. If any types are given, then units will be searched by type in the order listed. If no type is given, then no particular order with respect to type is guaranteed.]]
---StandardUnitFilter, do not use a [filter] sub-tag. SUF's role= and type= keys are not used: if you want to use them, use a nested SUF wrapped inside a [and] tag.
-
-
-
+        StandardUnitFilter:
+            description: "do not use a 'filter'' sub-table. SUF's role: and type: keys are not used: if you want to use them, use a nested SUF wrapped inside a 'and' table."
