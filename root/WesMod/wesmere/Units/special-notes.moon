@@ -71,3 +71,9 @@ SPECIAL_NOTES_MTNHOME = _" Whenever this unit is in a mountainous area, it will 
 SPECIAL_NOTES_DESERT_HOME = _" Whenever this unit is in desert-like area, it will regenerate 3 HP per turn."
 
 SPECIAL_NOTES_WATERHOME = _" Whenever this unit is in an aquatic area, it will regenerate 3 HP per turn."
+
+SPECIAL_NOTES_ATTACK_ONLY = _" One attack of this unit cannot be used to defend."
+
+SPECIAL_NOTES_PRECISION = _" This unit can attack very precisely, giving it a better chance to hit agile foes on the offense."
+
+SPECIAL_NOTES_PROTECTION = _" The importance of this unit motivate friendly units next to it to defend better, taking less damage in combat, though this only applies to units of lower level."
