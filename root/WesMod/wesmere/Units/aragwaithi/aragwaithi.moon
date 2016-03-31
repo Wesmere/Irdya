@@ -5,7 +5,7 @@ race
     plural_name: _"race^Aragwaithi"
     num_traits: 2
     markov_chain_size: 3
-    HUMAN_NAMES
+    --HUMAN_NAMES
 
     description: _[[During most of the Golden Age, the humans who inhabited the Great Continent were mostly Wesnothians, divided across various territories such as the Northlands, Elensefar and the kingdom of Wesnoth itself. However, there was once a time of great strife during which a new race of humans started to appear from nowhere. They were the 'Aragwaithi', which meant 'noble' in their native language.
 
@@ -14,7 +14,7 @@ It has been since then rumored that they came from the Vast Sea to settle in Wes
 Albeit being humans, many of their customs and racial features are incredibly different to the standards, to the point it puts them close to elves in terms of their dexterity with bows. Their wisemen have a mastery of magic not to be underestimated in the battlefield, for it has surprised and overseded the best magi often.]]
 
 move_type
-    name: "aragwaithfoot"
+    id: "aragwaithfoot"
     movement_costs:
         deep_water: 99
         shallow_water: 3
@@ -57,7 +57,7 @@ move_type
         arcane: 80
 
 move_type
-    name: "aragwaithmounted"
+    id: "aragwaithmounted"
     movement_costs:
         deep_water: 99
         shallow_water: 3

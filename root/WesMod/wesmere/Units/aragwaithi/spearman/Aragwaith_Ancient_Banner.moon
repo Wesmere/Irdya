@@ -2,9 +2,10 @@ unit_type
     id: "Aragwaith Ancient Banner"
     name: _"Ancient Banner"
     race: "aragwaith"
-    abilities:
+    abilities: {
         ABILITY_LEADERSHIP_LEVEL_4
         ABILITY_PROTECTION_LEVEL_4
+    }
     resistance:
         blade: 80
         pierce: 80

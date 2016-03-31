@@ -4,9 +4,10 @@ unit_type
     race: "aragwaith"
     hitpoints: 66
     movement_type: "aragwaithfoot"
-    abilities:
+    abilities: {
         ABILITY_PROTECTION_LEVEL_3
         ABILITY_STEADFAST
+    }
     resistance:
         pierce: 80
         impact: 90

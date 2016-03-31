@@ -479,7 +479,7 @@ ABILITY_PROTECTION_LEVEL_2 =
                 or:
                     level: 1
 
-ABILITY_PROTECTION_LEVEL_3
+ABILITY_PROTECTION_LEVEL_3 =
     resistance:
         id: "protection"
         add: 20
