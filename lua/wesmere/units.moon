@@ -90,15 +90,12 @@ import current, try from require "misc"
 get_unit = (x, y) =>
     assert(x, debug.traceback("called get_unit without arguments"))
 
-    local loc
     try
-        do: ->
-            loc = Loc(x,y)
+        do: -> return Loc(x,y)
         catch: (err) ->
-            error "get_unit: Invalid arguments #{err}"
-        finally: ->
-            unit = @units\get_unit_at(loc.x, loc.y)
-            return unit
+            error "wesmere.get_unit: Invalid arguments: #{err}"
+        finally: (loc) ->
+            return @units\get_unit_at(loc.x, loc.y)
 
 
 ----
@@ -108,20 +105,16 @@ get_unit = (x, y) =>
 -- @usage leaders_on_side_two = get_units { side: 2, can_recruit: true }
 -- name_of_leader = leaders_on_side_two[1].name
 get_units = (filter) =>
-    local loc
-    try
-        do: -> loc = Loc(filter)
-        catch: (err) ->
-        finally: ->
-            if loc
-                unit = get_unit(@, loc.x, loc.y)
-                if unit
-                    return {unit} if unit\matches(filter)
-                else return {}
+
+    if loc = Loc(filter)
+        if unit = get_unit(@, loc.x, loc.y)
+            return {unit} if unit\matches(filter)
+        else return {}
 
     return for unit in @units\iter!
-        unit if unit\matches(filter)
-
+        if unit\matches(filter)
+            unit
+        else continue
 
 ----
 -- Returns true if the given unit matches the WSL filter passed as the second argument. If other_unit is specified, it is used for the $other_unit auto-stored variable in the filter. Otherwise, this variable is not stored for the filter.
@@ -221,11 +214,10 @@ copy_unit = (unit) ->
 -- helper.set_variable_array("player_recall_list", l)
 -- Note: if the unit is on the map, it is just a shortcut for calling #wesmere.copy_unit and then #wesmere.put_unit without a unit. It is, however, the only way for removing a unit from a recall list without putting it on the map.
 extract_unit = (unit) =>
-    moon = require "moon"
     assert(unit, "Missing argument 'unit'")
-    unit_type = moon.type(unit)
-    assert(unit_type == "Unit", "wesmere.extract_unit: argument is not of type 'Unit' but #{unit_type}")
-    loc = Loc(unit)
+    unit_type = type(unit)
+    Unit = require "Unit"
+    assert(unit_type == Unit, "wesmere.extract_unit: argument is not of type 'Unit' but #{unit_type}")
     @units.remove_unit(unit.id)
     --unit\extract!
 
@@ -419,6 +411,8 @@ put_unit = (unit, x, y) =>
     if @units\place_unit(unit, loc.x, loc.y)
         import fire_event from require "actions"
         fire_event(@, "UnitPlaced", loc.x, loc,y)
+        return true
+    else return false
 
 
 {
